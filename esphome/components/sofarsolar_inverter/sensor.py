@@ -74,7 +74,7 @@ CONF_BATTERY_CONF_EPS_BUFFER = "battery_conf_eps_buffer"
 CONF_BATTERY_CONF_CONTROL = "battery_conf_control"
 
 sofarsolar_inverter_ns = cg.esphome_ns.namespace("sofarsolar_inverter")
-SofarSolar_Inverter = sofarsolar_inverter_ns.class_("SofarSolar_Inverter", cg.Component, uart.UARTDevice)
+SofarSolar_Inverter = sofarsolar_inverter_ns.class_("SofarSolar_Inverter", cg.PollingComponent, uart.UARTDevice)
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(SofarSolar_Inverter),
@@ -434,7 +434,7 @@ async def to_code(config):
 
     if pv_generation_today_config := config.get(CONF_PV_GENERATION_TODAY):
         sens = await sensor.new_sensor(pv_generation_today_config)
-        cg.add(var.set_temperature_sensor(sens))
+        cg.add(var.set_pv_generation_today_sensor(sens))
 
     if pv_generation_total_config := config.get(CONF_PV_GENERATION_TOTAL):
         sens = await sensor.new_sensor(pv_generation_total_config)
