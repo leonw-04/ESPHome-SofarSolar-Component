@@ -1,5 +1,6 @@
 #pragma once
-
+#include "queue"
+#include "vector"
 #include "esphome/core/component.h"
 
 namespace esphome {
@@ -59,6 +60,44 @@ namespace esphome {
             void set_battery_conf_eps_buffer_sensor(sensor::Sensor *battery_conf_eps_buffer_sensor) { battery_conf_eps_buffer_sensor_ = battery_conf_eps_buffer_sensor; }
             void set_battery_conf_control_sensor(sensor::Sensor *battery_conf_control_sensor) { battery_conf_control_sensor_ = battery_conf_control_sensor; }
 
+            void set_pv_generation_today_sensor_update_interval(int pv_generation_today_sensor_update_interval) { pv_generation_today_sensor_update_interval_ = pv_generation_today_sensor_update_interval; }
+            void set_pv_generation_total_sensor_update_interval(int pv_generation_total_sensor_update_interval) { pv_generation_total_sensor_update_interval_ = pv_generation_total_sensor_update_interval; }
+            void set_load_consumption_today_sensor_update_interval(int load_consumption_today_sensor_update_interval) { load_consumption_today_sensor_update_interval_ = load_consumption_today_sensor_update_interval; }
+            void set_load_consumption_total_sensor_update_interval(int load_consumption_total_sensor_update_interval) { load_consumption_total_sensor_update_interval_ = load_consumption_total_sensor_update_interval; }
+            void set_battery_charge_today_sensor_update_interval(int battery_charge_today_sensor_update_interval) { battery_charge_today_sensor_update_interval_ = battery_charge_today_sensor_update_interval; }
+            void set_battery_charge_total_sensor_update_interval(int battery_charge_total_sensor_update_interval) { battery_charge_total_sensor_update_interval_ = battery_charge_total_sensor_update_interval; }
+            void set_battery_discharge_today_sensor_update_interval(int battery_discharge_today_sensor_update_interval) { battery_discharge_today_sensor_update_interval_ = battery_discharge_today_sensor_update_interval; }
+            void set_battery_discharge_total_sensor_update_interval(int battery_discharge_total_sensor_update_interval) { battery_discharge_total_sensor_update_interval_ = battery_discharge_total_sensor_update_interval; }
+            void set_total_active_power_inverter_sensor_update_interval(int total_active_power_inverter_sensor_update_interval) { total_active_power_inverter_sensor_update_interval_ = total_active_power_inverter_sensor_update_interval; }
+            void set_pv_voltage_1_sensor_update_interval(int pv_voltage_1_sensor_update_interval) { pv_voltage_1_sensor_update_interval_ = pv_voltage_1_sensor_update_interval; }
+            void set_pv_current_1_sensor_update_interval(int pv_current_1_sensor_update_interval) { pv_current_1_sensor_update_interval_ = pv_current_1_sensor_update_interval; }
+            void set_pv_power_1_sensor_update_interval(int pv_power_1_sensor_update_interval) { pv_power_1_sensor_update_interval_ = pv_power_1_sensor_update_interval; }
+            void set_pv_voltage_2_sensor_update_interval(int pv_voltage_2_sensor_update_interval) { pv_voltage_2_sensor_update_interval_ = pv_voltage_2_sensor_update_interval; }
+            void set_pv_current_2_sensor_update_interval(int pv_current_2_sensor_update_interval) { pv_current_2_sensor_update_interval_ = pv_current_2_sensor_update_interval; }
+            void set_pv_power_2_sensor_update_interval(int pv_power_2_sensor_update_interval) { pv_power_2_sensor_update_interval_ = pv_power_2_sensor_update_interval; }
+            void set_pv_power_total_sensor_update_interval(int pv_power_total_sensor_update_interval) { pv_power_total_sensor_update_interval_ = pv_power_total_sensor_update_interval; }
+            void set_battery_power_total_sensor_update_interval(int battery_power_total_sensor_update_interval) { battery_power_total_sensor_update_interval_ = battery_power_total_sensor_update_interval; }
+            void set_battery_state_of_charge_total_sensor_update_interval(int battery_state_of_charge_total_sensor_update_interval) { battery_state_of_charge_total_sensor_update_interval_ = battery_state_of_charge_total_sensor_update_interval; }
+            void set_desired_grid_power_sensor_update_interval(int desired_grid_power_sensor_update_interval) { desired_grid_power_sensor_update_interval_ = desired_grid_power_sensor_update_interval; }
+            void set_minimum_battery_power_sensor_update_interval(int minimum_battery_power_sensor_update_interval) { minimum_battery_power_sensor_update_interval_ = minimum_battery_power_sensor_update_interval; }
+            void set_maximum_battery_power_sensor_update_interval(int maximum_battery_power_sensor_update_interval) { maximum_battery_power_sensor_update_interval_ = maximum_battery_power_sensor_update_interval; }
+            void set_energy_storage_mode_sensor_update_interval(int energy_storage_mode_sensor_update_interval) { energy_storage_mode_sensor_update_interval_ = energy_storage_mode_sensor_update_interval; }
+            void set_battery_conf_id_sensor_update_interval(int battery_conf_id_sensor_update_interval) { battery_conf_id_sensor_update_interval_ = battery_conf_id_sensor_update_interval; }
+            void set_battery_conf_address_sensor_update_interval(int battery_conf_address_sensor_update_interval) { battery_conf_address_sensor_update_interval_ = battery_conf_address_sensor_update_interval; }
+            void set_battery_conf_protocol_sensor_update_interval(int battery_conf_protocol_sensor_update_interval) { battery_conf_protocol_sensor_update_interval_ = battery_conf_protocol_sensor_update_interval; }
+            void set_battery_conf_voltage_nominal_sensor_update_interval(int battery_conf_voltage_nominal_sensor_update_interval) { battery_conf_voltage_nominal_sensor_update_interval_ = battery_conf_voltage_nominal_sensor_update_interval; }
+            void set_battery_conf_voltage_over_sensor_update_interval(int battery_conf_voltage_over_sensor_update_interval) { battery_conf_voltage_over_sensor_update_interval_ = battery_conf_voltage_over_sensor_update_interval; }
+            void set_battery_conf_voltage_charge_sensor_update_interval(int battery_conf_voltage_charge_sensor_update_interval) { battery_conf_voltage_charge_sensor_update_interval_ = battery_conf_voltage_charge_sensor_update_interval; }
+            void set_battery_conf_voltage_lack_sensor_update_interval(int battery_conf_voltage_lack_sensor_update_interval) { battery_conf_voltage_lack_sensor_update_interval_ = battery_conf_voltage_lack_sensor_update_interval; }
+            void set_battery_conf_voltage_discharge_stop_sensor_update_interval(int battery_conf_voltage_discharge_stop_sensor_update_interval) { battery_conf_voltage_discharge_stop_sensor_update_interval_ = battery_conf_voltage_discharge_stop_sensor_update_interval; }
+            void set_battery_conf_current_charge_limit_sensor_update_interval(int battery_conf_current_charge_limit_sensor_update_interval) { battery_conf_current_charge_limit_sensor_update_interval_ = battery_conf_current_charge_limit_sensor_update_interval; }
+            void set_battery_conf_current_discharge_limit_sensor_update_interval(int battery_conf_current_discharge_limit_sensor_update_interval) { battery_conf_current_discharge_limit_sensor_update_interval_ = battery_conf_current_discharge_limit_sensor_update_interval; }
+            void set_battery_conf_depth_of_discharge_sensor_update_interval(int battery_conf_depth_of_discharge_sensor_update_interval) { battery_conf_depth_of_discharge_sensor_update_interval_ = battery_conf_depth_of_discharge_sensor_update_interval; }
+            void set_battery_conf_end_of_discharge_sensor_update_interval(int battery_conf_end_of_discharge_sensor_update_interval) { battery_conf_end_of_discharge_sensor_update_interval_ = battery_conf_end_of_discharge_sensor_update_interval; }
+            void set_battery_conf_capacity_sensor_update_interval(int battery_conf_capacity_sensor_update_interval) { battery_conf_capacity_sensor_update_interval_ = battery_conf_capacity_sensor_update_interval; }
+            void set_battery_conf_cell_type_sensor_update_interval(int battery_conf_cell_type_sensor_update_interval) { battery_conf_cell_type_sensor_update_interval_ = battery_conf_cell_type_sensor_update_interval; }
+            void set_battery_conf_eps_buffer_sensor_update_interval(int battery_conf_eps_buffer_sensor_update_interval) { battery_conf_eps_buffer_sensor_update_interval_ = battery_conf_eps_buffer_sensor_update_interval; }
+            void set_battery_conf_control_sensor_update_interval(int battery_conf_control_sensor_update_interval) { battery_conf_control_sensor_update_interval_ = battery_conf_control_sensor_update_interval; }
         }
     }
 }
