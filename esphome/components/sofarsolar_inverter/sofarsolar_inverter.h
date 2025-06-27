@@ -16,10 +16,9 @@ namespace esphome {
             bool check_crc(std::vector<uint8_t> frame);
 
             void set_model(std::string model) { this->model_ = model;}
-            void set_model(int modbus_address) { this->modbus_address_ = modbus_address;}
-            void set_model(std::string uart_id) { this->uart_id_ = uart_id;}
-            void set_model(bool zero_export) { this->zero_export_ = zero_export;}
-            void set_model(std::string power_id) { this->power_id_ = power_id;}
+            void set_modbus_address(int modbus_address) { this->modbus_address_ = modbus_address;}
+            void set_zero_export(bool zero_export) { this->zero_export_ = zero_export;}
+            void set_power_id(std::string power_id) { this->power_id_ = power_id;}
 
             void set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { pv_generation_today_sensor_ = pv_generation_today_sensor; }
             void set_pv_generation_total_sensor(sensor::Sensor *pv_generation_total_sensor) { pv_generation_total_sensor_ = pv_generation_total_sensor; }
