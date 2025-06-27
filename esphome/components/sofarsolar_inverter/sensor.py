@@ -459,8 +459,8 @@ CONFIG_SCHEMA = cv.Schema({
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
-    yield uart.register_uart_device(var, config)
     await cg.register_component(var, config)
+    await uart.register_uart_device(var, config)
 
     cg.add(var.set_model(config[CONF_MODEL]))
     cg.add(var.set_modbus_address(config[CONF_MODBUS_ADDRESS]))
