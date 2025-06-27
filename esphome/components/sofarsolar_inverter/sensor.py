@@ -82,9 +82,8 @@ CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(SofarSolar_Inverter),
     cv.Required(CONF_MODEL): cv.string,
     cv.Optional(CONF_MODBUS_ADDRESS, default=1): cv.int_range(0, 255),
-    cv.Required(CONF_UART_ID): cv.string,
     cv.Optional(CONF_ZERO_EXPORT, default=False): cv.boolean,
-    cv.Optional(CONF_POWER_ID): cv.string,
+    cv.Optional(CONF_POWER_ID): cv.entity_id,
 
     cv.Optional(CONF_PV_GENERATION_TODAY): sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
@@ -460,12 +459,11 @@ CONFIG_SCHEMA = cv.Schema({
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
-
+    yield uart.register_uart_device(var, config)
     await cg.register_component(var, config)
 
     cg.add(var.set_model(config[CONF_MODEL]))
     cg.add(var.set_modbus_address(config[CONF_MODBUS_ADDRESS]))
-    cg.add(var.set_uart_id(config[CONF_UART_ID]))
     cg.add(var.set_zero_export(config[CONF_ZERO_EXPORT]))
     if bar := config.get(CONF_POWER_ID):
         cg.add(var.set_power_id(CONF_POWER_ID))
