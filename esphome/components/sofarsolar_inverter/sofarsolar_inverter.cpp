@@ -58,7 +58,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received");
                 } else {
                     current_reading = false;
-                    if (check_crc(response) & read_data[0] == 0x01 && response[1] == 0x03 && response[2] == quantity) {
+                    if (check_crc(response) & response[0] == 0x01 && response[1] == 0x03 && response[2] == quantity) {
                     // Process the response based on the register type
                         switch (SofarSolar_Register[i][2]) {
                             case 0: // uint16_t

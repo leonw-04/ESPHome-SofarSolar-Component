@@ -16,6 +16,8 @@ namespace esphome {
 
             void calc_crc(std::vector<uint8_t> frame);
             bool check_crc(std::vector<uint8_t> frame);
+            void send_read_modbus_registers(uint16_t start_address, uint16_t quantity);
+            void receive_modbus_response(std::vector<uint8_t> &response);
 
             void set_model(std::string model) { this->model_ = model;}
             void set_modbus_address(int modbus_address) { this->modbus_address_ = modbus_address;}
