@@ -1,6 +1,7 @@
 #include "queue"
-#include "esphome/core/log.h"
 #include "sofarsolar_inverter.h"
+#include "esphome/core/helpers.h"
+#include "esphome/core/log.h"
 
 namespace esphome {
     namespace sofarsolar_inverter {
