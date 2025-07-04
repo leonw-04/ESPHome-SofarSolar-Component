@@ -16,6 +16,18 @@ namespace esphome {
             }
         };
 
+        struct SofarSolar_Register {
+            uint16_t start_address; // Start address of the register
+            uint16_t quantity; // Number of registers to read
+            uint8_t type; // Type of the register (0: uint16_t, 1: int16_t, 2: uint32_t, 3: int32_t, 4: float16, 5: float32)
+            uint8_t priority; // Priority of the register for reading
+            int update_interval; // Update interval in seconds for the register
+            int timer; // Timer in seconds for reading the register
+            sensor::Sensor *sensor; // Pointer to the sensor to update
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, int update_interval = 0, int timer = 0, sensor::Sensor *sensor = nullptr)
+                : start_address(start_address), quantity(quantity), type(type), priority(priority), update_interval(update_interval), timer(timer), sensor(sensor) {}
+        };
+
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
         int time_begin_reading = 0;
@@ -60,228 +72,55 @@ namespace esphome {
                     current_reading = false;
                     if (check_crc(response) & response[0] == 0x01 && response[1] == 0x03 && response[2] == SofarSolar_Register[register_tasks.top().register_index][1]) {
                     // Process the response based on the register type
-                        switch (SofarSolar_Register[register_tasks.top().register_index][2]) {
-                            case 0: // uint16_t
-                                uint16_t value = (response[3] << 8) | response[4];
-                                break;
-                            case 1: // int16_t
-                                int16_t int_value = (response[3] << 8) | response[4];
-                                break;
-                            case 2: // uint32_t
-                                uint32_t uint_value = (response[3] << 24) | (response[4] << 16) | (response[5] << 8) | response[6];
-                                break;
-                            case 3: // int32_t
-                                int32_t int32_value = (response[3] << 24) | (response[4] << 16) | (response[5] << 8) | response[6];
-                                break;
-                            case 4: // float16
-                                // Handle float16 response
-                                break;
-                            case 5: // float32
-                                // Handle float32 response
-                                break;
-                            default:
-                                ESP_LOGE(TAG, "Unknown register type");
-                        }
-                        switch (current_reading->register_index) {
-                            case 0: // PV Generation Today
-                                if (this->pv_generation_today_sensor_ != nullptr) {
-                                    this->pv_generation_today_sensor_->publish_state(value);
-                                }
-                                break;
-                            case 1: // PV Generation Total
-                                if (this->pv_generation_total_sensor_ != nullptr) {
-                                    this->pv_generation_total_sensor_->publish_state(value);
-                                }
-                                break;
-                            case 2: // Load Consumption Today
-                                if (this->load_consumption_today_sensor_ != nullptr) {
-                                    this->load_consumption_today_sensor_->publish_state(value);
-                                }
-                                break;
-                            case 3: // Load Consumption Total
-                                if (this->load_consumption_total_sensor_ != nullptr) {
-                                    this->load_consumption_total_sensor_->publish_state(value);
-                                }
-                                break;
-                            case 4: // Battery Charge Today
-                                if (this->battery_charge_today_sensor_ != nullptr) {
-                                    this->battery_charge_today_sensor_->publish_state(value);
-                                }
-                                break;
-                            case 5: // Battery Charge Total
-                                if (this->battery_charge_total_sensor_ != nullptr) {
-                                    this->battery_charge_total_sensor_->publish_state(value);
-                                }
-                                break;
-                            case 6: // Battery Discharge Today
-                                if (this->battery_discharge_today_sensor_ != nullptr) {
-                                    this->battery_discharge_today_sensor_->publish_state(value);
-                                }
-                                break;
-                            case 7: // Battery Discharge Total
-                                if (this->battery_discharge_total_sensor_ != nullptr) {
-                                    this->battery_discharge_total_sensor_->publish_state(value);
-                                }
-                                break;
-                            case 8: // Total Active Power Inverter
-                                if (this->total_active_power_inverter_sensor_ != nullptr) {
-                                    this->total_active_power_inverter_sensor_->publish_state(int_value);
-                                }
-                                break;
-                            case 9: // PV Voltage 1
-                                if (this->pv_voltage_1_sensor_ != nullptr) {
-                                    this->pv_voltage_1_sensor_->publish_state(int_value / 10.0f); // Convert to volts
-                                }
-                                break;
-                            case 10: // PV Current 1
-                                if (this->pv_current_1_sensor_ != nullptr) {
-                                    this->pv_current_1_sensor_->publish_state(int_value / 100.0f); // Convert to amps
-                                }
-                                break;
-                            case 11: // PV Power 1
-                                if (this->pv_power_1_sensor_ != nullptr) {
-                                    this->pv_power_1_sensor_->publish_state(int_value / 10.0f); // Convert to watts
-                                }
-                                break;
-                            case 12: // PV Voltage 2
-                                if (this->pv_voltage_2_sensor_ != nullptr) {
-                                    this->pv_voltage_2_sensor_->publish_state(int_value / 10.0f); // Convert to volts
-                                }
-                                break;
-                            case 13: // PV Current 2
-                                if (this->pv_current_2_sensor_ != nullptr) {
-                                    this->pv_current_2_sensor_->publish_state(int_value / 100.0f); // Convert to amps
-                                }
-                                break;
-                            case 14: // PV Power 2
-                                if (this->pv_power_2_sensor_ != nullptr) {
-                                    this->pv_power_2_sensor_->publish_state(int_value / 10.0f); // Convert to watts
-                                }
-                                break;
-                            case 15: // PV Power Total
-                                if (this->pv_power_total_sensor_ != nullptr) {
-                                    this->pv_power_total_sensor_->publish_state(int_value / 10.0f); // Convert to watts
-                                }
-                                break;
-                            case 16: // Battery Power Total
-                                if (this->battery_power_total_sensor_ != nullptr) {
-                                    this->battery_power_total_sensor_->publish_state(int_value / 10.0f); // Convert to watts
-                                }
-                                break;
-                            case 17: // Battery State of Charge Total
-                                if (this->battery_state_of_charge_total_sensor_ != nullptr) {
-                                    this->battery_state_of_charge_total_sensor_->publish_state(int_value / 10.0f); // Convert to percentage
-                                }
-                                break;
-                            case 18: // Desired Grid Power
-                                if (this->desired_grid_power_sensor_ != nullptr) {
-                                    this->desired_grid_power_sensor_->publish_state(int_value / 10.0f); // Convert to watts
-                                }
-                                break;
-                            case 19: // Minimum Battery Power
-                                if (this->minimum_battery_power_sensor_ != nullptr) {
-                                    this->minimum_battery_power_sensor_->publish_state(int_value / 10.0f); // Convert to watts
-                                }
-                                break;
-                            case 20: // Maximum Battery Power
-                                if (this->maximum_battery_power_sensor_ != nullptr) {
-                                    this->maximum_battery_power_sensor_->publish_state(int_value / 10.0f); // Convert to watts
-                                }
-                                break;
-                            case 21: // Energy Storage Mode
-                                if (this->energy_storage_mode_sensor_ != nullptr) {
-                                    this->energy_storage_mode_sensor_->publish_state(int_value);
-                                }
-                                break;
-                            case 22: // Battery Conf ID
-                                if (this->battery_conf_id_sensor_ != nullptr) {
-                                    this->battery_conf_id_sensor_->publish_state(int_value);
-                                }
-                                break;
-                            case 23: // Battery Conf Address
-                                if (this->battery_conf_address_sensor_ != nullptr) {
-                                    this->battery_conf_address_sensor_->publish_state(int_value);
-                                }
-                                break;
-                            case 24: // Battery Conf Protocol
-                                if (this->battery_conf_protocol_sensor_ != nullptr) {
-                                    this->battery_conf_protocol_sensor_->publish_state(int_value);
-                                }
-                                break;
-                            case 25: // Battery Conf Voltage Nominal
-                                if (this->battery_conf_voltage_nominal_sensor_ != nullptr) {
-                                    this->battery_conf_voltage_nominal_sensor_->publish_state(int_value / 10.0f); // Convert to volts
-                                }
-                                break;
-                            case 26: // Battery Conf Voltage Over
-                                if (this->battery_conf_voltage_over_sensor_ != nullptr) {
-                                    this->battery_conf_voltage_over_sensor_->publish_state(int_value / 10.0f); // Convert to volts
-                                }
-                                break;
-                            case 27: // Battery Conf Voltage Charge
-                                if (this->battery_conf_voltage_charge_sensor_ != nullptr) {
-                                    this->battery_conf_voltage_charge_sensor_->publish_state(int_value / 10.0f); // Convert to volts
-                                }
-                                break;
-                            case 28: // Battery Conf Voltage Lack
-                                if (this->battery_conf_voltage_lack_sensor_ != nullptr) {
-                                    this->battery_conf_voltage_lack_sensor_->publish_state(int_value / 10.0f); // Convert to volts
-                                }
-                                break;
-                            case 29: // Battery Conf Voltage Discharge Stop
-                                if (this->battery_conf_voltage_discharge_stop_sensor_ != nullptr) {
-                                    this->battery_conf_voltage_discharge_stop_sensor_->publish_state(int_value / 10.0f); // Convert to volts
-                                }
-                                break;
-                            case 30: // Battery Conf Current Charge Limit
-                                if (this->battery_conf_current_charge_limit_sensor_ != nullptr) {
-                                    this->battery_conf_current_charge_limit_sensor_->publish_state(int_value / 100.0f); // Convert to amps
-                                }
-                                break;
-                            case 31: // Battery Conf Current Discharge Limit
-                                if (this->battery_conf_current_discharge_limit_sensor_ != nullptr) {
-                                    this->battery_conf_current_discharge_limit_sensor_->publish_state(int_value / 100.0f); // Convert to amps
-                                }
-                                break;
-                            case 32: // Battery Conf Depth of Discharge
-                                if (this->battery_conf_depth_of_discharge_sensor_ != nullptr) {
-                                    this->battery_conf_depth_of_discharge_sensor_->publish_state(int_value / 10.0f); // Convert to percentage
-                                }
-                                break;
-                            case 33: // Battery Conf End of Discharge
-                                if (this->battery_conf_end_of_discharge_sensor_ != nullptr) {
-                                    this->battery_conf_end_of_discharge_sensor_->publish_state(int_value / 10.0f); // Convert to percentage
-                                }
-                                break;
-                            case 34: // Battery Conf Capacity
-                                if (this->battery_conf_capacity_sensor_ != nullptr) {
-                                    this->battery_conf_capacity_sensor_->publish_state(int_value / 10.0f); // Convert to ampere-hours
-                                }
-                                break;
-                            case 35: // Battery Conf Cell Type
-                                if (this->battery_conf_cell_type_sensor_ != nullptr) {
-                                    this->battery_conf_cell_type_sensor_->publish_state(int_value);
-                                }
-                                break;
-                            case 36: // Battery Conf EPS Buffer
-                                if (this->battery_conf_eps_buffer_sensor_ != nullptr) {
-                                    this->battery_conf_eps_buffer_sensor_->publish_state(int_value);
-                                }
-                                break;
-                            case 37: // Battery Conf Control
-                                if (this->battery_conf_control_sensor_ != nullptr) {
-                                    this->battery_conf_control_sensor_->publish_state(int_value);
-                                }
-                                break;
-                            default:
-                                ESP_LOGE(TAG, "Unknown register index %d", i);
-                        }
+                        uint16_t start_address = SofarSolar_Register[register_tasks.top().register_index][0];
+                        uint8_t quantity = SofarSolar_Register[register_tasks.top().register_index][1];
+                        ESP_LOGD(TAG, "Received response for register %04X with quantity %d", start_address, quantity);
+                        update_sensor(register_tasks.top().register_index, response, 3); // Offset 3 for Modbus response
+                        register_tasks.pop(); // Remove the task from the queue
                     } else {
                         ESP_LOGE(TAG, "CRC check failed for register %04X", start_address);
                     }
                 }
             }
         }
+
+        void SofarSolar_Inverter::update_sensor(uint8_t register_index, std::vector<uint8_t> &response, uint8_t offset) {
+            // Update the sensor based on the register index and response data
+            if (register_index < sizeof(SofarSolar_Register) / sizeof(SofarSolar_Register[0])) {
+                switch (SofarSolar_Register[register_index][2]) {
+                    case 0: // uint16_t
+                        if (this->SofarSolar_Register[register_index].sensor != nullptr) {
+                            this->SofarSolar_Register[register_index].sensor->publish_state(uint16_t_from_bytes(response, offset));
+                        }
+                        break;
+                    case 1: // int16_t
+                        if (this->SofarSolar_Register[register_index].sensor != nullptr) {
+                            this->SofarSolar_Register[register_index].sensor->publish_state(int16_t_from_bytes(response, offset));
+                        }
+                        break;
+                    case 2: // uint32_t
+                        if (this->SofarSolar_Register[register_index].sensor != nullptr) {
+                            this->SofarSolar_Register[register_index].sensor->publish_state(uint32_t_from_bytes(response, offset));
+                        }
+                        break;
+                    case 3: // int32_t
+                        if (this->SofarSolar_Register[register_index].sensor != nullptr) {
+                            this->SofarSolar_Register[register_index].sensor->publish_state(int32_t_from_bytes(response, offset));
+                        }
+                        break;
+                    case 4: // float16
+                        // Handle float16 response
+                        break;
+                    case 5: // float32
+                        // Handle float32 response
+                        break;
+                    default:
+                        ESP_LOGE(TAG, "Unknown register type for index %d", register_index);
+                }
+            } else {
+                ESP_LOGE(TAG, "Register index out of bounds: %d", register_index);
+            }
+        }) {
 
         void SofarSolar_Inverter::dump_config(){
             ESP_LOGCONFIG(TAG, "SofarSolar_Inverter");
