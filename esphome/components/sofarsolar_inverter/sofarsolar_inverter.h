@@ -8,6 +8,25 @@
 namespace esphome {
     namespace sofarsolar_inverter {
 
+        struct RegisterTask {
+            uint8_t register_index; // Index of the register to read
+            SofarSolar_Inverter* inverter; // Zeiger auf die Instanz
+            bool operator<(const RegisterTask &other) const {
+                return inverter->SofarSolar_Register[this->register_index][4] > inverter->SofarSolar_Register[other.register_index][4];
+            }
+        };
+
+        struct SofarSolar_Register {
+            uint16_t start_address; // Start address of the register
+            uint16_t quantity; // Number of registers to read
+            uint8_t type; // Type of the register (0: uint16_t, 1: int16_t, 2: uint32_t, 3: int32_t, 4: float16, 5: float32)
+            uint8_t priority; // Priority of the register for reading
+            int update_interval; // Update interval in seconds for the register
+            int timer; // Timer in seconds for reading the register
+            sensor::Sensor *sensor; // Pointer to the sensor to update
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, int update_interval = 0, int timer = 0, sensor::Sensor *sensor = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), update_interval(update_interval), timer(timer), sensor(sensor) {}
+        };
+
         class SofarSolar_Inverter : public Component {
         public:
             void setup() override;
