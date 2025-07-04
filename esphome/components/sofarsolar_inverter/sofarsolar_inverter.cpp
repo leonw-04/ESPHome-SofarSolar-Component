@@ -9,8 +9,9 @@ namespace esphome {
 
         struct RegisterTask {
             uint8_t register_index; // Index of the register to read
+            SofarSolar_Inverter* inverter; // Zeiger auf die Instanz
             bool operator<(const RegisterTask &other) const {
-                return SofarSolar_Register[this.register_index][4] > SofarSolar_Register[other.register_index][4]; // Achtung: größer als = niedrigere Priorität!
+                return inverter->SofarSolar_Register[this->register_index][4] > inverter->SofarSolar_Register[other.register_index][4];
             }
         };
 
@@ -32,6 +33,7 @@ namespace esphome {
                     // Create a task for the register
                     RegisterTask task;
                     task.register_index = i;
+                    task.inverter = this;
                     // Add the task to a priority queue
                     register_tasks.push(task);
                 }
