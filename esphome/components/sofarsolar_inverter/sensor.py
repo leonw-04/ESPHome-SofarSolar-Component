@@ -482,12 +482,12 @@ async def to_code(config):
     if load_consumption_today_config := config.get(CONF_LOAD_CONSUMPTION_TODAY):
         sens = await sensor.new_sensor(load_consumption_today_config)
         cg.add(var.set_load_consumption_today_sensor(sens))
-        cg.add(var.set_load_consumption_today_sensor_update(load_consumption_today_config[UPDATE_INTERVAL]))
+        cg.add(var.set_load_consumption_today_sensor_update_interval(load_consumption_today_config[UPDATE_INTERVAL]))
 
     if load_consumption_total_config := config.get(CONF_LOAD_CONSUMPTION_TOTAL):
         sens = await sensor.new_sensor(load_consumption_total_config)
         cg.add(var.set_load_consumption_total_sensor(sens))
-        cg.add(var.set_load_consumption_total_sensor_update(load_consumption_total_config[UPDATE_INTERVAL]))
+        cg.add(var.set_load_consumption_total_sensor_update_interval(load_consumption_total_config[UPDATE_INTERVAL]))
 
     if battery_charge_today_config := config.get(CONF_BATTERY_CHARGE_TODAY):
         sens = await sensor.new_sensor(battery_charge_today_config)
