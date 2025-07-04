@@ -1,6 +1,7 @@
 #pragma once
 #include "queue"
 #include "vector"
+#include "esphome/components/sensor/sensor.h"
 #include "esphome/core/component.h"
 
 namespace esphome {
