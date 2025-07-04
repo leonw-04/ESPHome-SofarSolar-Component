@@ -20,8 +20,8 @@ namespace esphome {
         void SofarSolar_Inverter::loop() {
             int time_since_last_loop = millis() - time_last_loop;
             time_last_loop = millis();
-            for (int i = 0; i < sizeof(SofarSolar_Register) / sizeof(SofarSolar_Register[0]); i++) {
-                if (SofarSolar_Register[i][4] > 0 && time_since_last_loop >= SofarSolar_Register[i][4] * 1000) {
+            for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
+                if (registers_G3[i].timer > 0 && time_since_last_loop >= registers_G3[i].timer * 1000) {
                     // Create a task for the register
                     RegisterTask task;
                     task.register_index = i;
@@ -36,7 +36,7 @@ namespace esphome {
                 RegisterTask task = register_tasks.top();
                 current_reading = true;
                 time_begin_reading = millis();
-                send_read_modbus_registers(SofarSolar_Register[task.register_index][0], SofarSolar_Register[task.register_index][1]);
+                send_read_modbus_registers(registers_G3[task.register_index].start_address, registers_G3[task.register_index].quantity);
             } else if (current_reading) {
                 std::vector<uint8_t> response;
                 receive_modbus_response(response);
@@ -49,10 +49,10 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received");
                 } else {
                     current_reading = false;
-                    if (check_crc(response) & response[0] == 0x01 && response[1] == 0x03 && response[2] == SofarSolar_Register[register_tasks.top().register_index][1]) {
+                    if (check_crc(response) & response[0] == 0x01 && response[1] == 0x03 && response[2] == registers_G3[register_tasks.top().register_index].quantity) {
                     // Process the response based on the register type
-                        uint16_t start_address = SofarSolar_Register[register_tasks.top().register_index][0];
-                        uint8_t quantity = SofarSolar_Register[register_tasks.top().register_index][1];
+                        uint16_t start_address = registers_G3[register_tasks.top().register_index].start_address;
+                        uint8_t quantity = registers_G3[register_tasks.top().register_index].quantity;
                         ESP_LOGD(TAG, "Received response for register %04X with quantity %d", start_address, quantity);
                         update_sensor(register_tasks.top().register_index, response, 3); // Offset 3 for Modbus response
                         register_tasks.pop(); // Remove the task from the queue
@@ -65,26 +65,26 @@ namespace esphome {
 
         void SofarSolar_Inverter::update_sensor(uint8_t register_index, std::vector<uint8_t> &response, uint8_t offset) {
             // Update the sensor based on the register index and response data
-            if (register_index < sizeof(SofarSolar_Register) / sizeof(SofarSolar_Register[0])) {
-                switch (SofarSolar_Register[register_index][2]) {
+            if (register_index < sizeof(registers_G3) / sizeof(registers_G3[0])) {
+                switch (registers_G3[register_index]type) {
                     case 0: // uint16_t
-                        if (this->SofarSolar_Register[register_index].sensor != nullptr) {
-                            this->SofarSolar_Register[register_index].sensor->publish_state(uint16_t_from_bytes(response, offset));
+                        if (this->registers_G3[register_index].sensor != nullptr) {
+                            this->registers_G3[register_index].sensor->publish_state(uint16_t_from_bytes(response, offset));
                         }
                         break;
                     case 1: // int16_t
-                        if (this->SofarSolar_Register[register_index].sensor != nullptr) {
-                            this->SofarSolar_Register[register_index].sensor->publish_state(int16_t_from_bytes(response, offset));
+                        if (this->registers_G3[register_index].sensor != nullptr) {
+                            this->registers_G3[register_index].sensor->publish_state(int16_t_from_bytes(response, offset));
                         }
                         break;
                     case 2: // uint32_t
-                        if (this->SofarSolar_Register[register_index].sensor != nullptr) {
-                            this->SofarSolar_Register[register_index].sensor->publish_state(uint32_t_from_bytes(response, offset));
+                        if (this->registers_G3[register_index].sensor != nullptr) {
+                            this->registers_G3[register_index].sensor->publish_state(uint32_t_from_bytes(response, offset));
                         }
                         break;
                     case 3: // int32_t
-                        if (this->SofarSolar_Register[register_index].sensor != nullptr) {
-                            this->SofarSolar_Register[register_index].sensor->publish_state(int32_t_from_bytes(response, offset));
+                        if (this->registers_G3[register_index].sensor != nullptr) {
+                            this->registers_G3[register_index].sensor->publish_state(int32_t_from_bytes(response, offset));
                         }
                         break;
                     case 4: // float16
