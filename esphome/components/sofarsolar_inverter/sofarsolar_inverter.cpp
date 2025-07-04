@@ -99,7 +99,7 @@ namespace esphome {
             } else {
                 ESP_LOGE(TAG, "Register index out of bounds: %d", register_index);
             }
-        }) {
+        }
 
         void SofarSolar_Inverter::dump_config(){
             ESP_LOGCONFIG(TAG, "SofarSolar_Inverter");

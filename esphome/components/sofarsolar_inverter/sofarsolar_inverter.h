@@ -67,6 +67,7 @@ namespace esphome {
             void loop() override;
             void dump_config() override;
 
+            void update_sensor(uint8_t register_index, std::vector<uint8_t> &response, uint8_t offset);
             void calc_crc(std::vector<uint8_t> frame);
             bool check_crc(std::vector<uint8_t> frame);
             void send_read_modbus_registers(uint16_t start_address, uint16_t quantity);
@@ -255,7 +256,7 @@ namespace esphome {
             uint8_t register_index; // Index of the register to read
             SofarSolar_Inverter* inverter; // Zeiger auf die Instanz
             bool operator<(const RegisterTask &other) const {
-                return inverter->SofarSolar_Register[this->register_index][4] > inverter->SofarSolar_Register[other.register_index][4];
+                return inverter->registers_G3[this->register_index].priority > inverter->registers_G3[other.register_index].priority;
             }
         };
     }
