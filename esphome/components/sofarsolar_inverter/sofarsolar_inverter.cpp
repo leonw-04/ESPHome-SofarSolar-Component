@@ -57,7 +57,7 @@ namespace esphome {
                         update_sensor(register_tasks.top().register_index, response, 3); // Offset 3 for Modbus response
                         register_tasks.pop(); // Remove the task from the queue
                     } else {
-                        ESP_LOGE(TAG, "CRC check failed for register %04X", start_address);
+                        ESP_LOGE(TAG, "CRC check failed");
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace esphome {
         void SofarSolar_Inverter::update_sensor(uint8_t register_index, std::vector<uint8_t> &response, uint8_t offset) {
             // Update the sensor based on the register index and response data
             if (register_index < sizeof(registers_G3) / sizeof(registers_G3[0])) {
-                switch (registers_G3[register_index]type) {
+                switch (registers_G3[register_index].type) {
                     case 0: // uint16_t
                         if (this->registers_G3[register_index].sensor != nullptr) {
                             this->registers_G3[register_index].sensor->publish_state(uint16_t_from_bytes(response, offset));
@@ -105,11 +105,11 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "SofarSolar_Inverter");
             ESP_LOGCONFIG(TAG, "  model = %s", this->model_.c_str());
             ESP_LOGCONFIG(TAG, "  modbus_address = %i", this->modbus_address_);
-            ESP_LOGCONFIG(TAG, "  uart_id = %s", this->uart_id_.c_str());
             ESP_LOGCONFIG(TAG, "  zero_export = %s", TRUEFALSE(this->zero_export_));
             if (!this->power_id_.empty()) {
                 ESP_LOGCONFIG(TAG, "  power_id = %s", this->power_id_.c_str());
             }
+        }
 
         void SofarSolar_Inverter::send_read_modbus_registers(uint16_t start_address, uint16_t quantity) {
             // Create Modbus frame for reading registers
