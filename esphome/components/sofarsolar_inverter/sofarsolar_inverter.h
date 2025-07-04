@@ -182,7 +182,7 @@ namespace esphome {
             int battery_conf_eps_buffer_sensor_update_interval_;
             int battery_conf_control_sensor_update_interval_;
 
-            static const uint16_t SofarSolar_Register[][] = {
+            static const uint16_t SofarSolar_Register[][5] = {
                 // Register Address, Quantity, Type, Offset, Timer, Priority
                 // Type: 0 uint16_t, 1 int16_t, 2 uint32_t, 3 int32_t, 4 float16, 5 float32
                 // Priority: 0 - Low, 1 - Medium, 2 - High, 3 - Critical
@@ -224,7 +224,7 @@ namespace esphome {
                 {0x1051, 1, 0, 0, 0}, // Battery Conf Cell Type
                 {0x1052, 1, 0, 0, 0}, // Battery Conf EPS Buffer
                 {0x1053, 1, 0, 0, 0} // Battery Conf Control
-            }
+            };
         };
     }
 }
