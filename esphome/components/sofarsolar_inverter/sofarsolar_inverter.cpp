@@ -17,7 +17,7 @@ namespace esphome {
         };
 
         int time_last_loop = 0;
-        RegisterTask current_reading = nullptr;
+        bool current_reading = false; // Pointer to the current reading task
         int time_begin_reading = 0;
         std::priority_queue<RegisterTask> register_tasks;
 
@@ -43,7 +43,7 @@ namespace esphome {
             if (!current_reading && !register_tasks.empty()) {
                 // Get the highest priority task
                 RegisterTask task = register_tasks.top();
-                current_reading = task;
+                current_reading = true;
                 time_begin_reading = millis();
                 send_read_modbus_registers(SofarSolar_Register[task.register_index][0], SofarSolar_Register[task.register_index][1]);
             } else if (current_reading) {
@@ -51,16 +51,16 @@ namespace esphome {
                 receive_modbus_response(response);
                 if (millis() - time_begin_reading > 250) {
                     ESP_LOGE(TAG, "Timeout while waiting for response");
-                    current_reading = nullptr;
+                    current_reading = false;
                     return;
                 }
                 if (response.empty()) {
                     ESP_LOGE(TAG, "No response received");
                 } else {
-                    current_reading = nullptr;
-                    if (check_crc(response) & response[0] == 0x01 && response[1] == 0x03 && response[2] == SofarSolar_Register[current_reading->register_index][1]) {
+                    current_reading = false;
+                    if (check_crc(response) & response[0] == 0x01 && response[1] == 0x03 && response[2] == SofarSolar_Register[register_tasks.top()->register_index][1]) {
                     // Process the response based on the register type
-                        switch (SofarSolar_Register[current_reading->register_index][2]) {
+                        switch (SofarSolar_Register[register_tasks.top()->register_index][2]) {
                             case 0: // uint16_t
                                 uint16_t value = (response[3] << 8) | response[4];
                                 break;
