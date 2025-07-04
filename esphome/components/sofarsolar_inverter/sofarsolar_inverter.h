@@ -10,6 +10,48 @@ namespace esphome {
 
         class SofarSolar_Inverter : public Component {
         public:
+
+            SofarSolar_Register registers_G3[38] = {
+                SofarSolar_Register{0x0684, 2, 2, 1}, // PV Generation Today
+                SofarSolar_Register{0x0686, 2, 2, 0}, // PV Generation Total
+                SofarSolar_Register{0x0688, 2, 2, 1}, // Load Consumption Today
+                SofarSolar_Register{0x068A, 2, 2, 0}, // Load Consumption Total
+                SofarSolar_Register{0x0694, 2, 2, 1}, // Battery Charge Today
+                SofarSolar_Register{0x0696, 2, 2, 0}, // Battery Charge Total
+                SofarSolar_Register{0x0698, 2, 2, 1}, // Battery Discharge Today
+                SofarSolar_Register{0x069A, 2, 2, 0}, // Battery Discharge Total
+                SofarSolar_Register{0x0485, 1, 1, 3}, // Total Active Power Inverter
+                SofarSolar_Register{0x0584, 1, 0, 2}, // PV Voltage 1
+                SofarSolar_Register{0x0585, 1, 0, 2}, // PV Current 1
+                SofarSolar_Register{0x0586, 1, 0, 2}, // PV Power 1
+                SofarSolar_Register{0x0588, 1, 0, 2}, // PV Voltage 2
+                SofarSolar_Register{0x0589, 1, 0, 2}, // PV Current 2
+                SofarSolar_Register{0x058A, 1, 0, 2}, // PV Power 2
+                SofarSolar_Register{0x05C4, 1, 0, 3}, // PV Power Total
+                SofarSolar_Register{0x0667, 1, 1, 3}, // Battery Power Total
+                SofarSolar_Register{0x0668, 1, 0, 1}, // Battery State of Charge Total
+                SofarSolar_Register{0x1187, 2, 3, 3}, // Desired Grid Power
+                SofarSolar_Register{0x1189, 2, 3, 3}, // Minimum Battery Power
+                SofarSolar_Register{0x118B, 2, 3, 3}, // Maximum Battery Power
+                SofarSolar_Register{0x1110, 1, 0, 0}, // Energy Storage Mode
+                SofarSolar_Register{0x1044, 1, 0, 0}, // Battery Conf ID
+                SofarSolar_Register{0x1045, 1, 0, 0}, // Battery Conf Address
+                SofarSolar_Register{0x1046, 1, 0, 0}, // Battery Conf Protocol
+                SofarSolar_Register{0x1050, 1, 0, 0}, // Battery Conf Voltage Nominal
+                SofarSolar_Register{0x1047, 1, 0, 0}, // Battery Conf Voltage Over
+                SofarSolar_Register{0x1048, 1, 0, 0}, // Battery Conf Voltage Charge
+                SofarSolar_Register{0x1049, 1, 0, 0}, // Battery Conf Voltage Lack
+                SofarSolar_Register{0x104A, 1, 0, 0}, // Battery Conf Voltage Discharge Stop
+                SofarSolar_Register{0x104B, 1, 0, 0}, // Battery Conf Current Charge Limit
+                SofarSolar_Register{0x104C, 1, 0, 0}, // Battery Conf Current Discharge Limit
+                SofarSolar_Register{0x104D, 1, 0, 0}, // Battery Conf Depth of Discharge
+                SofarSolar_Register{0x104E, 1, 0, 0}, // Battery Conf End of Discharge
+                SofarSolar_Register{0x104F, 1, 0, 0}, // Battery Conf Capacity
+                SofarSolar_Register{0x1051, 1, 0, 0}, // Battery Conf Cell Type
+                SofarSolar_Register{0x1052, 1, 0, 0}, // Battery Conf EPS Buffer
+                SofarSolar_Register{0x1053, 1, 0, 0} // Battery Conf Control
+            };
+
             void setup() override;
             void loop() override;
             void dump_config() override;
@@ -197,48 +239,7 @@ namespace esphome {
             int battery_conf_eps_buffer_sensor_update_interval_;
             int battery_conf_control_sensor_update_interval_;
 
-            SofarSolar_Register registers_G3[38] = {
-                SofarSolar_Register{0x0684, 2, 2, 1}, // PV Generation Today
-                SofarSolar_Register{0x0686, 2, 2, 0}, // PV Generation Total
-                SofarSolar_Register{0x0688, 2, 2, 1}, // Load Consumption Today
-                SofarSolar_Register{0x068A, 2, 2, 0}, // Load Consumption Total
-                SofarSolar_Register{0x0694, 2, 2, 1}, // Battery Charge Today
-                SofarSolar_Register{0x0696, 2, 2, 0}, // Battery Charge Total
-                SofarSolar_Register{0x0698, 2, 2, 1}, // Battery Discharge Today
-                SofarSolar_Register{0x069A, 2, 2, 0}, // Battery Discharge Total
-                SofarSolar_Register{0x0485, 1, 1, 3}, // Total Active Power Inverter
-                SofarSolar_Register{0x0584, 1, 0, 2}, // PV Voltage 1
-                SofarSolar_Register{0x0585, 1, 0, 2}, // PV Current 1
-                SofarSolar_Register{0x0586, 1, 0, 2}, // PV Power 1
-                SofarSolar_Register{0x0588, 1, 0, 2}, // PV Voltage 2
-                SofarSolar_Register{0x0589, 1, 0, 2}, // PV Current 2
-                SofarSolar_Register{0x058A, 1, 0, 2}, // PV Power 2
-                SofarSolar_Register{0x05C4, 1, 0, 3}, // PV Power Total
-                SofarSolar_Register{0x0667, 1, 1, 3}, // Battery Power Total
-                SofarSolar_Register{0x0668, 1, 0, 1}, // Battery State of Charge Total
-                SofarSolar_Register{0x1187, 2, 3, 3}, // Desired Grid Power
-                SofarSolar_Register{0x1189, 2, 3, 3}, // Minimum Battery Power
-                SofarSolar_Register{0x118B, 2, 3, 3}, // Maximum Battery Power
-                SofarSolar_Register{0x1110, 1, 0, 0}, // Energy Storage Mode
-                SofarSolar_Register{0x1044, 1, 0, 0}, // Battery Conf ID
-                SofarSolar_Register{0x1045, 1, 0, 0}, // Battery Conf Address
-                SofarSolar_Register{0x1046, 1, 0, 0}, // Battery Conf Protocol
-                SofarSolar_Register{0x1050, 1, 0, 0}, // Battery Conf Voltage Nominal
-                SofarSolar_Register{0x1047, 1, 0, 0}, // Battery Conf Voltage Over
-                SofarSolar_Register{0x1048, 1, 0, 0}, // Battery Conf Voltage Charge
-                SofarSolar_Register{0x1049, 1, 0, 0}, // Battery Conf Voltage Lack
-                SofarSolar_Register{0x104A, 1, 0, 0}, // Battery Conf Voltage Discharge Stop
-                SofarSolar_Register{0x104B, 1, 0, 0}, // Battery Conf Current Charge Limit
-                SofarSolar_Register{0x104C, 1, 0, 0}, // Battery Conf Current Discharge Limit
-                SofarSolar_Register{0x104D, 1, 0, 0}, // Battery Conf Depth of Discharge
-                SofarSolar_Register{0x104E, 1, 0, 0}, // Battery Conf End of Discharge
-                SofarSolar_Register{0x104F, 1, 0, 0}, // Battery Conf Capacity
-                SofarSolar_Register{0x1051, 1, 0, 0}, // Battery Conf Cell Type
-                SofarSolar_Register{0x1052, 1, 0, 0}, // Battery Conf EPS Buffer
-                SofarSolar_Register{0x1053, 1, 0, 0} // Battery Conf Control
-            };
         };
-
         struct RegisterTask {
             uint8_t register_index; // Index of the register to read
             SofarSolar_Inverter* inverter; // Zeiger auf die Instanz
