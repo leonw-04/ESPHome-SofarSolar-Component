@@ -10,7 +10,7 @@ namespace esphome {
         class SofarSolar_Inverter : public Component {
         public:
             void setup() override;
-            void update() override;
+            void loop() override;
             void dump_config() override;
 
             void calc_crc(std::vector<uint8_t> frame);
@@ -98,6 +98,89 @@ namespace esphome {
             void set_battery_conf_cell_type_sensor_update_interval(int battery_conf_cell_type_sensor_update_interval) { battery_conf_cell_type_sensor_update_interval_ = battery_conf_cell_type_sensor_update_interval; }
             void set_battery_conf_eps_buffer_sensor_update_interval(int battery_conf_eps_buffer_sensor_update_interval) { battery_conf_eps_buffer_sensor_update_interval_ = battery_conf_eps_buffer_sensor_update_interval; }
             void set_battery_conf_control_sensor_update_interval(int battery_conf_control_sensor_update_interval) { battery_conf_control_sensor_update_interval_ = battery_conf_control_sensor_update_interval; }
-        }
+
+            std::string model_;
+            int modbus_address_;
+            bool zero_export_;
+            std::string power_id_;
+
+            sensor::Sensor *pv_generation_today_sensor_{nullptr};
+            sensor::Sensor *pv_generation_total_sensor_{nullptr};
+            sensor::Sensor *load_consumption_today_sensor_{nullptr};
+            sensor::Sensor *load_consumption_total_sensor_{nullptr};
+            sensor::Sensor *battery_charge_today_sensor_{nullptr};
+            sensor::Sensor *battery_charge_total_sensor_{nullptr};
+            sensor::Sensor *battery_discharge_today_sensor_{nullptr};
+            sensor::Sensor *battery_discharge_total_sensor_{nullptr};
+            sensor::Sensor *total_active_power_inverter_sensor_{nullptr};
+            sensor::Sensor *pv_voltage_1_sensor_{nullptr};
+            sensor::Sensor *pv_current_1_sensor_{nullptr};
+            sensor::Sensor *pv_power_1_sensor_{nullptr};
+            sensor::Sensor *pv_voltage_2_sensor_{nullptr};
+            sensor::Sensor *pv_current_2_sensor_{nullptr};
+            sensor::Sensor *pv_power_2_sensor_{nullptr};
+            sensor::Sensor *pv_power_total_sensor_{nullptr};
+            sensor::Sensor *battery_power_total_sensor_{nullptr};
+            sensor::Sensor *battery_state_of_charge_total_sensor_{nullptr};
+            sensor::Sensor *desired_grid_power_sensor_{nullptr};
+            sensor::Sensor *minimum_battery_power_sensor_{nullptr};
+            sensor::Sensor *maximum_battery_power_sensor_{nullptr};
+            sensor::Sensor *energy_storage_mode_sensor_{nullptr};
+            sensor::Sensor *battery_conf_id_sensor_{nullptr};
+            sensor::Sensor *battery_conf_address_sensor_{nullptr};
+            sensor::Sensor *battery_conf_protocol_sensor_{nullptr};
+            sensor::Sensor *battery_conf_voltage_nominal_sensor_{nullptr};
+            sensor::Sensor *battery_conf_voltage_over_sensor_{nullptr};
+            sensor::Sensor *battery_conf_voltage_charge_sensor_{nullptr};
+            sensor::Sensor *battery_conf_voltage_lack_sensor_{nullptr};
+            sensor::Sensor *battery_conf_voltage_discharge_stop_sensor_{nullptr};
+            sensor::Sensor *battery_conf_current_charge_limit_sensor_{nullptr};
+            sensor::Sensor *battery_conf_current_discharge_limit_sensor_{nullptr};
+            sensor::Sensor *battery_conf_depth_of_discharge_sensor_{nullptr};
+            sensor::Sensor *battery_conf_end_of_discharge_sensor_{nullptr};
+            sensor::Sensor *battery_conf_capacity_sensor_{nullptr};
+            sensor::Sensor *battery_conf_cell_type_sensor_{nullptr};
+            sensor::Sensor *battery_conf_eps_buffer_sensor_{nullptr};
+            sensor::Sensor *battery_conf_control_sensor_{nullptr};
+
+            int pv_generation_today_sensor_update_interval_;
+            int pv_generation_total_sensor_update_interval_;
+            int load_consumption_today_sensor_update_interval_;
+            int load_consumption_total_sensor_update_interval_;
+            int battery_charge_today_sensor_update_interval_;
+            int battery_charge_total_sensor_update_interval_;
+            int battery_discharge_today_sensor_update_interval_;
+            int battery_discharge_total_sensor_update_interval_;
+            int total_active_power_inverter_sensor_update_interval_;
+            int pv_voltage_1_sensor_update_interval_;
+            int pv_current_1_sensor_update_interval_;
+            int pv_power_1_sensor_update_interval_;
+            int pv_voltage_2_sensor_update_interval_;
+            int pv_current_2_sensor_update_interval_;
+            int pv_power_2_sensor_update_interval_;
+            int pv_power_total_sensor_update_interval_;
+            int battery_power_total_sensor_update_interval_;
+            int battery_state_of_charge_total_sensor_update_interval_;
+            int desired_grid_power_sensor_update_interval_;
+            int minimum_battery_power_sensor_update_interval_;
+            int maximum_battery_power_sensor_update_interval_;
+            int energy_storage_mode_sensor_update_interval_;
+            int battery_conf_id_sensor_update_interval_;
+            int battery_conf_address_sensor_update_interval_;
+            int battery_conf_protocol_sensor_update_interval_;
+            int battery_conf_voltage_nominal_sensor_update_interval_;
+            int battery_conf_voltage_over_sensor_update_interval_;
+            int battery_conf_voltage_charge_sensor_update_interval_;
+            int battery_conf_voltage_lack_sensor_update_interval_;
+            int battery_conf_voltage_discharge_stop_sensor_update_interval_;
+            int battery_conf_current_charge_limit_sensor_update_interval_;
+            int battery_conf_current_discharge_limit_sensor_update_interval_;
+            int battery_conf_depth_of_discharge_sensor_update_interval_;
+            int battery_conf_end_of_discharge_sensor_update_interval_;
+            int battery_conf_capacity_sensor_update_interval_;
+            int battery_conf_cell_type_sensor_update_interval_;
+            int battery_conf_eps_buffer_sensor_update_interval_;
+            int battery_conf_control_sensor_update_interval_;
+        };
     }
 }
