@@ -4,14 +4,6 @@
 
 namespace esphome {
     namespace sofarsolar_inverter {
-
-        struct RegisterTask {
-            uint8_t register_index; // Index of the register to read
-            bool operator<(const RegisterTask &other) const {
-                return SofarSolar_Register[this.register_index][4] > SofarSolar_Register[other.register_index][4]; // Achtung: größer als = niedrigere Priorität!
-            }
-        };
-
         static const char *TAG = "sofarsolar_inverter.component";
         SofarSolar_Register = {
                 // Register Address, Quantity, Type, Offset, Timer, Priority
@@ -56,6 +48,14 @@ namespace esphome {
                 {0x1052, 1, 0, 0, 0}, // Battery Conf EPS Buffer
                 {0x1053, 1, 0, 0, 0} // Battery Conf Control
             };
+
+
+        struct RegisterTask {
+            uint8_t register_index; // Index of the register to read
+            bool operator<(const RegisterTask &other) const {
+                return SofarSolar_Register[this.register_index][4] > SofarSolar_Register[other.register_index][4]; // Achtung: größer als = niedrigere Priorität!
+            }
+        };
 
         int time_last_loop = 0;
         bool current_reading = false;
