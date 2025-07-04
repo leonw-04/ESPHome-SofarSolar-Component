@@ -92,7 +92,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=60): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_PV_GENERATION_TOTAL): sensor.sensor_schema(
@@ -102,7 +102,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=120): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_LOAD_CONSUMPTION_TODAY): sensor.sensor_schema(
@@ -112,7 +112,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=60): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_LOAD_CONSUMPTION_TOTAL): sensor.sensor_schema(
@@ -122,7 +122,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=120): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CHARGE_TODAY): sensor.sensor_schema(
@@ -132,7 +132,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=60): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CHARGE_TOTAL): sensor.sensor_schema(
@@ -142,7 +142,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=120): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_DISCHARGE_TODAY): sensor.sensor_schema(
@@ -152,7 +152,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=60): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_DISCHARGE_TOTAL): sensor.sensor_schema(
@@ -162,7 +162,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=120): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_PV_VOLTAGE_1): sensor.sensor_schema(
@@ -172,7 +172,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=10): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_PV_CURRENT_1): sensor.sensor_schema(
@@ -182,7 +182,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=10): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_PV_POWER_1): sensor.sensor_schema(
@@ -192,7 +192,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=10): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_PV_VOLTAGE_2): sensor.sensor_schema(
@@ -202,7 +202,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=10): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_PV_CURRENT_2): sensor.sensor_schema(
@@ -212,7 +212,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=10): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_PV_POWER_2): sensor.sensor_schema(
@@ -222,7 +222,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=10): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_PV_POWER_TOTAL): sensor.sensor_schema(
@@ -232,7 +232,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=10): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_POWER_TOTAL): sensor.sensor_schema(
@@ -242,7 +242,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=10): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_STATE_OF_CHARGE_TOTAL): sensor.sensor_schema(
@@ -252,7 +252,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=30): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_DESIRED_GRID_POWER): sensor.sensor_schema(
@@ -262,7 +262,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=1): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_MINIMUM_BATTERY_POWER): sensor.sensor_schema(
@@ -272,7 +272,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=1): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_MAXIMUM_BATTERY_POWER): sensor.sensor_schema(
@@ -282,7 +282,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=1): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_ENERGY_STORAGE_MODE): sensor.sensor_schema(
@@ -292,7 +292,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_ID): sensor.sensor_schema(
@@ -302,7 +302,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_ADDRESS): sensor.sensor_schema(
@@ -312,7 +312,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_PROTOCOL): sensor.sensor_schema(
@@ -322,7 +322,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_VOLTAGE_NOMINAL): sensor.sensor_schema(
@@ -332,7 +332,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_VOLTAGE_OVER): sensor.sensor_schema(
@@ -342,7 +342,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_VOLTAGE_CHARGE): sensor.sensor_schema(
@@ -352,7 +352,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_VOLTAGE_LACK): sensor.sensor_schema(
@@ -362,7 +362,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_VOLTAGE_DISCHARGE_STOP): sensor.sensor_schema(
@@ -372,7 +372,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_CURRENT_CHARGE_LIMIT): sensor.sensor_schema(
@@ -382,7 +382,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_CURRENT_DISCHARGE_LIMIT): sensor.sensor_schema(
@@ -392,7 +392,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_DEPTH_OF_DISCHARGE): sensor.sensor_schema(
@@ -402,7 +402,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_END_OF_DISCHARGE): sensor.sensor_schema(
@@ -412,7 +412,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_CAPACITY): sensor.sensor_schema(
@@ -422,7 +422,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_CELL_TYPE): sensor.sensor_schema(
@@ -432,7 +432,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_EPS_BUFFER): sensor.sensor_schema(
@@ -442,7 +442,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_BATTERY_CONF_CONTROL): sensor.sensor_schema(
@@ -452,7 +452,7 @@ CONFIG_SCHEMA = cv.Schema({
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default=300): cv.time_period,
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
 }).extend(uart.UART_DEVICE_SCHEMA)
