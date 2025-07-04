@@ -182,7 +182,7 @@ namespace esphome {
             int battery_conf_eps_buffer_sensor_update_interval_;
             int battery_conf_control_sensor_update_interval_;
 
-            const uint16_t SofarSolar_Register[38][5];
+            uint16_t SofarSolar_Register[38][5];
         };
     }
 }
