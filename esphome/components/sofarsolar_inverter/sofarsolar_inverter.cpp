@@ -18,10 +18,10 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::loop() {
-            int time_since_last_loop = millis() - time_last_loop;
-            time_last_loop = millis();
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
-                if (registers_G3[i].timer > 0 && time_since_last_loop >= registers_G3[i].timer * 1000) {
+                ESP_LOGD(TAG, "Checking register %d: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i], millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
+                if (millis() - registers_G3[i].timer * 1000 > registers_G3[i].update_interval * 1000) {
+                    registers_G3[i].timer -= millis() / 1000;
                     // Create a task for the register
                     RegisterTask task;
                     task.register_index = i;

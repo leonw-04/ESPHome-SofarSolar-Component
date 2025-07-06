@@ -13,10 +13,10 @@ namespace esphome {
             uint16_t quantity; // Number of registers to read
             uint8_t type; // Type of the register (0: uint16_t, 1: int16_t, 2: uint32_t, 3: int32_t, 4: float16, 5: float32)
             uint8_t priority; // Priority of the register for reading
-            int update_interval; // Update interval in seconds for the register
-            int timer; // Timer in seconds for reading the register
+            uint16_t update_interval; // Update interval in seconds for the register
+            uint32_t timer; // Timer in seconds for reading the register
             sensor::Sensor *sensor; // Pointer to the sensor to update
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, int update_interval = 0, int timer = 0, sensor::Sensor *sensor = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), update_interval(update_interval), timer(timer), sensor(sensor) {}
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, uint16_t update_interval = 0, uint32_t timer = 0, sensor::Sensor *sensor = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), update_interval(update_interval), timer(timer), sensor(sensor) {}
         };
 
         class SofarSolar_Inverter : public uart::UARTDevice, public Component {
