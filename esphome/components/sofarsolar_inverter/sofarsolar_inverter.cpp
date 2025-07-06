@@ -24,7 +24,7 @@ namespace esphome {
                     ESP_LOGVV(TAG, "Sensor for register %d is not set", registers_G3[i].start_address);
                     continue;
                 }
-                ESP_LOGD(TAG, "Checking register %d: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
+                ESP_LOGD(TAG, "Checking register %04X: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
                 if (millis() / 1000 - registers_G3[i].timer > registers_G3[i].update_interval && !registers_G3[i].is_queued) {
                     registers_G3[i].timer -= millis() / 1000;
                     // Create a task for the register
@@ -131,8 +131,7 @@ namespace esphome {
 
         bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response, uint8_t type, uint8_t quantity) {
             // Read Modbus response from UART
-            ESP_LOGD(TAG, "Peek data in UART buffer: %d bytes", this->peek());
-            if (this->available()) {
+            if (this->peek() != -1 && this->available()) {
                 ESP_LOGV(TAG, "Data available in UART buffer");
             } else {
                 ESP_LOGV(TAG, "No data available in UART buffer");
