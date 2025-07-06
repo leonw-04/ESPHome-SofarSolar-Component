@@ -41,6 +41,7 @@ namespace esphome {
                 RegisterTask task = register_tasks.top();
                 current_reading = true;
                 time_begin_reading = millis();
+                empty_uart_buffer_(); // Clear the UART buffer before sending a new request
                 send_read_modbus_registers(registers_G3[task.register_index].start_address, registers_G3[task.register_index].quantity);
             } else if (current_reading) {
                 if (millis() - time_begin_reading > 500) { // Timeout after 500 ms
@@ -123,9 +124,7 @@ namespace esphome {
 
         bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response) {
             // Read Modbus response from UART
-            uint8_t peek_data;
-            this->read_byte(&peek_data);
-            if (peek_data) {
+            if (this->available()) {
                 ESP_LOGVV(TAG, "Data available in UART buffer");
             } else {
                 ESP_LOGVV(TAG, "No data available in UART buffer");
@@ -181,6 +180,13 @@ namespace esphome {
             } else {
                 ESP_LOGD(TAG, "CRC check passed: %04X", crc_received);
                 return true;
+            }
+        }
+
+        void SofarSolar_Inverter::empty_uart_buffer_() {
+            uint8_t byte;
+            while (this->available()) {
+                this->read_byte(&byte);
             }
         }
     }
