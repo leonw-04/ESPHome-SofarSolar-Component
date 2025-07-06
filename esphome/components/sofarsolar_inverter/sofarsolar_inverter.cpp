@@ -139,7 +139,14 @@ namespace esphome {
             response.clear();
             uint8_t expected_length = 5 + quantity * 2 + 2; // 5 bytes header + quantity * 2 bytes for data + crc 2 bytes
             uint8_t buffer[expected_length];
-            this->read_array(&buffer[0], expected_length);
+            for (uint8_t i = 0; i < expected_length && this->available(); i++) {
+                if (!this->read_byte(&buffer[i])) {
+                    ESP_LOGE(TAG, "Failed to read byte from UART");
+                    return false;
+                } else {
+                    ESP_LOGD(TAG, "Read byte: %02X", buffer[i]);
+                }
+            }
             response.insert(response.end(), buffer, buffer + expected_length);
             ESP_LOGD(TAG, "Received Modbus response: %s", vector_to_string(response).c_str());
             return true;
