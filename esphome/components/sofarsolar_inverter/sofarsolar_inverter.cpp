@@ -120,7 +120,9 @@ namespace esphome {
         void SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response) {
             // Read Modbus response from UART
             response.clear();
-            response.push_back(this->read_byte());
+            std::array<uint8_t, 256> buffer;
+            this->read_array(buffer.data(), buffer.size());
+            response.insert(response.end(), buffer.begin(), buffer.end());
         }
 
         void SofarSolar_Inverter::send_modbus(std::vector<uint8_t> frame) {
