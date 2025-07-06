@@ -48,6 +48,8 @@ namespace esphome {
                 if (millis() - time_begin_reading > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for response");
                     current_reading = false;
+                    registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
+                    register_tasks.pop(); // Remove the task from the queue
                     return;
                 }
                 std::vector<uint8_t> response;
@@ -64,6 +66,8 @@ namespace esphome {
                         registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
                         register_tasks.pop(); // Remove the task from the queue
                     } else {
+                        registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
+                        register_tasks.pop(); // Remove the task from the queue
                         ESP_LOGE(TAG, "CRC check failed");
                     }
                 }
