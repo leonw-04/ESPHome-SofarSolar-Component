@@ -123,7 +123,9 @@ namespace esphome {
 
         bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response) {
             // Read Modbus response from UART
-            if (this->peek_byte()) {
+            uint8_t peek_data;
+            this->read_byte(peek_data);
+            if (peek_data) {
                 ESP_LOGVV(TAG, "Data available in UART buffer");
             } else {
                 ESP_LOGVV(TAG, "No data available in UART buffer");
