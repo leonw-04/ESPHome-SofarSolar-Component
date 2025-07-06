@@ -24,7 +24,7 @@ namespace esphome {
                     ESP_LOGVV(TAG, "Sensor for register %d is not set", registers_G3[i].start_address);
                     continue;
                 }
-                ESP_LOGVV(TAG, "Checking register %d: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
+                ESP_LOGD(TAG, "Checking register %d: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
                 if (millis() / 1000 - registers_G3[i].timer > registers_G3[i].update_interval && !registers_G3[i].is_queued) {
                     registers_G3[i].timer -= millis() / 1000;
                     // Create a task for the register
