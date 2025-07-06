@@ -19,7 +19,7 @@ namespace esphome {
             SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, int update_interval = 0, int timer = 0, sensor::Sensor *sensor = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), update_interval(update_interval), timer(timer), sensor(sensor) {}
         };
 
-        class SofarSolar_Inverter : public Component {
+        class SofarSolar_Inverter : public uart::UARTDevice, Component {
         public:
 
             SofarSolar_Register registers_G3[38] = {
