@@ -18,13 +18,13 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::loop() {
-            ESP_LOGV(TAG, "Elements in register_tasks: %d", register_tasks.size());
+            ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
                 if (registers_G3[i].sensor == nullptr) {
                     ESP_LOGVV(TAG, "Sensor for register %d is not set", registers_G3[i].start_address);
                     continue;
                 }
-                ESP_LOGD(TAG, "Checking register %04X: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
+                ESP_LOGVV(TAG, "Checking register %04X: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
                 if (millis() / 1000 - registers_G3[i].timer > registers_G3[i].update_interval && !registers_G3[i].is_queued) {
                     registers_G3[i].timer = millis() / 1000;
                     // Create a task for the register
@@ -34,7 +34,7 @@ namespace esphome {
                     // Add the task to a priority queue
                     register_tasks.push(task);
                     registers_G3[i].is_queued = true;
-                    ESP_LOGD(TAG, "Register %04X is queued for reading", registers_G3[i].start_address);
+                    ESP_LOGV(TAG, "Register %04X is queued for reading", registers_G3[i].start_address);
                 }
             }
 
@@ -150,8 +150,6 @@ namespace esphome {
                 if (!this->read_byte(&buffer[i])) {
                     ESP_LOGE(TAG, "Failed to read byte from UART");
                     return false;
-                } else {
-                    ESP_LOGD(TAG, "Read byte: %02X", buffer[i]);
                 }
                 i++;
             }
@@ -207,12 +205,12 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::empty_uart_buffer() {
-            ESP_LOGD(TAG, "Bytes vor leeren: %d", this->available());
+            ESP_LOGVV(TAG, "Bytes vor leeren: %d", this->available());
             uint8_t byte;
             while (this->available()) {
                 this->read_byte(&byte);
             }
-            ESP_LOGD(TAG, "Bytes nach leeren: %d", this->available());
+            ESP_LOGVV(TAG, "Bytes nach leeren: %d", this->available());
         }
     }
 }
