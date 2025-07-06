@@ -129,7 +129,7 @@ namespace esphome {
             // Send Modbus frame over UART
             calculate_crc(frame);
             this->write_array(frame);
-            ESP_LOGD(TAG, "Sending Modbus frame: %s", frame.c_str());
+            ESP_LOGD(TAG, "Sending Modbus frame");
         }
 
         void SofarSolar_Inverter::calculate_crc(std::vector<uint8_t> frame) {
