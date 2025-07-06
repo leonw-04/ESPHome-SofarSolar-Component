@@ -86,7 +86,7 @@ namespace esphome {
 				return (int32_t) (data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3];
 			}
 
-            string vector_to_string(const std::vector<uint8_t> &data) {
+            std::string vector_to_string(const std::vector<uint8_t> &data) {
                 std::string result;
                 for (const auto &byte : data) {
                     result += fmt::format("{:02X} ", byte);
