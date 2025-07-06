@@ -137,7 +137,7 @@ namespace esphome {
                 return false;
             }
             response.clear();
-            uint8_t expected_length = 3 + quantity * 2 + 2; // 3 bytes header + quantity * 2 bytes for data + crc 2 bytes
+            uint8_t expected_length = 5 + quantity * 2 + 2; // 3 bytes header + quantity * 2 bytes for data + crc 2 bytes
             uint8_t buffer[expected_length];
             uint8_t i = 0;
             while (this->available()) {
@@ -207,10 +207,10 @@ namespace esphome {
 
         void SofarSolar_Inverter::empty_uart_buffer() {
             ESP_LOGD(TAG, "Bytes vor leeren: %d", this->available());
-            //uint8_t byte;
-            //while (this->available()) {
-            //    this->read_byte(&byte);
-            //}
+            uint8_t byte;
+            while (this->available()) {
+                this->read_byte(&byte);
+            }
             ESP_LOGD(TAG, "Bytes nach leeren: %d", this->available());
         }
     }
