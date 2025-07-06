@@ -43,7 +43,7 @@ namespace esphome {
                 time_begin_reading = millis();
                 send_read_modbus_registers(registers_G3[task.register_index].start_address, registers_G3[task.register_index].quantity);
             } else if (current_reading) {
-                if (millis() - time_begin_reading > 250) {
+                if (millis() - time_begin_reading > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for response");
                     current_reading = false;
                     return;
@@ -124,7 +124,7 @@ namespace esphome {
         bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response) {
             // Read Modbus response from UART
             response.clear();
-            std::array<uint8_t, 256> buffer;
+            std::array<uint8_t, 16> buffer;
             this->read_array(buffer.data(), buffer.size());
             if (buffer.data()[0] == 0) {
                 ESP_LOGE(TAG, "No data received from UART");
