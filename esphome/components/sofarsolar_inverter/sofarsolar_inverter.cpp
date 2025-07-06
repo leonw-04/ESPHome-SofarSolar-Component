@@ -45,7 +45,7 @@ namespace esphome {
                 empty_uart_buffer(); // Clear the UART buffer before sending a new request
                 send_read_modbus_registers(registers_G3[task.register_index].start_address, registers_G3[task.register_index].quantity);
             } else if (current_reading) {
-                if (millis() - time_begin_reading > 1000) { // Timeout after 500 ms
+                if (millis() - time_begin_reading > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for response");
                     current_reading = false;
                     registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
@@ -139,13 +139,20 @@ namespace esphome {
             response.clear();
             uint8_t expected_length = 3 + quantity * 2 + 2; // 3 bytes header + quantity * 2 bytes for data + crc 2 bytes
             uint8_t buffer[expected_length];
-            for (uint8_t i = 0; i < expected_length && this->available(); i++) {
+            uint8_t i = 0;
+            while (this->available()) {
+                if (i >= expected_length) {
+                    ESP_LOGE(TAG, "Received more bytes than expected: %d", i);
+                    empty_uart_buffer(); // Clear the buffer if too many bytes are received
+                    return true;
+                }
                 if (!this->read_byte(&buffer[i])) {
                     ESP_LOGE(TAG, "Failed to read byte from UART");
                     return false;
                 } else {
                     ESP_LOGD(TAG, "Read byte: %02X", buffer[i]);
                 }
+                i++;
             }
             response.insert(response.end(), buffer, buffer + expected_length);
             ESP_LOGD(TAG, "Received Modbus response: %s", vector_to_string(response).c_str());
@@ -199,10 +206,12 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::empty_uart_buffer() {
+            ESP_LOGD(TAG, "Bytes vor leeren: %d", this->available());
             uint8_t byte;
             while (this->available()) {
                 this->read_byte(&byte);
             }
+            ESP_LOGD(TAG, "Bytes nach leeren: %d", this->available());
         }
     }
 }
