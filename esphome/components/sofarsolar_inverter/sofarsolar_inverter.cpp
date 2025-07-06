@@ -119,16 +119,14 @@ namespace esphome {
 
         void SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response) {
             // Read Modbus response from UART
-            uart::UARTComponent *uart = this->get_uart();
             response.clear();
-            response.push_back(uart->read_byte());
+            this->push_back(uart->read_byte());
         }
 
         void SofarSolar_Inverter::send_modbus(std::vector<uint8_t> frame) {
             // Send Modbus frame over UART
             calculate_crc(frame);
-            uart::UARTComponent *uart = this->get_uart();
-            uart->write_array(frame);
+            this->write_array(frame);
             ESP_LOGD(TAG, "Sending Modbus frame: %s", frame_to_string(frame).c_str());
         }
 
