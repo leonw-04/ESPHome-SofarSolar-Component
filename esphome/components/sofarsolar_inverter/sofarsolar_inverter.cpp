@@ -138,8 +138,8 @@ namespace esphome {
             }
             response.clear();
             uint8_t expected_length = 5 + quantity * 2 + 2; // 5 bytes header + quantity * 2 bytes for data + crc 2 bytes
-            std::array<uint8_t, expected_length> buffer;
-            this->read_array(buffer.data(), buffer.size());
+            uint8_t buffer[expected_length];
+            this->read_array(&buffer[0], buffer.size());
             response.insert(response.end(), buffer.begin(), buffer.end());
             ESP_LOGD(TAG, "Received Modbus response: %s", vector_to_string(response).c_str());
             return true;
