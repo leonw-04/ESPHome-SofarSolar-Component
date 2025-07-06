@@ -50,7 +50,7 @@ namespace esphome {
                     current_reading = false;
                     return;
                 }
-                if (response.empty()) {
+                if (response.begin() == 00) {
                     ESP_LOGE(TAG, "No response received");
                 } else {
                     current_reading = false;
