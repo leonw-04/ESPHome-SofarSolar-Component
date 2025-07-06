@@ -129,7 +129,7 @@ namespace esphome {
             // Send Modbus frame over UART
             calculate_crc(frame);
             this->write_array(frame);
-            ESP_LOGD(TAG, "Sending Modbus frame: %s", frame_to_string(frame).c_str());
+            ESP_LOGD(TAG, "Sending Modbus frame: %s", frame.c_str());
         }
 
         void SofarSolar_Inverter::calculate_crc(std::vector<uint8_t> frame) {
@@ -152,7 +152,7 @@ namespace esphome {
             frame.push_back((crc) >> 8);
         }
 
-        void SofarSolar_Inverter::check_crc(std::vector<uint8_t> frame) {
+        bool SofarSolar_Inverter::check_crc(std::vector<uint8_t> frame) {
             if (frame.size() < 2) {
                 ESP_LOGE(TAG, "Frame too short to check CRC");
                 return false;
