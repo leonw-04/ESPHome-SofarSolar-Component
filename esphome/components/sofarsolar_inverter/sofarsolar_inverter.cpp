@@ -137,7 +137,7 @@ namespace esphome {
             ESP_LOGD(TAG, "Sending Modbus frame: %s", vector_to_string(frame).c_str());
         }
 
-        void SofarSolar_Inverter::calculate_crc(std::vector<uint8_t> frame) {
+        void SofarSolar_Inverter::calculate_crc(std::vector<uint8_t> &frame) {
             uint16_t crc = 0xFFFF;  // Initialwert für CRC16-CCITT-FALSE
 
             // Iteriere über alle Bytes im Vektor
