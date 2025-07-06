@@ -45,7 +45,7 @@ namespace esphome {
                 //empty_uart_buffer(); // Clear the UART buffer before sending a new request
                 send_read_modbus_registers(registers_G3[task.register_index].start_address, registers_G3[task.register_index].quantity);
             } else if (current_reading) {
-                if (millis() - time_begin_reading > 500) { // Timeout after 500 ms
+                if (millis() - time_begin_reading > 250) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for response");
                     current_reading = false;
                     registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
