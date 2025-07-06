@@ -128,7 +128,7 @@ namespace esphome {
             send_modbus(frame);
         }
 
-        bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response) {
+        bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response, uint8_t type, uint8_t quantity) {
             // Read Modbus response from UART
             if (this->available()) {
                 ESP_LOGVV(TAG, "Data available in UART buffer");
@@ -137,7 +137,8 @@ namespace esphome {
                 return false;
             }
             response.clear();
-            std::array<uint8_t, 16> buffer;
+            uint8_t expected_length = 5 + quantity * 2 + 2; // 5 bytes header + quantity * 2 bytes for data + crc 2 bytes
+            std::array<uint8_t, expected_length> buffer;
             this->read_array(buffer.data(), buffer.size());
             response.insert(response.end(), buffer.begin(), buffer.end());
             ESP_LOGD(TAG, "Received Modbus response: %s", vector_to_string(response).c_str());
