@@ -25,7 +25,7 @@ namespace esphome {
                     continue;
                 }
                 ESP_LOGVV(TAG, "Checking register %d: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
-                if (millis() / 1000 - registers_G3[i].timer  > registers_G3[i].update_interval) {
+                if (millis() / 1000 - registers_G3[i].timer > registers_G3[i].update_interval && !registers_G3[i].is_queued) {
                     registers_G3[i].timer -= millis() / 1000;
                     // Create a task for the register
                     RegisterTask task;
@@ -33,6 +33,7 @@ namespace esphome {
                     task.inverter = this;
                     // Add the task to a priority queue
                     register_tasks.push(task);
+                    registers_G3[i].is_queued = true;
                 }
             }
 
@@ -60,6 +61,7 @@ namespace esphome {
                         uint8_t quantity = registers_G3[register_tasks.top().register_index].quantity;
                         ESP_LOGD(TAG, "Received response for register %04X with quantity %d", start_address, quantity);
                         update_sensor(register_tasks.top().register_index, response, 3); // Offset 3 for Modbus response
+                        registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
                         register_tasks.pop(); // Remove the task from the queue
                     } else {
                         ESP_LOGE(TAG, "CRC check failed");
