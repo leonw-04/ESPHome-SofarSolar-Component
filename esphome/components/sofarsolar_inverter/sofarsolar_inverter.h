@@ -86,6 +86,14 @@ namespace esphome {
 				return (int32_t) (data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3];
 			}
 
+            string vector_to_string(const std::vector<uint8_t> &data) {
+                std::string result;
+                for (const auto &byte : data) {
+                    result += fmt::format("{:02X} ", byte);
+                }
+                return result;
+            }
+
             void set_model(std::string model) { this->model_ = model;}
             void set_modbus_address(int modbus_address) { this->modbus_address_ = modbus_address;}
             void set_zero_export(bool zero_export) { this->zero_export_ = zero_export;}
