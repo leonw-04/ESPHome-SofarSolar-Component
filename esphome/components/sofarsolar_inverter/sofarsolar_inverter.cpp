@@ -207,10 +207,10 @@ namespace esphome {
 
         void SofarSolar_Inverter::empty_uart_buffer() {
             ESP_LOGD(TAG, "Bytes vor leeren: %d", this->available());
-            uint8_t byte;
-            while (this->available()) {
-                this->read_byte(&byte);
-            }
+            //uint8_t byte;
+            //while (this->available()) {
+            //    this->read_byte(&byte);
+            //}
             ESP_LOGD(TAG, "Bytes nach leeren: %d", this->available());
         }
     }
