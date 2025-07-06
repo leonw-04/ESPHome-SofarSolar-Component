@@ -26,7 +26,7 @@ namespace esphome {
                 }
                 ESP_LOGD(TAG, "Checking register %04X: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
                 if (millis() / 1000 - registers_G3[i].timer > registers_G3[i].update_interval && !registers_G3[i].is_queued) {
-                    registers_G3[i].timer -= millis() / 1000;
+                    registers_G3[i].timer = millis() / 1000;
                     // Create a task for the register
                     RegisterTask task;
                     task.register_index = i;
