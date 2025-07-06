@@ -21,10 +21,10 @@ namespace esphome {
             ESP_LOGD(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
                 if (registers_G3[i].sensor == nullptr) {
-                    ESP_LOGD(TAG, "Sensor for register %d is not set", registers_G3[i].start_address);
+                    ESP_LOGVV(TAG, "Sensor for register %d is not set", registers_G3[i].start_address);
                     continue;
                 }
-                ESP_LOGD(TAG, "Checking register %d: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
+                ESP_LOGVV(TAG, "Checking register %d: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
                 if (millis() / 1000 - registers_G3[i].timer  > registers_G3[i].update_interval) {
                     registers_G3[i].timer -= millis() / 1000;
                     // Create a task for the register
