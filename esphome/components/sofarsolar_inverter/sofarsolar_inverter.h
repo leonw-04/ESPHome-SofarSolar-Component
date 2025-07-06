@@ -89,7 +89,9 @@ namespace esphome {
             std::string vector_to_string(const std::vector<uint8_t> &data) {
                 std::string result;
                 for (const auto &byte : data) {
-                    result += fmt::format("{:02X} ", byte);
+                    char buf[4];
+                    std::sprintf(buf, "%02X ", byte);
+                    result += buf;
                 }
                 return result;
             }
