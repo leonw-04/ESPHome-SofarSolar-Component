@@ -53,7 +53,7 @@ namespace esphome {
                     return;
                 }
                 std::vector<uint8_t> response;
-                if (receive_modbus_response(response, 0, registers_G3[register_tasks.top().register_index].quantity) {
+                if (receive_modbus_response(response, 0, registers_G3[register_tasks.top().register_index].quantity)) {
                     ESP_LOGE(TAG, "No response received");
                 } else {
                     current_reading = false;
