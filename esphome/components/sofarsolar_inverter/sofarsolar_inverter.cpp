@@ -18,7 +18,7 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::loop() {
-            ESP_LOGD(TAG, "Elements in register_tasks: %d", register_tasks.size());
+            ESP_LOGV(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
                 if (registers_G3[i].sensor == nullptr) {
                     ESP_LOGVV(TAG, "Sensor for register %d is not set", registers_G3[i].start_address);
