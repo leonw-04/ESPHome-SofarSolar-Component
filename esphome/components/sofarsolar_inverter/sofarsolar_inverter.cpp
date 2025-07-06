@@ -41,7 +41,7 @@ namespace esphome {
                 RegisterTask task = register_tasks.top();
                 current_reading = true;
                 time_begin_reading = millis();
-                empty_uart_buffer_(); // Clear the UART buffer before sending a new request
+                empty_uart_buffer(); // Clear the UART buffer before sending a new request
                 send_read_modbus_registers(registers_G3[task.register_index].start_address, registers_G3[task.register_index].quantity);
             } else if (current_reading) {
                 if (millis() - time_begin_reading > 500) { // Timeout after 500 ms
@@ -183,7 +183,7 @@ namespace esphome {
             }
         }
 
-        void SofarSolar_Inverter::empty_uart_buffer_() {
+        void SofarSolar_Inverter::empty_uart_buffer() {
             uint8_t byte;
             while (this->available()) {
                 this->read_byte(&byte);

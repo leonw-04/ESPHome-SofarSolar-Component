@@ -73,6 +73,7 @@ namespace esphome {
             bool check_crc(std::vector<uint8_t> frame);
             void send_read_modbus_registers(uint16_t start_address, uint16_t quantity);
             bool receive_modbus_response(std::vector<uint8_t> &response);
+            void empty_uart_buffer();
 			uint16_t uint16_t_from_bytes(const std::vector<uint8_t> &data, size_t offset) {
 				return (uint16_t) (data[offset] << 8) | data[offset + 1];
 			}
