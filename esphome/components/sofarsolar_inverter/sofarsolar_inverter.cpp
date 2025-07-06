@@ -137,7 +137,7 @@ namespace esphome {
                 return false;
             }
             response.clear();
-            uint8_t expected_length = 5 + quantity * 2 + 2; // 5 bytes header + quantity * 2 bytes for data + crc 2 bytes
+            uint8_t expected_length = 3 + quantity * 2 + 2; // 3 bytes header + quantity * 2 bytes for data + crc 2 bytes
             uint8_t buffer[expected_length];
             for (uint8_t i = 0; i < expected_length && this->available(); i++) {
                 if (!this->read_byte(&buffer[i])) {
