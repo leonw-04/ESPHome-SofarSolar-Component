@@ -69,7 +69,7 @@ namespace esphome {
 
             void update_sensor(uint8_t register_index, std::vector<uint8_t> &response, uint8_t offset);
             void send_modbus(std::vector<uint8_t> frame);
-            void calculate_crc(std::vector<uint8_t> frame);
+            void calculate_crc(std::vector<uint8_t> &frame);
             bool check_crc(std::vector<uint8_t> frame);
             void send_read_modbus_registers(uint16_t start_address, uint16_t quantity);
             void receive_modbus_response(std::vector<uint8_t> &response);
