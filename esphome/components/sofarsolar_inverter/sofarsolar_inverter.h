@@ -251,25 +251,25 @@ namespace esphome {
 			void set_off_grid_current_phase_t_sensor_update_interval(int off_grid_current_phase_t_sensor_update_interval) { registers_G3[57].update_interval = off_grid_current_phase_t_sensor_update_interval; off_grid_current_phase_t_sensor_update_interval_ = off_grid_current_phase_t_sensor_update_interval; }
 			void set_off_grid_power_phase_t_sensor_update_interval(int off_grid_power_phase_t_sensor_update_interval) { registers_G3[58].update_interval = off_grid_power_phase_t_sensor_update_interval; off_grid_power_phase_t_sensor_update_interval_ = off_grid_power_phase_t_sensor_update_interval; }
 
-			void set_desired_grid_power_sensor_default_value(int64_t default_value) { registers_G3[18].default_value = default_value; registers_G3[18].default_value_set = true; }
-			void set_minimum_battery_power_sensor_default_value(int64_t default_value) { registers_G3[19].default_value = default_value; registers_G3[19].default_value_set = true; }
-			void set_maximum_battery_power_sensor_default_value(int64_t default_value) { registers_G3[20].default_value = default_value; registers_G3[20].default_value_set = true; }
-			void set_energy_storage_mode_sensor_default_value(int64_t default_value) { registers_G3[21].default_value = default_value; registers_G3[21].default_value_set = true; }
-			void set_battery_conf_id_sensor_default_value(int64_t default_value) { registers_G3[22].default_value = default_value; registers_G3[22].default_value_set = true; }
-			void set_battery_conf_address_sensor_default_value(int64_t default_value) { registers_G3[23].default_value = default_value; registers_G3[23].default_value_set = true; }
-			void set_battery_conf_protocol_sensor_default_value(int64_t default_value) { registers_G3[24].default_value = default_value; registers_G3[24].default_value_set = true; }
-			void set_battery_conf_voltage_nominal_sensor_default_value(float default_value) { registers_G3[25].default_value = (int64_t) (default_value / registers_G3[25].scale); registers_G3[25].default_value_set = true; }
-			void set_battery_conf_voltage_over_sensor_default_value(float default_value) { registers_G3[26].default_value = (int64_t) (default_value / registers_G3[26].scale); registers_G3[26].default_value_set = true; }
-			void set_battery_conf_voltage_charge_sensor_default_value(float default_value) { registers_G3[27].default_value = (int64_t) (default_value / registers_G3[27].scale); registers_G3[27].default_value_set = true; }
-			void set_battery_conf_voltage_lack_sensor_default_value(float default_value) { registers_G3[28].default_value = (int64_t) (default_value / registers_G3[28].scale); registers_G3[28].default_value_set = true; }
-			void set_battery_conf_voltage_discharge_stop_sensor_default_value(float default_value) { registers_G3[29].default_value = (int64_t) (default_value / registers_G3[29].scale); registers_G3[29].default_value_set = true; }
-			void set_battery_conf_current_charge_limit_sensor_default_value(float default_value) { registers_G3[30].default_value = (int64_t) (default_value / registers_G3[30].scale); registers_G3[30].default_value_set = true; }
-			void set_battery_conf_current_discharge_limit_sensor_default_value(float default_value) { registers_G3[31].default_value = (int64_t) (default_value / registers_G3[31].scale); registers_G3[31].default_value_set = true; }
-			void set_battery_conf_depth_of_discharge_sensor_default_value(int64_t default_value) { registers_G3[32].default_value = default_value; registers_G3[32].default_value_set = true; }
-			void set_battery_conf_end_of_discharge_sensor_default_value(int64_t default_value) { registers_G3[33].default_value = default_value; registers_G3[33].default_value_set = true; }
-			void set_battery_conf_capacity_sensor_default_value(int64_t default_value) { registers_G3[34].default_value = default_value; registers_G3[34].default_value_set = true; }
-			void set_battery_conf_cell_type_sensor_default_value(int64_t default_value) { registers_G3[35].default_value = default_value; registers_G3[35].default_value_set = true; }
-			void set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value) { registers_G3[36].default_value = default_value; registers_G3[36].default_value_set = true; }
+			void set_desired_grid_power_sensor_default_value(int64_t default_value) { registers_G3[18].default_value = default_value; registers_G3[18].is_default_value_set = true; }
+			void set_minimum_battery_power_sensor_default_value(int64_t default_value) { registers_G3[19].default_value = default_value; registers_G3[19].is_default_value_set = true; }
+			void set_maximum_battery_power_sensor_default_value(int64_t default_value) { registers_G3[20].default_value = default_value; registers_G3[20].is_default_value_set = true; }
+			void set_energy_storage_mode_sensor_default_value(int64_t default_value) { registers_G3[21].default_value = default_value; registers_G3[21].is_default_value_set = true; }
+			void set_battery_conf_id_sensor_default_value(int64_t default_value) { registers_G3[22].default_value = default_value; registers_G3[22].is_default_value_set = true; }
+			void set_battery_conf_address_sensor_default_value(int64_t default_value) { registers_G3[23].default_value = default_value; registers_G3[23].is_default_value_set = true; }
+			void set_battery_conf_protocol_sensor_default_value(int64_t default_value) { registers_G3[24].default_value = default_value; registers_G3[24].is_default_value_set = true; }
+			void set_battery_conf_voltage_nominal_sensor_default_value(float default_value) { registers_G3[25].default_value = (int64_t) (default_value / registers_G3[25].scale); registers_G3[25].is_default_value_set = true; }
+			void set_battery_conf_voltage_over_sensor_default_value(float default_value) { registers_G3[26].default_value = (int64_t) (default_value / registers_G3[26].scale); registers_G3[26].is_default_value_set = true; }
+			void set_battery_conf_voltage_charge_sensor_default_value(float default_value) { registers_G3[27].default_value = (int64_t) (default_value / registers_G3[27].scale); registers_G3[27].is_default_value_set = true; }
+			void set_battery_conf_voltage_lack_sensor_default_value(float default_value) { registers_G3[28].default_value = (int64_t) (default_value / registers_G3[28].scale); registers_G3[28].is_default_value_set = true; }
+			void set_battery_conf_voltage_discharge_stop_sensor_default_value(float default_value) { registers_G3[29].default_value = (int64_t) (default_value / registers_G3[29].scale); registers_G3[29].is_default_value_set = true; }
+			void set_battery_conf_current_charge_limit_sensor_default_value(float default_value) { registers_G3[30].default_value = (int64_t) (default_value / registers_G3[30].scale); registers_G3[30].is_default_value_set = true; }
+			void set_battery_conf_current_discharge_limit_sensor_default_value(float default_value) { registers_G3[31].default_value = (int64_t) (default_value / registers_G3[31].scale); registers_G3[31].is_default_value_set = true; }
+			void set_battery_conf_depth_of_discharge_sensor_default_value(int64_t default_value) { registers_G3[32].default_value = default_value; registers_G3[32].is_default_value_set = true; }
+			void set_battery_conf_end_of_discharge_sensor_default_value(int64_t default_value) { registers_G3[33].default_value = default_value; registers_G3[33].is_default_value_set = true; }
+			void set_battery_conf_capacity_sensor_default_value(int64_t default_value) { registers_G3[34].default_value = default_value; registers_G3[34].is_default_value_set = true; }
+			void set_battery_conf_cell_type_sensor_default_value(int64_t default_value) { registers_G3[35].default_value = default_value; registers_G3[35].is_default_value_set = true; }
+			void set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value) { registers_G3[36].default_value = default_value; registers_G3[36].is_default_value_set = true; }
 
 			void set_desired_grid_power_sensor_enforce_default_value(bool enforce_default_value) { registers_G3[18].enforce_default_value = enforce_default_value; }
 			void set_minimum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { registers_G3[19].enforce_default_value = enforce_default_value; }
