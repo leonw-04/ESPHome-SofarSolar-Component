@@ -137,9 +137,6 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "  model = %s", this->model_.c_str());
             ESP_LOGCONFIG(TAG, "  modbus_address = %i", this->modbus_address_);
             ESP_LOGCONFIG(TAG, "  zero_export = %s", TRUEFALSE(this->zero_export_));
-            if (!this->power_id_.empty()) {
-                ESP_LOGCONFIG(TAG, "  power_id = %s", this->power_id_.c_str());
-            }
         }
 
         void SofarSolar_Inverter::send_read_modbus_registers(uint16_t start_address, uint16_t quantity) {

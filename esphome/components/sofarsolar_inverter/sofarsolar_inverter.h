@@ -24,7 +24,7 @@ namespace esphome {
         class SofarSolar_Inverter : public uart::UARTDevice, public Component {
         public:
 
-            SofarSolar_Register registers_G3[] = {
+            SofarSolar_Register registers_G3[59] = {
                 SofarSolar_Register{0x0684, 2, 2, 1, 0.01}, // PV Generation Today
                 SofarSolar_Register{0x0686, 2, 2, 0, 0.1}, // PV Generation Total
                 SofarSolar_Register{0x0688, 2, 2, 1, 0.01}, // Load Consumption Today
