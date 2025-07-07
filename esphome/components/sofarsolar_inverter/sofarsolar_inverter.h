@@ -291,6 +291,27 @@ namespace esphome {
             sensor::Sensor *battery_conf_cell_type_sensor_{nullptr};
             sensor::Sensor *battery_conf_eps_buffer_sensor_{nullptr};
             sensor::Sensor *battery_conf_control_sensor_{nullptr};
+			sensor::Sensor *grid_frequency_sensor_{nullptr};
+            sensor::Sensor *grid_voltage_phase_r_sensor_{nullptr};
+            sensor::Sensor *grid_current_phase_r_sensor_{nullptr};
+            sensor::Sensor *grid_power_phase_r_sensor_{nullptr};
+            sensor::Sensor *grid_voltage_phase_s_sensor_{nullptr};
+            sensor::Sensor *grid_current_phase_s_sensor_{nullptr};
+            sensor::Sensor *grid_power_phase_s_sensor_{nullptr};
+            sensor::Sensor *grid_voltage_phase_t_sensor_{nullptr};
+            sensor::Sensor *grid_current_phase_t_sensor_{nullptr};
+            sensor::Sensor *grid_power_phase_t_sensor_{nullptr};
+            sensor::Sensor *off_grid_power_total_sensor_{nullptr};
+            sensor::Sensor *off_grid_frequency_sensor_{nullptr};
+            sensor::Sensor *off_grid_voltage_phase_r_sensor_{nullptr};
+            sensor::Sensor *off_grid_current_phase_r_sensor_{nullptr};
+            sensor::Sensor *off_grid_power_phase_r_sensor_{nullptr};
+            sensor::Sensor *off_grid_voltage_phase_s_sensor_{nullptr};
+            sensor::Sensor *off_grid_current_phase_s_sensor_{nullptr};
+            sensor::Sensor *off_grid_power_phase_s_sensor_{nullptr};
+            sensor::Sensor *off_grid_voltage_phase_t_sensor_{nullptr};
+            sensor::Sensor *off_grid_current_phase_t_sensor_{nullptr};
+            sensor::Sensor *off_grid_power_phase_t_sensor_{nullptr};
 
             int pv_generation_today_sensor_update_interval_;
             int pv_generation_total_sensor_update_interval_;
@@ -330,8 +351,28 @@ namespace esphome {
             int battery_conf_cell_type_sensor_update_interval_;
             int battery_conf_eps_buffer_sensor_update_interval_;
             int battery_conf_control_sensor_update_interval_;
+			int grid_frequency_sensor_update_interval_;
+            int grid_voltage_phase_r_sensor_update_interval_;
+            int grid_current_phase_r_sensor_update_interval_;
+            int grid_power_phase_r_sensor_update_interval_;
+            int grid_voltage_phase_s_sensor_update_interval_;
+            int grid_current_phase_s_sensor_update_interval_;
+            int grid_power_phase_s_sensor_update_interval_;
+            int grid_voltage_phase_t_sensor_update_interval_;
+            int grid_current_phase_t_sensor_update_interval_;
+            int grid_power_phase_t_sensor_update_interval_;
+            int off_grid_power_total_sensor_update_interval_;
+            int off_grid_frequency_sensor_update_interval_;
+            int off_grid_voltage_phase_r_sensor_update_interval_;
+            int off_grid_current_phase_r_sensor_update_interval_;
+            int off_grid_power_phase_r_sensor_update_interval_;
+            int off_grid_voltage_phase_s_sensor_update_interval_;
+            int off_grid_current_phase_s_sensor_update_interval_;
+            int off_grid_power_phase_s_sensor_update_interval_;
+            int off_grid_voltage_phase_t_sensor_update_interval_;
+            int off_grid_current_phase_t_sensor_update_interval_;
+            int off_grid_power_phase_t_sensor_update_interval_;
 
-        };
         struct RegisterTask {
             uint8_t register_index; // Index of the register to read
             SofarSolar_Inverter* inverter; // Zeiger auf die Instanz
