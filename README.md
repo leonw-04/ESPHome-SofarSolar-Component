@@ -146,5 +146,5 @@ sensor:
     battery_conf_control:
       name: "Battery Config Control"
       id: battery_conf_control
-´´´
+```
 
