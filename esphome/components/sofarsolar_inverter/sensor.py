@@ -475,8 +475,10 @@ async def to_code(config):
     cg.add(var.set_model(config[CONF_MODEL]))
     cg.add(var.set_modbus_address(config[CONF_MODBUS_ADDRESS]))
     cg.add(var.set_zero_export(config[CONF_ZERO_EXPORT]))
+
     if bar := config.get(CONF_POWER_ID):
-        cg.add(var.set_power_id(CONF_POWER_ID))
+        power_sensor = await cg.get_variable(config[CONF_POWER_ID])
+        cg.add(var.set_power_id(power_sensor))
 
 
     if pv_generation_today_config := config.get(CONF_PV_GENERATION_TODAY):
