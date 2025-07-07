@@ -81,29 +81,40 @@ namespace esphome {
                 switch (registers_G3[register_index].type) {
                     case 0: // uint16_t
                         if (this->registers_G3[register_index].sensor != nullptr) {
-                            this->registers_G3[register_index].sensor->publish_state(uint16_t_from_bytes(response, offset));
+                            if (registers_G3[register_index].scale < 1) {
+                                this->registers_G3[register_index].sensor->publish_state(((float) uint16_t_from_bytes(response, offset) * registers_G3[register_index].scale));
+                            } else {
+                                this->registers_G3[register_index].sensor->publish_state(uint16_t_from_bytes(response, offset) * registers_G3[register_index].scale);
+                            }
+
                         }
                         break;
                     case 1: // int16_t
                         if (this->registers_G3[register_index].sensor != nullptr) {
-                            this->registers_G3[register_index].sensor->publish_state(int16_t_from_bytes(response, offset));
+                            if (registers_G3[register_index].scale < 1) {
+                                this->registers_G3[register_index].sensor->publish_state(((float) int16_t_from_bytes(response, offset) * registers_G3[register_index].scale));
+                            } else {
+                                this->registers_G3[register_index].sensor->publish_state(int16_t_from_bytes(response, offset) * registers_G3[register_index].scale);
+                            }
                         }
                         break;
                     case 2: // uint32_t
                         if (this->registers_G3[register_index].sensor != nullptr) {
-                            this->registers_G3[register_index].sensor->publish_state(uint32_t_from_bytes(response, offset));
+                            if (registers_G3[register_index].scale < 1) {
+                                this->registers_G3[register_index].sensor->publish_state(((float) uint32_t_from_bytes(response, offset) * registers_G3[register_index].scale));
+                            } else {
+                                this->registers_G3[register_index].sensor->publish_state(uint32_t_from_bytes(response, offset) * registers_G3[register_index].scale);
+                            }
                         }
                         break;
                     case 3: // int32_t
                         if (this->registers_G3[register_index].sensor != nullptr) {
-                            this->registers_G3[register_index].sensor->publish_state(int32_t_from_bytes(response, offset));
+                            if (registers_G3[register_index].scale < 1) {
+                                this->registers_G3[register_index].sensor->publish_state(((float) int32_t_from_bytes(response, offset) * registers_G3[register_index].scale));
+                            } else {
+                                this->registers_G3[register_index].sensor->publish_state(int32_t_from_bytes(response, offset) * registers_G3[register_index].scale);
+                            }
                         }
-                        break;
-                    case 4: // float16
-                        // Handle float16 response
-                        break;
-                    case 5: // float32
-                        // Handle float32 response
                         break;
                     default:
                         ESP_LOGE(TAG, "Unknown register type for index %d", register_index);
