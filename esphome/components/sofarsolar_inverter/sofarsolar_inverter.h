@@ -24,7 +24,7 @@ namespace esphome {
         class SofarSolar_Inverter : public uart::UARTDevice, public Component {
         public:
 
-            SofarSolar_Register registers_G3[38] = {
+            SofarSolar_Register registers_G3[59] = {
                 SofarSolar_Register{0x0684, 2, 2, 1, 0.01}, // PV Generation Today
                 SofarSolar_Register{0x0686, 2, 2, 0, 0.1}, // PV Generation Total
                 SofarSolar_Register{0x0688, 2, 2, 1, 0.01}, // Load Consumption Today
@@ -72,12 +72,12 @@ namespace esphome {
                 SofarSolar_Register{0x049A, 1, 1, 1, 10}, // Grid Power Phase S
                 SofarSolar_Register{0x04A3, 1, 0, 1, 0.1}, // Grid Voltage Phase T
                 SofarSolar_Register{0x04A4, 1, 1, 1, 0.01}, // Grid Current Phase T
-                SofarSolar_Register{0x04A5, 1, 1, 1, 10} // Grid Power Phase T
-                SofarSolar_Register{0x0504, 1, 1, 1, 10} // Off Grid Power Total
-                SofarSolar_Register{0x0507, 1, 0, 1, 0.01} // Off Grid Frequency
-                SofarSolar_Register{0x050A, 1, 0, 1, 0.1} // Off Grid Voltage Phase R
-                SofarSolar_Register{0x050B, 1, 1, 1, 0.01} // Off Grid Current Phase R
-                SofarSolar_Register{0x050C, 1, 1, 1, 10} // Off Grid Power Phase R
+                SofarSolar_Register{0x04A5, 1, 1, 1, 10}, // Grid Power Phase T
+                SofarSolar_Register{0x0504, 1, 1, 1, 10}, // Off Grid Power Total
+                SofarSolar_Register{0x0507, 1, 0, 1, 0.01}, // Off Grid Frequency
+                SofarSolar_Register{0x050A, 1, 0, 1, 0.1}, // Off Grid Voltage Phase R
+                SofarSolar_Register{0x050B, 1, 1, 1, 0.01}, // Off Grid Current Phase R
+                SofarSolar_Register{0x050C, 1, 1, 1, 10}, // Off Grid Power Phase R
                 SofarSolar_Register{0x0512, 1, 0, 1, 0.1}, // Off Grid Voltage Phase S
                 SofarSolar_Register{0x0513, 1, 1, 1, 0.01}, // Off Grid Current Phase S
                 SofarSolar_Register{0x0514, 1, 1, 1, 10}, // Off Grid Power Phase S
@@ -96,6 +96,10 @@ namespace esphome {
             bool check_crc(std::vector<uint8_t> frame);
             void send_read_modbus_registers(uint16_t start_address, uint16_t quantity);
             bool receive_modbus_response(std::vector<uint8_t> &response, uint8_t type, uint8_t quantity);
+            void send_write_modbus_register_uint16_t(uint16_t start_address, uint16_t value);
+            void send_write_modbus_register_int16_t(uint16_t start_address, int16_t value);
+            void send_write_modbus_register_uint32_t(uint16_t start_address, uint32_t value);
+            void send_write_modbus_register_int32_t(uint16_t start_address, int32_t value);
             void empty_uart_buffer();
 			uint16_t uint16_t_from_bytes(const std::vector<uint8_t> &data, size_t offset) {
 				return (uint16_t) (data[offset] << 8) | data[offset + 1];
@@ -206,7 +210,7 @@ namespace esphome {
             std::string model_;
             int modbus_address_;
             bool zero_export_;
-            sensor::Sensor power_sensor_;
+            sensor::Sensor *power_sensor_;
 
             sensor::Sensor *pv_generation_today_sensor_{nullptr};
             sensor::Sensor *pv_generation_total_sensor_{nullptr};
