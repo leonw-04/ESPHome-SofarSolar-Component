@@ -79,6 +79,7 @@ namespace esphome {
                 ESP_LOGD(TAG, "Updating zero export status");
                 // Read the current zero export status
                 int32_t new_desired_grid_power = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
+                ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, new_desired_grid_power);
                 this->send_write_modbus_register_int32_t(registers_G3[18].start_address, new_desired_grid_power); // Update the desired grid power
             }
         }
