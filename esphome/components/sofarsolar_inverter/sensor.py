@@ -165,6 +165,16 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
         }
     ),
+    cv.Optional(CONF_TOTAL_ACTIVE_POWER_INVERTER): sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
+        }
+    ),
     cv.Optional(CONF_PV_VOLTAGE_1): sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
         accuracy_decimals=1,
@@ -508,6 +518,11 @@ async def to_code(config):
         sens = await sensor.new_sensor(battery_discharge_total_config)
         cg.add(var.set_battery_discharge_total_sensor(sens))
         cg.add(var.set_battery_discharge_total_sensor_update_interval(battery_discharge_total_config[UPDATE_INTERVAL]))
+
+    if total_active_power_inverter_config := config.get(CONF_TOTAL_ACTIVE_POWER_INVERTER):
+        sens = await sensor.new_sensor(total_active_power_inverter_config)
+        cg.add(var.set_total_active_power_inverter_sensor(sens))
+        cg.add(var.set_total_active_power_inverter_sensor_update_interval(total_active_power_inverter_config[UPDATE_INTERVAL]))
 
     if pv_voltage_1_config := config.get(CONF_PV_VOLTAGE_1):
         sens = await sensor.new_sensor(pv_voltage_1_config)
