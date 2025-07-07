@@ -83,7 +83,7 @@ CONFIG_SCHEMA = cv.Schema({
     cv.Required(CONF_MODEL): cv.string,
     cv.Optional(CONF_MODBUS_ADDRESS, default=1): cv.int_range(0, 255),
     cv.Optional(CONF_ZERO_EXPORT, default=False): cv.boolean,
-    cv.Optional(CONF_POWER_ID): cv.entity_id,
+    cv.Optional(CONF_POWER_ID): cv.use_id(sensor.Sensor),
 
     cv.Optional(CONF_PV_GENERATION_TODAY): sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
