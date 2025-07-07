@@ -33,7 +33,7 @@ namespace esphome {
                 SofarSolar_Register{0x0696, 2, 2, 0, 0.1}, // Battery Charge Total
                 SofarSolar_Register{0x0698, 2, 2, 1, 0.01}, // Battery Discharge Today
                 SofarSolar_Register{0x069A, 2, 2, 0, 0.1}, // Battery Discharge Total
-                SofarSolar_Register{0x0485, 1, 1, 3, 100}, // Total Active Power Inverter
+                SofarSolar_Register{0x0485, 1, 1, 3, 10}, // Total Active Power Inverter
                 SofarSolar_Register{0x0584, 1, 0, 2, 0.1}, // PV Voltage 1
                 SofarSolar_Register{0x0585, 1, 0, 2, 0.01}, // PV Current 1
                 SofarSolar_Register{0x0586, 1, 0, 2, 10}, // PV Power 1
