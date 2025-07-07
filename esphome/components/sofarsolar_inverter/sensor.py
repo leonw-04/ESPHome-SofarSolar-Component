@@ -94,6 +94,8 @@ CONF_OFF_GRID_VOLTAGE_PHASE_T = "off_grid_voltage_phase_t"
 CONF_OFF_GRID_CURRENT_PHASE_T = "off_grid_current_phase_t"
 CONF_OFF_GRID_POWER_PHASE_T = "off_grid_power_phase_t"
 UPDATE_INTERVAL = "update_interval"
+DEFAULT_VALUE = "default_value"
+ENFORCE_DEFAULT_VALUE = "enforce_default_value"
 
 
 
@@ -289,6 +291,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_MINIMUM_BATTERY_POWER: sensor.sensor_schema(
@@ -299,6 +303,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_MAXIMUM_BATTERY_POWER: sensor.sensor_schema(
@@ -309,6 +315,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_ENERGY_STORAGE_MODE: sensor.sensor_schema(
@@ -319,6 +327,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE, default=3): cv.int_range(0,7),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_ID: sensor.sensor_schema(
@@ -329,6 +339,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_range(0, 255),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_ADDRESS: sensor.sensor_schema(
@@ -339,6 +351,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_range(0, 255),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_PROTOCOL: sensor.sensor_schema(
@@ -349,6 +363,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_range(0, 12),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_VOLTAGE_NOMINAL: sensor.sensor_schema(
@@ -359,6 +375,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.positive_not_null_float,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_VOLTAGE_OVER: sensor.sensor_schema(
@@ -369,6 +387,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.positive_not_null_float,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_VOLTAGE_CHARGE: sensor.sensor_schema(
@@ -379,6 +399,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.positive_not_null_float,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_VOLTAGE_LACK: sensor.sensor_schema(
@@ -389,6 +411,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.positive_not_null_float,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_VOLTAGE_DISCHARGE_STOP: sensor.sensor_schema(
@@ -399,6 +423,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.positive_not_null_float,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_CURRENT_CHARGE_LIMIT: sensor.sensor_schema(
@@ -409,6 +435,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.positive_not_null_float,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_CURRENT_DISCHARGE_LIMIT: sensor.sensor_schema(
@@ -419,6 +447,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.positive_not_null_float,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_DEPTH_OF_DISCHARGE: sensor.sensor_schema(
@@ -429,6 +459,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_range(0, 100),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_END_OF_DISCHARGE: sensor.sensor_schema(
@@ -439,6 +471,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_range(0, 100),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_CAPACITY: sensor.sensor_schema(
@@ -449,6 +483,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.positive_not_null_int,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_CELL_TYPE: sensor.sensor_schema(
@@ -459,6 +495,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_range(0, 6),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_EPS_BUFFER: sensor.sensor_schema(
@@ -469,6 +507,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_range(0, 100),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_BATTERY_CONF_CONTROL: sensor.sensor_schema(
@@ -721,3 +761,7 @@ async def to_code(config):
             sens = await sensor.new_sensor(conf)
             cg.add(getattr(var, f"set_{type}_sensor")(sens))
             cg.add(getattr(var, f"set_{type}_sensor_update_interval")(conf[UPDATE_INTERVAL]))
+            if DEFAULT_VALUE in conf:
+                cg.add(getattr(var, f"set_{type}_sensor_default_value")(conf[DEFAULT_VALUE]))
+            if ENFORCE_DEFAULT_VALUE in conf:
+                cg.add(getattr(var, f"set_{type}_sensor_enforce_default_value")(conf[ENFORCE_DEFAULT_VALUE]))
