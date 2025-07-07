@@ -106,7 +106,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received for zero export write");
                 } else {
                     current_zero_export_write = false;
-                    if (check_crc(response) && response[0] == 0x01 && response[1] == 0x10 && response[2] ==registers_G3[18].start_address >> 8 && response[3] == (registers_G3[18].start_address & 0xFF) && response[4] == 0x00 && response[5] == 0x06) {
+                    if (check_crc(response) && response[1] == 0x10 && response[2] ==registers_G3[18].start_address >> 8 && response[3] == (registers_G3[18].start_address & 0xFF) && response[4] == 0x00 && response[5] == 0x06) {
                         ESP_LOGD(TAG, "Zero export write successful");
                     } else {
                         ESP_LOGE(TAG, "Invalid response for zero export write");
