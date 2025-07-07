@@ -206,7 +206,7 @@ namespace esphome {
             std::string model_;
             int modbus_address_;
             bool zero_export_;
-            sensor::Sensor power_sensor_;
+            sensor::Sensor *power_sensor_;
 
             sensor::Sensor *pv_generation_today_sensor_{nullptr};
             sensor::Sensor *pv_generation_total_sensor_{nullptr};
