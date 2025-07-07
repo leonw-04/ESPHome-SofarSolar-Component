@@ -18,7 +18,7 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::loop() {
-            ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
+            ESP_LOGD(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
                 if (registers_G3[i].sensor == nullptr) {
                     ESP_LOGVV(TAG, "Sensor for register %d is not set", registers_G3[i].start_address);
@@ -58,7 +58,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received");
                 } else {
                     current_reading = false;
-                    if (check_crc(response) && response[0] == 0x01 && response[1] == 0x03 && response[2] == 0x04) {
+                    if (check_crc(response) && response[0] == 0x01 && response[1] == 0x03) {
                     // Process the response based on the register type
                         uint16_t start_address = registers_G3[register_tasks.top().register_index].start_address;
                         uint8_t quantity = registers_G3[register_tasks.top().register_index].quantity;
