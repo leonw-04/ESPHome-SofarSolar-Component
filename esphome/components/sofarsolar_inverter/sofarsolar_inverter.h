@@ -372,7 +372,7 @@ namespace esphome {
             int off_grid_voltage_phase_t_sensor_update_interval_;
             int off_grid_current_phase_t_sensor_update_interval_;
             int off_grid_power_phase_t_sensor_update_interval_;
-
+		};
         struct RegisterTask {
             uint8_t register_index; // Index of the register to read
             SofarSolar_Inverter* inverter; // Zeiger auf die Instanz
