@@ -9,7 +9,8 @@ namespace esphome {
 
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
-        int time_begin_reading = 0;
+        uint64_t time_begin_reading = 0;
+        uint64_t zero_export_last_update = 0;
         std::priority_queue<RegisterTask> register_tasks;
 
         void SofarSolar_Inverter::setup() {
@@ -72,6 +73,13 @@ namespace esphome {
                         ESP_LOGE(TAG, "Invalid response");
                     }
                 }
+            }
+            if (this->zero_export_ && millis() - zero_export_last_update > 1000) { // Update zero export every second
+                zero_export_last_update = millis();
+                ESP_LOGD(TAG, "Updating zero export status");
+                // Read the current zero export status
+                int32_t new_desired_grid_power = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
+                this->send_write_modbus_register_int32_t(registers_G3[18].start_address, new_desired_grid_power); // Update the desired grid power
             }
         }
 
@@ -137,6 +145,27 @@ namespace esphome {
         void SofarSolar_Inverter::send_read_modbus_registers(uint16_t start_address, uint16_t quantity) {
             // Create Modbus frame for reading registers
             std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x03, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(quantity >> 8), static_cast<uint8_t>(quantity & 0xFF)};
+            send_modbus(frame);
+        }
+
+        void SofarSolar_Inverter::send_write_modbus_register_uint16_t(uint16_t start_address, uint16_t value) {
+            // Create Modbus frame for writing a register
+            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, 0x01, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(value >> 8), static_cast<uint8_t>(value & 0xFF)};
+            send_modbus(frame);
+        }
+        void SofarSolar_Inverter::send_write_modbus_register_int16_t(uint16_t start_address, int16_t value) {
+            // Create Modbus frame for writing a register
+            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, 0x01, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(value >> 8), static_cast<uint8_t>(value & 0xFF)};
+            send_modbus(frame);
+        }
+        void SofarSolar_Inverter::send_write_modbus_register_uint32_t(uint16_t start_address, uint32_t value) {
+            // Create Modbus frame for writing a register
+            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, 0x02, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(value >> 24), static_cast<uint8_t>((value >> 16) & 0xFF), static_cast<uint8_t>((value >> 8) & 0xFF), static_cast<uint8_t>(value & 0xFF)};
+            send_modbus(frame);
+        }
+        void SofarSolar_Inverter::send_write_modbus_register_int32_t(uint16_t start_address, int32_t value) {
+            // Create Modbus frame for writing a register
+            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, 0x02, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(value >> 24), static_cast<uint8_t>((value >> 16) & 0xFF), static_cast<uint8_t>((value >> 8) & 0xFF), static_cast<uint8_t>(value & 0xFF)};
             send_modbus(frame);
         }
 
