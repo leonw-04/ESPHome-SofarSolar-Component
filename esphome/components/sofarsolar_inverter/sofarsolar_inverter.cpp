@@ -9,7 +9,8 @@ namespace esphome {
 
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
-        uint64_t time_begin_reading = 0;
+        bool current_zero_export_write = false; // Pointer to the current reading task
+        uint64_t time_begin_modbus_operation = 0;
         uint64_t zero_export_last_update = 0;
         std::priority_queue<RegisterTask> register_tasks;
 
@@ -19,6 +20,16 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::loop() {
+            if (!current_reading && !current_zero_export_write && this->zero_export_ && millis() - zero_export_last_update > 1000) { // Update zero export every second
+                zero_export_last_update = millis();
+                ESP_LOGD(TAG, "Updating zero export status");
+                // Read the current zero export status
+                int32_t new_desired_grid_power = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
+                ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, new_desired_grid_power);
+                current_zero_export_write = true; // Set the flag to indicate that a zero export write is in progress
+                time_begin_modbus_operation = millis();
+                this->send_write_modbus_register_int32_t(registers_G3[18].start_address, new_desired_grid_power); // Update the desired grid power
+            }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
                 if (registers_G3[i].sensor == nullptr) {
@@ -39,15 +50,15 @@ namespace esphome {
                 }
             }
 
-            if (!current_reading && !register_tasks.empty()) {
+            if (!current_reading && !current_zero_export_write && !register_tasks.empty()) {
                 // Get the highest priority task
                 RegisterTask task = register_tasks.top();
                 current_reading = true;
-                time_begin_reading = millis();
+                time_begin_modbus_operation = millis();
                 empty_uart_buffer(); // Clear the UART buffer before sending a new request
                 send_read_modbus_registers(registers_G3[task.register_index].start_address, registers_G3[task.register_index].quantity);
             } else if (current_reading) {
-                if (millis() - time_begin_reading > 500) { // Timeout after 500 ms
+                if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for response");
                     current_reading = false;
                     registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
@@ -73,14 +84,23 @@ namespace esphome {
                         ESP_LOGE(TAG, "Invalid response");
                     }
                 }
-            }
-            if (this->zero_export_ && millis() - zero_export_last_update > 1000) { // Update zero export every second
-                zero_export_last_update = millis();
-                ESP_LOGD(TAG, "Updating zero export status");
-                // Read the current zero export status
-                int32_t new_desired_grid_power = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
-                ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, new_desired_grid_power);
-                this->send_write_modbus_register_int32_t(registers_G3[18].start_address, new_desired_grid_power); // Update the desired grid power
+            } else if (current_zero_export_write) {
+                if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
+                    ESP_LOGE(TAG, "Timeout while waiting for zero export write response");
+                    current_zero_export_write = false;
+                    return;
+                }
+                std::vector<uint8_t> response;
+                if (!receive_modbus_response(response, 0, 0)) {
+                    ESP_LOGE(TAG, "No response received for zero export write");
+                } else {
+                    current_zero_export_write = false;
+                    if (check_crc(response) && response[0] == 0x01 && response[1] == 0x10 && response[2] ==registers_G3[18].start_address >> 8 && response[3] == (registers_G3[18].start_address & 0xFF) && response[4] == 0x00 && response[5] == 0x01) {
+                        ESP_LOGD(TAG, "Zero export write successful");
+                    } else {
+                        ESP_LOGE(TAG, "Invalid response for zero export write");
+                    }
+                }
             }
         }
 
