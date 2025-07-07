@@ -72,12 +72,12 @@ namespace esphome {
                 SofarSolar_Register{0x049A, 1, 1, 1, 10}, // Grid Power Phase S
                 SofarSolar_Register{0x04A3, 1, 0, 1, 0.1}, // Grid Voltage Phase T
                 SofarSolar_Register{0x04A4, 1, 1, 1, 0.01}, // Grid Current Phase T
-                SofarSolar_Register{0x04A5, 1, 1, 1, 10} // Grid Power Phase T
-                SofarSolar_Register{0x0504, 1, 1, 1, 10} // Off Grid Power Total
-                SofarSolar_Register{0x0507, 1, 0, 1, 0.01} // Off Grid Frequency
-                SofarSolar_Register{0x050A, 1, 0, 1, 0.1} // Off Grid Voltage Phase R
-                SofarSolar_Register{0x050B, 1, 1, 1, 0.01} // Off Grid Current Phase R
-                SofarSolar_Register{0x050C, 1, 1, 1, 10} // Off Grid Power Phase R
+                SofarSolar_Register{0x04A5, 1, 1, 1, 10}, // Grid Power Phase T
+                SofarSolar_Register{0x0504, 1, 1, 1, 10}, // Off Grid Power Total
+                SofarSolar_Register{0x0507, 1, 0, 1, 0.01}, // Off Grid Frequency
+                SofarSolar_Register{0x050A, 1, 0, 1, 0.1}, // Off Grid Voltage Phase R
+                SofarSolar_Register{0x050B, 1, 1, 1, 0.01}, // Off Grid Current Phase R
+                SofarSolar_Register{0x050C, 1, 1, 1, 10}, // Off Grid Power Phase R
                 SofarSolar_Register{0x0512, 1, 0, 1, 0.1}, // Off Grid Voltage Phase S
                 SofarSolar_Register{0x0513, 1, 1, 1, 0.01}, // Off Grid Current Phase S
                 SofarSolar_Register{0x0514, 1, 1, 1, 10}, // Off Grid Power Phase S
