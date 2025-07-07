@@ -77,7 +77,7 @@ namespace esphome {
                     return;
                 }
                 std::vector<uint8_t> response;
-                if (!receive_modbus_response(response, 0, registers_G3[register_tasks.top().register_index].quantity)) {
+                if (!receive_modbus_response(response, 3 + registers_G3[register_tasks.top().register_index].quantity)*2 + 2) {
                     ESP_LOGE(TAG, "No response received");
                 } else {
                     current_reading = false;
@@ -102,7 +102,7 @@ namespace esphome {
                     return;
                 }
                 std::vector<uint8_t> response;
-                if (!receive_modbus_response(response, 0, 0)) {
+                if (!receive_modbus_response(response, 8)) {
                     ESP_LOGE(TAG, "No response received for zero export write");
                 } else {
                     current_zero_export_write = false;
@@ -184,7 +184,7 @@ namespace esphome {
             send_modbus(frame);
         }
 
-        bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response, uint8_t type, uint8_t quantity) {
+        bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response, uint8_t response_length) {
             // Read Modbus response from UART
             if (this->peek() != -1 && this->available()) {
                 ESP_LOGV(TAG, "Data available in UART buffer");
@@ -193,11 +193,10 @@ namespace esphome {
                 return false;
             }
             response.clear();
-            uint8_t expected_length = 3 + quantity * 2 + 2; // 3 bytes header + quantity * 2 bytes for data + crc 2 bytes
-            uint8_t buffer[expected_length];
+            uint8_t buffer[response_length];
             uint8_t i = 0;
             while (this->available()) {
-                if (i >= expected_length) {
+                if (i >= response_length) {
                     ESP_LOGE(TAG, "Received more bytes than expected: %d", i);
                     empty_uart_buffer(); // Clear the buffer if too many bytes are received
                     return true;
@@ -208,7 +207,7 @@ namespace esphome {
                 }
                 i++;
             }
-            response.insert(response.end(), buffer, buffer + expected_length);
+            response.insert(response.end(), buffer, buffer + response_length);
             ESP_LOGD(TAG, "Received Modbus response: %s", vector_to_string(response).c_str());
             return true;
         }
