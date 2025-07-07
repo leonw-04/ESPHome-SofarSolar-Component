@@ -87,7 +87,7 @@ CONFIG_SCHEMA = cv.Schema({
 
     cv.Optional(CONF_PV_GENERATION_TODAY): sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
-        accuracy_decimals=1,
+        accuracy_decimals=2,
         device_class=DEVICE_CLASS_ENERGY,
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
@@ -107,7 +107,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_LOAD_CONSUMPTION_TODAY): sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
-        accuracy_decimals=1,
+        accuracy_decimals=2,
         device_class=DEVICE_CLASS_ENERGY,
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
@@ -127,7 +127,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CHARGE_TODAY): sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
-        accuracy_decimals=1,
+        accuracy_decimals=2,
         device_class=DEVICE_CLASS_ENERGY,
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
@@ -147,7 +147,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_DISCHARGE_TODAY): sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
-        accuracy_decimals=1,
+        accuracy_decimals=2,
         device_class=DEVICE_CLASS_ENERGY,
         state_class=STATE_CLASS_TOTAL_INCREASING,
     ).extend(
@@ -167,12 +167,12 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_TOTAL_ACTIVE_POWER_INVERTER): sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
     cv.Optional(CONF_PV_VOLTAGE_1): sensor.sensor_schema(
@@ -187,7 +187,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_PV_CURRENT_1): sensor.sensor_schema(
         unit_of_measurement=UNIT_AMPERE,
-        accuracy_decimals=1,
+        accuracy_decimals=2,
         device_class=DEVICE_CLASS_CURRENT,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -197,7 +197,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_PV_POWER_1): sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -217,7 +217,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_PV_CURRENT_2): sensor.sensor_schema(
         unit_of_measurement=UNIT_AMPERE,
-        accuracy_decimals=1,
+        accuracy_decimals=2,
         device_class=DEVICE_CLASS_CURRENT,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -227,7 +227,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_PV_POWER_2): sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -237,7 +237,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_PV_POWER_TOTAL): sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -247,7 +247,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_POWER_TOTAL): sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -257,7 +257,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_STATE_OF_CHARGE_TOTAL): sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_BATTERY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -267,7 +267,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_DESIRED_GRID_POWER): sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -277,7 +277,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_MINIMUM_BATTERY_POWER): sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -287,7 +287,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_MAXIMUM_BATTERY_POWER): sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -297,7 +297,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_ENERGY_STORAGE_MODE): sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -307,7 +307,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_ID): sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -317,7 +317,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_ADDRESS): sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -327,7 +327,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_PROTOCOL): sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -387,7 +387,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_CURRENT_CHARGE_LIMIT): sensor.sensor_schema(
         unit_of_measurement=UNIT_AMPERE,
-        accuracy_decimals=1,
+        accuracy_decimals=2,
         device_class=DEVICE_CLASS_CURRENT,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -397,7 +397,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_CURRENT_DISCHARGE_LIMIT): sensor.sensor_schema(
         unit_of_measurement=UNIT_AMPERE,
-        accuracy_decimals=1,
+        accuracy_decimals=2,
         device_class=DEVICE_CLASS_CURRENT,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -407,7 +407,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_DEPTH_OF_DISCHARGE): sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -417,7 +417,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_END_OF_DISCHARGE): sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -427,7 +427,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_CAPACITY): sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -437,7 +437,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_CELL_TYPE): sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -447,7 +447,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_EPS_BUFFER): sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -457,7 +457,7 @@ CONFIG_SCHEMA = cv.Schema({
     ),
     cv.Optional(CONF_BATTERY_CONF_CONTROL): sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
-        accuracy_decimals=1,
+        accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
