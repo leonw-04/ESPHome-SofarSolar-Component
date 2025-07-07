@@ -81,7 +81,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received");
                 } else {
                     current_reading = false;
-                    if (check_crc(response) && response[0] == 0x01 && response[1] == 0x03) {
+                    if (check_crc(response) && response[1] == 0x03) {
                     // Process the response based on the register type
                         uint16_t start_address = registers_G3[register_tasks.top().register_index].start_address;
                         uint8_t quantity = registers_G3[register_tasks.top().register_index].quantity;
