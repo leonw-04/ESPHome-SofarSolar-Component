@@ -25,10 +25,21 @@ namespace esphome {
                 ESP_LOGD(TAG, "Updating zero export status");
                 // Read the current zero export status
                 int32_t new_desired_grid_power = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
+                int32_t minimum_battery_power = -5000;
+                int32_t maximum_battery_power = 5000;
+                std::vector<uint8_t> data = {
+                    static_cast<uint8_t>(new_desired_grid_power >> 24), static_cast<uint8_t>(new_desired_grid_power >> 16),
+                    static_cast<uint8_t>(new_desired_grid_power >> 8), static_cast<uint8_t>(new_desired_grid_power & 0xFF),
+                    static_cast<uint8_t>(minimum_battery_power >> 24), static_cast<uint8_t>(minimum_battery_power >> 16),
+                    static_cast<uint8_t>(minimum_battery_power >> 8), static_cast<uint8_t>(minimum_battery_power & 0xFF),
+                    static_cast<uint8_t>(maximum_battery_power >> 24), static_cast<uint8_t>(maximum_battery_power >> 16),
+                    static_cast<uint8_t>(maximum_battery_power >> 8), static_cast<uint8_t>(maximum_battery_power & 0xFF)
+                };
                 ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, new_desired_grid_power);
                 current_zero_export_write = true; // Set the flag to indicate that a zero export write is in progress
                 time_begin_modbus_operation = millis();
-                this->send_write_modbus_register_int32_t(registers_G3[18].start_address, new_desired_grid_power); // Update the desired grid power
+                this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
+                this->send_write_modbus_registers(registers_G3[18].start_address, 6, data); // Write the new desired grid power, minimum battery power, and maximum battery power
             }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
@@ -95,7 +106,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received for zero export write");
                 } else {
                     current_zero_export_write = false;
-                    if (check_crc(response) && response[0] == 0x01 && response[1] == 0x10 && response[2] ==registers_G3[18].start_address >> 8 && response[3] == (registers_G3[18].start_address & 0xFF) && response[4] == 0x00 && response[5] == 0x01) {
+                    if (check_crc(response) && response[0] == 0x01 && response[1] == 0x10 && response[2] ==registers_G3[18].start_address >> 8 && response[3] == (registers_G3[18].start_address & 0xFF) && response[4] == 0x00 && response[5] == 0x06) {
                         ESP_LOGD(TAG, "Zero export write successful");
                     } else {
                         ESP_LOGE(TAG, "Invalid response for zero export write");
@@ -166,24 +177,10 @@ namespace esphome {
             send_modbus(frame);
         }
 
-        void SofarSolar_Inverter::send_write_modbus_register_uint16_t(uint16_t start_address, uint16_t value) {
-            // Create Modbus frame for writing a register
-            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, 0x01, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(value >> 8), static_cast<uint8_t>(value & 0xFF)};
-            send_modbus(frame);
-        }
-        void SofarSolar_Inverter::send_write_modbus_register_int16_t(uint16_t start_address, int16_t value) {
-            // Create Modbus frame for writing a register
-            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, 0x01, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(value >> 8), static_cast<uint8_t>(value & 0xFF)};
-            send_modbus(frame);
-        }
-        void SofarSolar_Inverter::send_write_modbus_register_uint32_t(uint16_t start_address, uint32_t value) {
-            // Create Modbus frame for writing a register
-            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, 0x02, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(value >> 24), static_cast<uint8_t>((value >> 16) & 0xFF), static_cast<uint8_t>((value >> 8) & 0xFF), static_cast<uint8_t>(value & 0xFF)};
-            send_modbus(frame);
-        }
-        void SofarSolar_Inverter::send_write_modbus_register_int32_t(uint16_t start_address, int32_t value) {
-            // Create Modbus frame for writing a register
-            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, 0x02, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(value >> 24), static_cast<uint8_t>((value >> 16) & 0xFF), static_cast<uint8_t>((value >> 8) & 0xFF), static_cast<uint8_t>(value & 0xFF)};
+        void SofarSolar_Inverter::send_write_modbus_registers(uint16_t start_address, uint16_t quantity, const std::vector<uint8_t> &data) {
+            // Create Modbus frame for writing registers
+            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(quantity >> 8), static_cast<uint8_t>(quantity & 0xFF)};
+            frame.insert(frame.end(), data.begin(), data.end());
             send_modbus(frame);
         }
 
