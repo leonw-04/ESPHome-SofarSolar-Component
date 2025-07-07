@@ -72,20 +72,36 @@ CONF_BATTERY_CONF_CAPACITY = "battery_conf_capacity"
 CONF_BATTERY_CONF_CELL_TYPE = "battery_conf_cell_type"
 CONF_BATTERY_CONF_EPS_BUFFER = "battery_conf_eps_buffer"
 CONF_BATTERY_CONF_CONTROL = "battery_conf_control"
+CONF_GRID_FREQUENCY = "grid_frequency"
+CONF_GRID_VOLTAGE_PHASE_R = "grid_voltage_phase_r"
+CONF_GRID_CURRENT_PHASE_R = "grid_current_phase_r"
+CONF_GRID_POWER_PHASE_R = "grid_power_phase_r"
+CONF_GRID_VOLTAGE_PHASE_S = "grid_voltage_phase_s"
+CONF_GRID_CURRENT_PHASE_S = "grid_current_phase_s"
+CONF_GRID_POWER_PHASE_S = "grid_power_phase_s"
+CONF_GRID_VOLTAGE_PHASE_T = "grid_voltage_phase_t"
+CONF_GRID_CURRENT_PHASE_T = "grid_current_phase_t"
+CONF_GRID_POWER_PHASE_T = "grid_power_phase_t"
+CONF_OFF_GRID_POWER_TOTAL = "off_grid_power_total"
+CONF_OFF_GRID_FREQUENCY = "off_grid_frequency"
+CONF_OFF_GRID_VOLTAGE_PHASE_R = "off_grid_voltage_phase_r"
+CONF_OFF_GRID_CURRENT_PHASE_R = "off_grid_current_phase_r"
+CONF_OFF_GRID_POWER_PHASE_R = "off_grid_power_phase_r"
+CONF_OFF_GRID_VOLTAGE_PHASE_S = "off_grid_voltage_phase_s"
+CONF_OFF_GRID_CURRENT_PHASE_S = "off_grid_current_phase_s"
+CONF_OFF_GRID_POWER_PHASE_S = "off_grid_power_phase_s"
+CONF_OFF_GRID_VOLTAGE_PHASE_T = "off_grid_voltage_phase_t"
+CONF_OFF_GRID_CURRENT_PHASE_T = "off_grid_current_phase_t"
+CONF_OFF_GRID_POWER_PHASE_T = "off_grid_power_phase_t"
 UPDATE_INTERVAL = "update_interval"
+
 
 
 sofarsolar_inverter_ns = cg.esphome_ns.namespace("sofarsolar_inverter")
 SofarSolar_Inverter = sofarsolar_inverter_ns.class_("SofarSolar_Inverter", cg.Component, uart.UARTDevice)
 
-CONFIG_SCHEMA = cv.Schema({
-    cv.GenerateID(): cv.declare_id(SofarSolar_Inverter),
-    cv.Required(CONF_MODEL): cv.string,
-    cv.Optional(CONF_MODBUS_ADDRESS, default=1): cv.int_range(0, 255),
-    cv.Optional(CONF_ZERO_EXPORT, default=False): cv.boolean,
-    cv.Optional(CONF_POWER_ID): cv.use_id(sensor.Sensor),
-
-    cv.Optional(CONF_PV_GENERATION_TODAY): sensor.sensor_schema(
+TYPES = {
+    CONF_PV_GENERATION_TODAY: sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
         accuracy_decimals=2,
         device_class=DEVICE_CLASS_ENERGY,
@@ -95,7 +111,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_PV_GENERATION_TOTAL): sensor.sensor_schema(
+    CONF_PV_GENERATION_TOTAL: sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_ENERGY,
@@ -105,7 +121,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_LOAD_CONSUMPTION_TODAY): sensor.sensor_schema(
+    CONF_LOAD_CONSUMPTION_TODAY: sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
         accuracy_decimals=2,
         device_class=DEVICE_CLASS_ENERGY,
@@ -115,7 +131,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_LOAD_CONSUMPTION_TOTAL): sensor.sensor_schema(
+    CONF_LOAD_CONSUMPTION_TOTAL: sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_ENERGY,
@@ -125,7 +141,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CHARGE_TODAY): sensor.sensor_schema(
+    CONF_BATTERY_CHARGE_TODAY: sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
         accuracy_decimals=2,
         device_class=DEVICE_CLASS_ENERGY,
@@ -135,7 +151,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CHARGE_TOTAL): sensor.sensor_schema(
+    CONF_BATTERY_CHARGE_TOTAL: sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_ENERGY,
@@ -145,7 +161,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_DISCHARGE_TODAY): sensor.sensor_schema(
+    CONF_BATTERY_DISCHARGE_TODAY: sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
         accuracy_decimals=2,
         device_class=DEVICE_CLASS_ENERGY,
@@ -155,7 +171,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_DISCHARGE_TOTAL): sensor.sensor_schema(
+    CONF_BATTERY_DISCHARGE_TOTAL: sensor.sensor_schema(
         unit_of_measurement=UNIT_KILOWATT_HOURS,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_ENERGY,
@@ -165,7 +181,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="120s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_TOTAL_ACTIVE_POWER_INVERTER): sensor.sensor_schema(
+    CONF_TOTAL_ACTIVE_POWER_INVERTER: sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
@@ -175,7 +191,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_PV_VOLTAGE_1): sensor.sensor_schema(
+    CONF_PV_VOLTAGE_1: sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_VOLTAGE,
@@ -185,7 +201,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_PV_CURRENT_1): sensor.sensor_schema(
+    CONF_PV_CURRENT_1: sensor.sensor_schema(
         unit_of_measurement=UNIT_AMPERE,
         accuracy_decimals=2,
         device_class=DEVICE_CLASS_CURRENT,
@@ -195,7 +211,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_PV_POWER_1): sensor.sensor_schema(
+    CONF_PV_POWER_1: sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
@@ -205,7 +221,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_PV_VOLTAGE_2): sensor.sensor_schema(
+    CONF_PV_VOLTAGE_2: sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_VOLTAGE,
@@ -215,7 +231,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_PV_CURRENT_2): sensor.sensor_schema(
+    CONF_PV_CURRENT_2: sensor.sensor_schema(
         unit_of_measurement=UNIT_AMPERE,
         accuracy_decimals=2,
         device_class=DEVICE_CLASS_CURRENT,
@@ -225,7 +241,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_PV_POWER_2): sensor.sensor_schema(
+    CONF_PV_POWER_2: sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
@@ -235,7 +251,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_PV_POWER_TOTAL): sensor.sensor_schema(
+    CONF_PV_POWER_TOTAL: sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
@@ -245,7 +261,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_POWER_TOTAL): sensor.sensor_schema(
+    CONF_BATTERY_POWER_TOTAL: sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
@@ -255,7 +271,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_STATE_OF_CHARGE_TOTAL): sensor.sensor_schema(
+    CONF_BATTERY_STATE_OF_CHARGE_TOTAL: sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_BATTERY,
@@ -265,7 +281,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_DESIRED_GRID_POWER): sensor.sensor_schema(
+    CONF_DESIRED_GRID_POWER: sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
@@ -275,7 +291,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_MINIMUM_BATTERY_POWER): sensor.sensor_schema(
+    CONF_MINIMUM_BATTERY_POWER: sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
@@ -285,7 +301,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_MAXIMUM_BATTERY_POWER): sensor.sensor_schema(
+    CONF_MAXIMUM_BATTERY_POWER: sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_POWER,
@@ -295,7 +311,17 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_ENERGY_STORAGE_MODE): sensor.sensor_schema(
+    CONF_ENERGY_STORAGE_MODE: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_ENERGY_STORAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CONF_ID: sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
@@ -305,7 +331,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_ID): sensor.sensor_schema(
+    CONF_BATTERY_CONF_ADDRESS: sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
@@ -315,7 +341,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_ADDRESS): sensor.sensor_schema(
+    CONF_BATTERY_CONF_PROTOCOL: sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
@@ -325,17 +351,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_PROTOCOL): sensor.sensor_schema(
-        unit_of_measurement=UNIT_EMPTY,
-        accuracy_decimals=0,
-        device_class=DEVICE_CLASS_EMPTY,
-        state_class=STATE_CLASS_MEASUREMENT,
-    ).extend(
-        {
-            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
-        }
-    ),
-    cv.Optional(CONF_BATTERY_CONF_VOLTAGE_NOMINAL): sensor.sensor_schema(
+    CONF_BATTERY_CONF_VOLTAGE_NOMINAL: sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_VOLTAGE,
@@ -345,7 +361,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_VOLTAGE_OVER): sensor.sensor_schema(
+    CONF_BATTERY_CONF_VOLTAGE_OVER: sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_VOLTAGE,
@@ -355,7 +371,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_VOLTAGE_CHARGE): sensor.sensor_schema(
+    CONF_BATTERY_CONF_VOLTAGE_CHARGE: sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_VOLTAGE,
@@ -365,7 +381,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_VOLTAGE_LACK): sensor.sensor_schema(
+    CONF_BATTERY_CONF_VOLTAGE_LACK: sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_VOLTAGE,
@@ -375,7 +391,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_VOLTAGE_DISCHARGE_STOP): sensor.sensor_schema(
+    CONF_BATTERY_CONF_VOLTAGE_DISCHARGE_STOP: sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
         accuracy_decimals=1,
         device_class=DEVICE_CLASS_VOLTAGE,
@@ -385,7 +401,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_CURRENT_CHARGE_LIMIT): sensor.sensor_schema(
+    CONF_BATTERY_CONF_CURRENT_CHARGE_LIMIT: sensor.sensor_schema(
         unit_of_measurement=UNIT_AMPERE,
         accuracy_decimals=2,
         device_class=DEVICE_CLASS_CURRENT,
@@ -395,7 +411,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_CURRENT_DISCHARGE_LIMIT): sensor.sensor_schema(
+    CONF_BATTERY_CONF_CURRENT_DISCHARGE_LIMIT: sensor.sensor_schema(
         unit_of_measurement=UNIT_AMPERE,
         accuracy_decimals=2,
         device_class=DEVICE_CLASS_CURRENT,
@@ -405,7 +421,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_DEPTH_OF_DISCHARGE): sensor.sensor_schema(
+    CONF_BATTERY_CONF_DEPTH_OF_DISCHARGE: sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
@@ -415,7 +431,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_END_OF_DISCHARGE): sensor.sensor_schema(
+    CONF_BATTERY_CONF_END_OF_DISCHARGE: sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
@@ -425,7 +441,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_CAPACITY): sensor.sensor_schema(
+    CONF_BATTERY_CONF_CAPACITY: sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
@@ -435,7 +451,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_CELL_TYPE): sensor.sensor_schema(
+    CONF_BATTERY_CONF_CELL_TYPE: sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
@@ -445,7 +461,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_EPS_BUFFER): sensor.sensor_schema(
+    CONF_BATTERY_CONF_EPS_BUFFER: sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
@@ -455,7 +471,7 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
-    cv.Optional(CONF_BATTERY_CONF_CONTROL): sensor.sensor_schema(
+    CONF_BATTERY_CONF_CONTROL: sensor.sensor_schema(
         unit_of_measurement=UNIT_EMPTY,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
@@ -465,6 +481,225 @@ CONFIG_SCHEMA = cv.Schema({
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
+    CONF_GRID_FREQUENCY: sensor.sensor_schema(
+        unit_of_measurement=UNIT_HERTZ,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_FREQUENCY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_GRID_VOLTAGE_PHASE_R: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_GRID_CURRENT_PHASE_R: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_GRID_POWER_PHASE_R: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_GRID_VOLTAGE_PHASE_S: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_GRID_CURRENT_PHASE_S: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_GRID_POWER_PHASE_S: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_GRID_VOLTAGE_PHASE_T: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_GRID_CURRENT_PHASE_T: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_GRID_POWER_PHASE_T: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_POWER_TOTAL: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_FREQUENCY: sensor.sensor_schema(
+        unit_of_measurement=UNIT_HERTZ,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_FREQUENCY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_VOLTAGE_PHASE_R: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_CURRENT_PHASE_R: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_POWER_PHASE_R: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_VOLTAGE_PHASE_S: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_CURRENT_PHASE_S: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_POWER_PHASE_S: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_VOLTAGE_PHASE_T: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_CURRENT_PHASE_T: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_OFF_GRID_POWER_PHASE_T: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+}
+
+CONFIG_SCHEMA = cv.Schema({
+    cv.GenerateID(): cv.declare_id(SofarSolar_Inverter),
+    cv.Required(CONF_MODEL): cv.string,
+    cv.Optional(CONF_MODBUS_ADDRESS, default=1): cv.int_range(0, 255),
+    cv.Optional(CONF_ZERO_EXPORT, default=False): cv.boolean,
+    cv.Optional(CONF_POWER_ID): cv.use_id(sensor.Sensor),
+    **{cv.Optional(type): schema for type, schema in TYPES.items()},
 }).extend(uart.UART_DEVICE_SCHEMA)
 
 async def to_code(config):
@@ -480,193 +715,9 @@ async def to_code(config):
         power_sensor = await cg.get_variable(config[CONF_POWER_ID])
         cg.add(var.set_power_id(power_sensor))
 
-
-    if pv_generation_today_config := config.get(CONF_PV_GENERATION_TODAY):
-        sens = await sensor.new_sensor(pv_generation_today_config)
-        cg.add(var.set_pv_generation_today_sensor(sens))
-        cg.add(var.set_pv_generation_today_sensor_update_interval(pv_generation_today_config[UPDATE_INTERVAL]))
-
-    if pv_generation_total_config := config.get(CONF_PV_GENERATION_TOTAL):
-        sens = await sensor.new_sensor(pv_generation_total_config)
-        cg.add(var.set_pv_generation_total_sensor(sens))
-        cg.add(var.set_pv_generation_total_sensor_update_interval(pv_generation_total_config[UPDATE_INTERVAL]))
-
-    if load_consumption_today_config := config.get(CONF_LOAD_CONSUMPTION_TODAY):
-        sens = await sensor.new_sensor(load_consumption_today_config)
-        cg.add(var.set_load_consumption_today_sensor(sens))
-        cg.add(var.set_load_consumption_today_sensor_update_interval(load_consumption_today_config[UPDATE_INTERVAL]))
-
-    if load_consumption_total_config := config.get(CONF_LOAD_CONSUMPTION_TOTAL):
-        sens = await sensor.new_sensor(load_consumption_total_config)
-        cg.add(var.set_load_consumption_total_sensor(sens))
-        cg.add(var.set_load_consumption_total_sensor_update_interval(load_consumption_total_config[UPDATE_INTERVAL]))
-
-    if battery_charge_today_config := config.get(CONF_BATTERY_CHARGE_TODAY):
-        sens = await sensor.new_sensor(battery_charge_today_config)
-        cg.add(var.set_battery_charge_today_sensor(sens))
-        cg.add(var.set_battery_charge_today_sensor_update_interval(battery_charge_today_config[UPDATE_INTERVAL]))
-
-    if battery_charge_total_config := config.get(CONF_BATTERY_CHARGE_TOTAL):
-        sens = await sensor.new_sensor(battery_charge_total_config)
-        cg.add(var.set_battery_charge_total_sensor(sens))
-        cg.add(var.set_battery_charge_total_sensor_update_interval(battery_charge_total_config[UPDATE_INTERVAL]))
-
-    if battery_discharge_today_config := config.get(CONF_BATTERY_DISCHARGE_TODAY):
-        sens = await sensor.new_sensor(battery_discharge_today_config)
-        cg.add(var.set_battery_discharge_today_sensor(sens))
-        cg.add(var.set_battery_discharge_today_sensor_update_interval(battery_discharge_today_config[UPDATE_INTERVAL]))
-
-    if battery_discharge_total_config := config.get(CONF_BATTERY_DISCHARGE_TOTAL):
-        sens = await sensor.new_sensor(battery_discharge_total_config)
-        cg.add(var.set_battery_discharge_total_sensor(sens))
-        cg.add(var.set_battery_discharge_total_sensor_update_interval(battery_discharge_total_config[UPDATE_INTERVAL]))
-
-    if total_active_power_inverter_config := config.get(CONF_TOTAL_ACTIVE_POWER_INVERTER):
-        sens = await sensor.new_sensor(total_active_power_inverter_config)
-        cg.add(var.set_total_active_power_inverter_sensor(sens))
-        cg.add(var.set_total_active_power_inverter_sensor_update_interval(total_active_power_inverter_config[UPDATE_INTERVAL]))
-
-    if pv_voltage_1_config := config.get(CONF_PV_VOLTAGE_1):
-        sens = await sensor.new_sensor(pv_voltage_1_config)
-        cg.add(var.set_pv_voltage_1_sensor(sens))
-        cg.add(var.set_pv_voltage_1_sensor_update_interval(pv_voltage_1_config[UPDATE_INTERVAL]))
-
-    if pv_current_1_config := config.get(CONF_PV_CURRENT_1):
-        sens = await sensor.new_sensor(pv_current_1_config)
-        cg.add(var.set_pv_current_1_sensor(sens))
-        cg.add(var.set_pv_current_1_sensor_update_interval(pv_current_1_config[UPDATE_INTERVAL]))
-
-    if pv_power_1_config := config.get(CONF_PV_POWER_1):
-        sens = await sensor.new_sensor(pv_power_1_config)
-        cg.add(var.set_pv_power_1_sensor(sens))
-        cg.add(var.set_pv_power_1_sensor_update_interval(pv_power_1_config[UPDATE_INTERVAL]))
-
-    if pv_voltage_2_config := config.get(CONF_PV_VOLTAGE_2):
-        sens = await sensor.new_sensor(pv_voltage_2_config)
-        cg.add(var.set_pv_voltage_2_sensor(sens))
-        cg.add(var.set_pv_voltage_2_sensor_update_interval(pv_voltage_2_config[UPDATE_INTERVAL]))
-
-    if pv_current_2_config := config.get(CONF_PV_CURRENT_2):
-        sens = await sensor.new_sensor(pv_current_2_config)
-        cg.add(var.set_pv_current_2_sensor(sens))
-        cg.add(var.set_pv_current_2_sensor_update_interval(pv_current_2_config[UPDATE_INTERVAL]))
-
-    if pv_power_2_config := config.get(CONF_PV_POWER_2):
-        sens = await sensor.new_sensor(pv_power_2_config)
-        cg.add(var.set_pv_power_2_sensor(sens))
-        cg.add(var.set_pv_power_2_sensor_update_interval(pv_power_2_config[UPDATE_INTERVAL]))
-
-    if pv_power_total_config := config.get(CONF_PV_POWER_TOTAL):
-        sens = await sensor.new_sensor(pv_power_total_config)
-        cg.add(var.set_pv_power_total_sensor(sens))
-        cg.add(var.set_pv_power_total_sensor_update_interval(pv_power_total_config[UPDATE_INTERVAL]))
-
-    if battery_power_total_config := config.get(CONF_BATTERY_POWER_TOTAL):
-        sens = await sensor.new_sensor(battery_power_total_config)
-        cg.add(var.set_battery_power_total_sensor(sens))
-        cg.add(var.set_battery_power_total_sensor_update_interval(battery_power_total_config[UPDATE_INTERVAL]))
-
-    if battery_state_of_charge_total_config := config.get(CONF_BATTERY_STATE_OF_CHARGE_TOTAL):
-        sens = await sensor.new_sensor(battery_state_of_charge_total_config)
-        cg.add(var.set_battery_state_of_charge_total_sensor(sens))
-        cg.add(var.set_battery_state_of_charge_total_sensor_update_interval(battery_state_of_charge_total_config[UPDATE_INTERVAL]))
-
-    if desired_grid_power_config := config.get(CONF_DESIRED_GRID_POWER):
-        sens = await sensor.new_sensor(desired_grid_power_config)
-        cg.add(var.set_desired_grid_power_sensor(sens))
-        cg.add(var.set_desired_grid_power_sensor_update_interval(desired_grid_power_config[UPDATE_INTERVAL]))
-
-    if minimum_battery_power_config := config.get(CONF_MINIMUM_BATTERY_POWER):
-        sens = await sensor.new_sensor(minimum_battery_power_config)
-        cg.add(var.set_minimum_battery_power_sensor(sens))
-        cg.add(var.set_minimum_battery_power_sensor_update_interval(minimum_battery_power_config[UPDATE_INTERVAL]))
-
-    if maximum_battery_power_config := config.get(CONF_MAXIMUM_BATTERY_POWER):
-        sens = await sensor.new_sensor(maximum_battery_power_config)
-        cg.add(var.set_maximum_battery_power_sensor(sens))
-        cg.add(var.set_maximum_battery_power_sensor_update_interval(maximum_battery_power_config[UPDATE_INTERVAL]))
-
-    if energy_storage_mode_config := config.get(CONF_ENERGY_STORAGE_MODE):
-        sens = await sensor.new_sensor(energy_storage_mode_config)
-        cg.add(var.set_energy_storage_mode_sensor(sens))
-        cg.add(var.set_energy_storage_mode_sensor_update_interval(energy_storage_mode_config[UPDATE_INTERVAL]))
-
-    if battery_conf_id_config := config.get(CONF_BATTERY_CONF_ID):
-        sens = await sensor.new_sensor(battery_conf_id_config)
-        cg.add(var.set_battery_conf_id_sensor(sens))
-        cg.add(var.set_battery_conf_id_sensor_update_interval(battery_conf_id_config[UPDATE_INTERVAL]))
-
-    if battery_conf_address_config := config.get(CONF_BATTERY_CONF_ADDRESS):
-        sens = await sensor.new_sensor(battery_conf_address_config)
-        cg.add(var.set_battery_conf_address_sensor(sens))
-        cg.add(var.set_battery_conf_address_sensor_update_interval(battery_conf_address_config[UPDATE_INTERVAL]))
-
-    if battery_conf_protocol_config := config.get(CONF_BATTERY_CONF_PROTOCOL):
-        sens = await sensor.new_sensor(battery_conf_protocol_config)
-        cg.add(var.set_battery_conf_protocol_sensor(sens))
-        cg.add(var.set_battery_conf_protocol_sensor_update_interval(battery_conf_protocol_config[UPDATE_INTERVAL]))
-
-    if battery_conf_voltage_nominal_config := config.get(CONF_BATTERY_CONF_VOLTAGE_NOMINAL):
-        sens = await sensor.new_sensor(battery_conf_voltage_nominal_config)
-        cg.add(var.set_battery_conf_voltage_nominal_sensor(sens))
-        cg.add(var.set_battery_conf_voltage_nominal_sensor_update_interval(battery_conf_voltage_nominal_config[UPDATE_INTERVAL]))
-
-    if battery_conf_voltage_over_config := config.get(CONF_BATTERY_CONF_VOLTAGE_OVER):
-        sens = await sensor.new_sensor(battery_conf_voltage_over_config)
-        cg.add(var.set_battery_conf_voltage_over_sensor(sens))
-        cg.add(var.set_battery_conf_voltage_over_sensor_update_interval(battery_conf_voltage_over_config[UPDATE_INTERVAL]))
-
-    if battery_conf_voltage_charge_config := config.get(CONF_BATTERY_CONF_VOLTAGE_CHARGE):
-        sens = await sensor.new_sensor(battery_conf_voltage_charge_config)
-        cg.add(var.set_battery_conf_voltage_charge_sensor(sens))
-        cg.add(var.set_battery_conf_voltage_charge_sensor_update_interval(battery_conf_voltage_charge_config[UPDATE_INTERVAL]))
-
-    if battery_conf_voltage_lack_config := config.get(CONF_BATTERY_CONF_VOLTAGE_LACK):
-        sens = await sensor.new_sensor(battery_conf_voltage_lack_config)
-        cg.add(var.set_battery_conf_voltage_lack_sensor(sens))
-        cg.add(var.set_battery_conf_voltage_lack_sensor_update_interval(battery_conf_voltage_lack_config[UPDATE_INTERVAL]))
-
-    if battery_conf_voltage_discharge_stop_config := config.get(CONF_BATTERY_CONF_VOLTAGE_DISCHARGE_STOP):
-        sens = await sensor.new_sensor(battery_conf_voltage_discharge_stop_config)
-        cg.add(var.set_battery_conf_voltage_discharge_stop_sensor(sens))
-        cg.add(var.set_battery_conf_voltage_discharge_stop_sensor_update_interval(battery_conf_voltage_discharge_stop_config[UPDATE_INTERVAL]))
-
-    if battery_conf_current_charge_limit_config := config.get(CONF_BATTERY_CONF_CURRENT_CHARGE_LIMIT):
-        sens = await sensor.new_sensor(battery_conf_current_charge_limit_config)
-        cg.add(var.set_battery_conf_current_charge_limit_sensor(sens))
-        cg.add(var.set_battery_conf_current_charge_limit_sensor_update_interval(battery_conf_current_charge_limit_config[UPDATE_INTERVAL]))
-
-    if battery_conf_current_discharge_limit_config := config.get(CONF_BATTERY_CONF_CURRENT_DISCHARGE_LIMIT):
-        sens = await sensor.new_sensor(battery_conf_current_discharge_limit_config)
-        cg.add(var.set_battery_conf_current_discharge_limit_sensor(sens))
-        cg.add(var.set_battery_conf_current_discharge_limit_sensor_update_interval(battery_conf_current_discharge_limit_config[UPDATE_INTERVAL]))
-
-    if battery_conf_depth_of_discharge_config := config.get(CONF_BATTERY_CONF_DEPTH_OF_DISCHARGE):
-        sens = await sensor.new_sensor(battery_conf_depth_of_discharge_config)
-        cg.add(var.set_battery_conf_depth_of_discharge_sensor(sens))
-        cg.add(var.set_battery_conf_depth_of_discharge_sensor_update_interval(battery_conf_depth_of_discharge_config[UPDATE_INTERVAL]))
-
-    if battery_conf_end_of_discharge_config := config.get(CONF_BATTERY_CONF_END_OF_DISCHARGE):
-        sens = await sensor.new_sensor(battery_conf_end_of_discharge_config)
-        cg.add(var.set_battery_conf_end_of_discharge_sensor(sens))
-        cg.add(var.set_battery_conf_end_of_discharge_sensor_update_interval(battery_conf_end_of_discharge_config[UPDATE_INTERVAL]))
-
-    if battery_conf_capacity_config := config.get(CONF_BATTERY_CONF_CAPACITY):
-        sens = await sensor.new_sensor(battery_conf_capacity_config)
-        cg.add(var.set_battery_conf_capacity_sensor(sens))
-        cg.add(var.set_battery_conf_capacity_sensor_update_interval(battery_conf_capacity_config[UPDATE_INTERVAL]))
-
-    if battery_conf_cell_type_config := config.get(CONF_BATTERY_CONF_CELL_TYPE):
-        sens = await sensor.new_sensor(battery_conf_cell_type_config)
-        cg.add(var.set_battery_conf_cell_type_sensor(sens))
-        cg.add(var.set_battery_conf_cell_type_sensor_update_interval(battery_conf_cell_type_config[UPDATE_INTERVAL]))
-
-    if battery_conf_eps_buffer_config := config.get(CONF_BATTERY_CONF_EPS_BUFFER):
-        sens = await sensor.new_sensor(battery_conf_eps_buffer_config)
-        cg.add(var.set_battery_conf_eps_buffer_sensor(sens))
-        cg.add(var.set_battery_conf_eps_buffer_sensor_update_interval(battery_conf_eps_buffer_config[UPDATE_INTERVAL]))
-
-    if battery_conf_control_config := config.get(CONF_BATTERY_CONF_CONTROL):
-        sens = await sensor.new_sensor(battery_conf_control_config)
-        cg.add(var.set_battery_conf_control_sensor(sens))
-        cg.add(var.set_battery_conf_control_sensor_update_interval(battery_conf_control_config[UPDATE_INTERVAL]))
+    for type, _ in TYPES.items():
+        if type in config:
+            conf = config[type]
+            sens = await sensor.new_sensor(conf)
+            cg.add(getattr(var, f"set_{type}_sensor")(sens))
+            cg.add(getattr(var, f"set_{type}_sensor_update_interval")(conf[UPDATE_INTERVAL]))
