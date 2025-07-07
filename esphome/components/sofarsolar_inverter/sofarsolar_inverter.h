@@ -24,7 +24,7 @@ namespace esphome {
         class SofarSolar_Inverter : public uart::UARTDevice, public Component {
         public:
 
-            SofarSolar_Register registers_G3[38] = {
+            SofarSolar_Register registers_G3[] = {
                 SofarSolar_Register{0x0684, 2, 2, 1, 0.01}, // PV Generation Today
                 SofarSolar_Register{0x0686, 2, 2, 0, 0.1}, // PV Generation Total
                 SofarSolar_Register{0x0688, 2, 2, 1, 0.01}, // Load Consumption Today
@@ -96,6 +96,10 @@ namespace esphome {
             bool check_crc(std::vector<uint8_t> frame);
             void send_read_modbus_registers(uint16_t start_address, uint16_t quantity);
             bool receive_modbus_response(std::vector<uint8_t> &response, uint8_t type, uint8_t quantity);
+            void send_write_modbus_register_uint16_t(uint16_t start_address, uint16_t value);
+            void send_write_modbus_register_int16_t(uint16_t start_address, int16_t value);
+            void send_write_modbus_register_uint32_t(uint16_t start_address, uint32_t value);
+            void send_write_modbus_register_int32_t(uint16_t start_address, int32_t value);
             void empty_uart_buffer();
 			uint16_t uint16_t_from_bytes(const std::vector<uint8_t> &data, size_t offset) {
 				return (uint16_t) (data[offset] << 8) | data[offset + 1];
