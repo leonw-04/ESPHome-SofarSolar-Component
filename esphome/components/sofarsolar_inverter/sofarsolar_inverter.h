@@ -94,8 +94,8 @@ namespace esphome {
             sensor::Sensor *sensor = nullptr; // Pointer to the sensor to update
             bool is_queued = false; // Flag to indicate if the register is queued for reading
 			bool writeable;
-			void (*write_funktion)() = nullptr; // Function pointer for writing to the register
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, bool writeable, void (*write_funktion)() = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), writeable(writeable), write_funktion(write_funktion) {}
+			void (*write_funktion)(register_write_task) = nullptr; // Function pointer for writing to the register
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, bool writeable, void (*write_funktion)(register_write_task) = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), writeable(writeable), write_funktion(write_funktion) {}
         };
 
 		struct register_read_task {
