@@ -218,147 +218,148 @@ namespace esphome {
             void set_battery_conf_voltage_over_sensor_update_interval(int battery_conf_voltage_over_sensor_update_interval);
             void set_battery_conf_voltage_charge_sensor_update_interval(int battery_conf_voltage_charge_sensor_update_interval);
             void set_battery_conf_voltage_lack_sensor_update_interval(int battery_conf_voltage_lack_sensor_update_interval);
-            void set_battery_conf_voltage_discharge_stop_sensor_update_interval(int battery_conf_voltage_discharge_stop_sensor_update_interval)void set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { registers_G3[0].sensor = pv_generation_today_sensor; pv_generation_today_sensor_ = pv_generation_today_sensor; }
-            void set_pv_generation_total_sensor(sensor::Sensor *pv_generation_total_sensor) { registers_G3[1].sensor = pv_generation_total_sensor; pv_generation_total_sensor_ = pv_generation_total_sensor; }
-            void set_load_consumption_today_sensor(sensor::Sensor *load_consumption_today_sensor) { registers_G3[2].sensor = load_consumption_today_sensor; load_consumption_today_sensor_ = load_consumption_today_sensor; }
-            void set_load_consumption_total_sensor(sensor::Sensor *load_consumption_total_sensor) { registers_G3[3].sensor = load_consumption_total_sensor; load_consumption_total_sensor_ = load_consumption_total_sensor; }
-            void set_battery_charge_today_sensor(sensor::Sensor *battery_charge_today_sensor) { registers_G3[4].sensor = battery_charge_today_sensor; battery_charge_today_sensor_ = battery_charge_today_sensor; }
-            void set_battery_charge_total_sensor(sensor::Sensor *battery_charge_total_sensor) { registers_G3[5].sensor = battery_charge_total_sensor; battery_charge_total_sensor_ = battery_charge_total_sensor; }
-            void set_battery_discharge_today_sensor(sensor::Sensor *battery_discharge_today_sensor) { registers_G3[6].sensor = battery_discharge_today_sensor; battery_discharge_today_sensor_ = battery_discharge_today_sensor; }
-            void set_battery_discharge_total_sensor(sensor::Sensor *battery_discharge_total_sensor) { registers_G3[7].sensor = battery_discharge_total_sensor; battery_discharge_total_sensor_ = battery_discharge_total_sensor; }
-            void set_total_active_power_inverter_sensor(sensor::Sensor *total_active_power_inverter_sensor) { registers_G3[8].sensor = total_active_power_inverter_sensor; total_active_power_inverter_sensor_ = total_active_power_inverter_sensor; }
-            void set_pv_voltage_1_sensor(sensor::Sensor *pv_voltage_1_sensor) { registers_G3[9].sensor = pv_voltage_1_sensor; pv_voltage_1_sensor_ = pv_voltage_1_sensor; }
-            void set_pv_current_1_sensor(sensor::Sensor *pv_current_1_sensor) { registers_G3[10].sensor = pv_current_1_sensor; pv_current_1_sensor_ = pv_current_1_sensor; }
-            void set_pv_power_1_sensor(sensor::Sensor *pv_power_1_sensor) { registers_G3[11].sensor = pv_power_1_sensor; pv_power_1_sensor_ = pv_power_1_sensor; }
-            void set_pv_voltage_2_sensor(sensor::Sensor *pv_voltage_2_sensor) { registers_G3[12].sensor = pv_voltage_2_sensor; pv_voltage_2_sensor_ = pv_voltage_2_sensor; }
-            void set_pv_current_2_sensor(sensor::Sensor *pv_current_2_sensor) { registers_G3[13].sensor = pv_current_2_sensor; pv_current_2_sensor_ = pv_current_2_sensor; }
-            void set_pv_power_2_sensor(sensor::Sensor *pv_power_2_sensor) { registers_G3[14].sensor = pv_power_2_sensor; pv_power_2_sensor_ = pv_power_2_sensor; }
-            void set_pv_power_total_sensor(sensor::Sensor *pv_power_total_sensor) { registers_G3[15].sensor = pv_power_total_sensor; pv_power_total_sensor_ = pv_power_total_sensor; }
-            void set_battery_power_total_sensor(sensor::Sensor *battery_power_total_sensor) { registers_G3[16].sensor = battery_power_total_sensor; battery_power_total_sensor_ = battery_power_total_sensor; }
-            void set_battery_state_of_charge_total_sensor(sensor::Sensor *battery_state_of_charge_total_sensor) { registers_G3[17].sensor = battery_state_of_charge_total_sensor; battery_state_of_charge_total_sensor_ = battery_state_of_charge_total_sensor; }
-            void set_desired_grid_power_sensor(sensor::Sensor *desired_grid_power_sensor) { registers_G3[18].sensor = desired_grid_power_sensor; desired_grid_power_sensor_ = desired_grid_power_sensor; }
-            void set_minimum_battery_power_sensor(sensor::Sensor *minimum_battery_power_sensor) { registers_G3[19].sensor = minimum_battery_power_sensor; minimum_battery_power_sensor_ = minimum_battery_power_sensor; }
-            void set_maximum_battery_power_sensor(sensor::Sensor *maximum_battery_power_sensor) { registers_G3[20].sensor = maximum_battery_power_sensor; maximum_battery_power_sensor_ = maximum_battery_power_sensor; }
-            void set_energy_storage_mode_sensor(sensor::Sensor *energy_storage_mode_sensor) { registers_G3[21].sensor = energy_storage_mode_sensor; energy_storage_mode_sensor_ = energy_storage_mode_sensor; }
-            void set_battery_conf_id_sensor(sensor::Sensor *battery_conf_id_sensor) { registers_G3[22].sensor = battery_conf_id_sensor; battery_conf_id_sensor_ = battery_conf_id_sensor; }
-            void set_battery_conf_address_sensor(sensor::Sensor *battery_conf_address_sensor) { registers_G3[23].sensor = battery_conf_address_sensor; battery_conf_address_sensor_ = battery_conf_address_sensor; }
-            void set_battery_conf_protocol_sensor(sensor::Sensor *battery_conf_protocol_sensor) { registers_G3[24].sensor = battery_conf_protocol_sensor; battery_conf_protocol_sensor_ = battery_conf_protocol_sensor; }
-            void set_battery_conf_voltage_nominal_sensor(sensor::Sensor *battery_conf_voltage_nominal_sensor) { registers_G3[25].sensor = battery_conf_voltage_nominal_sensor; battery_conf_voltage_nominal_sensor_ = battery_conf_voltage_nominal_sensor; }
-            void set_battery_conf_voltage_over_sensor(sensor::Sensor *battery_conf_voltage_over_sensor) { registers_G3[26].sensor = battery_conf_voltage_over_sensor; battery_conf_voltage_over_sensor_ = battery_conf_voltage_over_sensor; }
-            void set_battery_conf_voltage_charge_sensor(sensor::Sensor *battery_conf_voltage_charge_sensor) { registers_G3[27].sensor = battery_conf_voltage_charge_sensor; battery_conf_voltage_charge_sensor_ = battery_conf_voltage_charge_sensor; }
-            void set_battery_conf_voltage_lack_sensor(sensor::Sensor *battery_conf_voltage_lack_sensor) { registers_G3[28].sensor = battery_conf_voltage_lack_sensor; battery_conf_voltage_lack_sensor_ = battery_conf_voltage_lack_sensor; }
-            void set_battery_conf_voltage_discharge_stop_sensor(sensor::Sensor *battery_conf_voltage_discharge_stop_sensor) { registers_G3[29].sensor = battery_conf_voltage_discharge_stop_sensor; battery_conf_voltage_discharge_stop_sensor_ = battery_conf_voltage_discharge_stop_sensor; }
-            void set_battery_conf_current_charge_limit_sensor(sensor::Sensor *battery_conf_current_charge_limit_sensor) { registers_G3[30].sensor = battery_conf_current_charge_limit_sensor; battery_conf_current_charge_limit_sensor_ = battery_conf_current_charge_limit_sensor; }
-            void set_battery_conf_current_discharge_limit_sensor(sensor::Sensor *battery_conf_current_discharge_limit_sensor) { registers_G3[31].sensor = battery_conf_current_discharge_limit_sensor; battery_conf_current_discharge_limit_sensor_ = battery_conf_current_discharge_limit_sensor; }
-            void set_battery_conf_depth_of_discharge_sensor(sensor::Sensor *battery_conf_depth_of_discharge_sensor) { registers_G3[32].sensor = battery_conf_depth_of_discharge_sensor; battery_conf_depth_of_discharge_sensor_ = battery_conf_depth_of_discharge_sensor; }
-            void set_battery_conf_end_of_discharge_sensor(sensor::Sensor *battery_conf_end_of_discharge_sensor) { registers_G3[33].sensor = battery_conf_end_of_discharge_sensor; battery_conf_end_of_discharge_sensor_ = battery_conf_end_of_discharge_sensor; }
-            void set_battery_conf_capacity_sensor(sensor::Sensor *battery_conf_capacity_sensor) { registers_G3[34].sensor = battery_conf_capacity_sensor; battery_conf_capacity_sensor_ = battery_conf_capacity_sensor; }
-            void set_battery_conf_cell_type_sensor(sensor::Sensor *battery_conf_cell_type_sensor) { registers_G3[35].sensor = battery_conf_cell_type_sensor; battery_conf_cell_type_sensor_ = battery_conf_cell_type_sensor; }
-            void set_battery_conf_eps_buffer_sensor(sensor::Sensor *battery_conf_eps_buffer_sensor) { registers_G3[36].sensor = battery_conf_eps_buffer_sensor; battery_conf_eps_buffer_sensor_ = battery_conf_eps_buffer_sensor; }
-            void set_battery_conf_control_sensor(sensor::Sensor *battery_conf_control_sensor) { registers_G3[37].sensor = battery_conf_control_sensor; battery_conf_control_sensor_ = battery_conf_control_sensor; }
-			void set_grid_frequency_sensor(sensor::Sensor *grid_frequency_sensor) { registers_G3[38].sensor = grid_frequency_sensor; grid_frequency_sensor_ = grid_frequency_sensor; }
-			void set_grid_voltage_phase_r_sensor(sensor::Sensor *grid_voltage_phase_r_sensor) { registers_G3[39].sensor = grid_voltage_phase_r_sensor; grid_voltage_phase_r_sensor_ = grid_voltage_phase_r_sensor; }
-			void set_grid_current_phase_r_sensor(sensor::Sensor *grid_current_phase_r_sensor) { registers_G3[40].sensor = grid_current_phase_r_sensor; grid_current_phase_r_sensor_ = grid_current_phase_r_sensor; }
-			void set_grid_power_phase_r_sensor(sensor::Sensor *grid_power_phase_r_sensor) { registers_G3[41].sensor = grid_power_phase_r_sensor; grid_power_phase_r_sensor_ = grid_power_phase_r_sensor; }
-			void set_grid_voltage_phase_s_sensor(sensor::Sensor *grid_voltage_phase_s_sensor) { registers_G3[42].sensor = grid_voltage_phase_s_sensor; grid_voltage_phase_s_sensor_ = grid_voltage_phase_s_sensor; }
-			void set_grid_current_phase_s_sensor(sensor::Sensor *grid_current_phase_s_sensor) { registers_G3[43].sensor = grid_current_phase_s_sensor; grid_current_phase_s_sensor_ = grid_current_phase_s_sensor; }
-			void set_grid_power_phase_s_sensor(sensor::Sensor *grid_power_phase_s_sensor) { registers_G3[44].sensor = grid_power_phase_s_sensor; grid_power_phase_s_sensor_ = grid_power_phase_s_sensor; }
-			void set_grid_voltage_phase_t_sensor(sensor::Sensor *grid_voltage_phase_t_sensor) { registers_G3[45].sensor = grid_voltage_phase_t_sensor; grid_voltage_phase_t_sensor_ = grid_voltage_phase_t_sensor; }
-			void set_grid_current_phase_t_sensor(sensor::Sensor *grid_current_phase_t_sensor) { registers_G3[46].sensor = grid_current_phase_t_sensor; grid_current_phase_t_sensor_ = grid_current_phase_t_sensor; }
-			void set_grid_power_phase_t_sensor(sensor::Sensor *grid_power_phase_t_sensor) { registers_G3[47].sensor = grid_power_phase_t_sensor; grid_power_phase_t_sensor_ = grid_power_phase_t_sensor; }
-			void set_off_grid_power_total_sensor(sensor::Sensor *off_grid_power_total_sensor) { registers_G3[48].sensor = off_grid_power_total_sensor; off_grid_power_total_sensor_ = off_grid_power_total_sensor; }
-			void set_off_grid_frequency_sensor(sensor::Sensor *off_grid_frequency_sensor) { registers_G3[49].sensor = off_grid_frequency_sensor; off_grid_frequency_sensor_ = off_grid_frequency_sensor; }
-			void set_off_grid_voltage_phase_r_sensor(sensor::Sensor *off_grid_voltage_phase_r_sensor) { registers_G3[50].sensor = off_grid_voltage_phase_r_sensor; off_grid_voltage_phase_r_sensor_ = off_grid_voltage_phase_r_sensor; }
-			void set_off_grid_current_phase_r_sensor(sensor::Sensor *off_grid_current_phase_r_sensor) { registers_G3[51].sensor = off_grid_current_phase_r_sensor; off_grid_current_phase_r_sensor_ = off_grid_current_phase_r_sensor; }
-			void set_off_grid_power_phase_r_sensor(sensor::Sensor *off_grid_power_phase_r_sensor) { registers_G3[52].sensor = off_grid_power_phase_r_sensor; off_grid_power_phase_r_sensor_ = off_grid_power_phase_r_sensor; }
-			void set_off_grid_voltage_phase_s_sensor(sensor::Sensor *off_grid_voltage_phase_s_sensor) { registers_G3[53].sensor = off_grid_voltage_phase_s_sensor; off_grid_voltage_phase_s_sensor_ = off_grid_voltage_phase_s_sensor; }
-			void set_off_grid_current_phase_s_sensor(sensor::Sensor *off_grid_current_phase_s_sensor) { registers_G3[54].sensor = off_grid_current_phase_s_sensor; off_grid_current_phase_s_sensor_ = off_grid_current_phase_s_sensor; }
-			void set_off_grid_power_phase_s_sensor(sensor::Sensor *off_grid_power_phase_s_sensor) { registers_G3[55].sensor = off_grid_power_phase_s_sensor; off_grid_power_phase_s_sensor_ = off_grid_power_phase_s_sensor; }
-			void set_off_grid_voltage_phase_t_sensor(sensor::Sensor *off_grid_voltage_phase_t_sensor) { registers_G3[56].sensor = off_grid_voltage_phase_t_sensor; off_grid_voltage_phase_t_sensor_ = off_grid_voltage_phase_t_sensor; }
-			void set_off_grid_current_phase_t_sensor(sensor::Sensor *off_grid_current_phase_t_sensor) { registers_G3[57].sensor = off_grid_current_phase_t_sensor; off_grid_current_phase_t_sensor_ = off_grid_current_phase_t_sensor; }
-			void set_off_grid_power_phase_t_sensor(sensor::Sensor *off_grid_power_phase_t_sensor) { registers_G3[58].sensor = off_grid_power_phase_t_sensor; off_grid_power_phase_t_sensor_ = off_grid_power_phase_t_sensor; }
+            void set_battery_conf_voltage_discharge_stop_sensor_update_interval(int battery_conf_voltage_discharge_stop_sensor_update_interval);
+            void set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor);
+            void set_pv_generation_total_sensor(sensor::Sensor *pv_generation_total_sensor);
+            void set_load_consumption_today_sensor(sensor::Sensor *load_consumption_today_sensor);
+            void set_load_consumption_total_sensor(sensor::Sensor *load_consumption_total_sensor);
+            void set_battery_charge_today_sensor(sensor::Sensor *battery_charge_today_sensor);
+            void set_battery_charge_total_sensor(sensor::Sensor *battery_charge_total_sensor);
+            void set_battery_discharge_today_sensor(sensor::Sensor *battery_discharge_today_sensor);
+            void set_battery_discharge_total_sensor(sensor::Sensor *battery_discharge_total_sensor);
+            void set_total_active_power_inverter_sensor(sensor::Sensor *total_active_power_inverter_sensor);
+            void set_pv_voltage_1_sensor(sensor::Sensor *pv_voltage_1_sensor);
+            void set_pv_current_1_sensor(sensor::Sensor *pv_current_1_sensor);
+            void set_pv_power_1_sensor(sensor::Sensor *pv_power_1_sensor);
+            void set_pv_voltage_2_sensor(sensor::Sensor *pv_voltage_2_sensor);
+            void set_pv_current_2_sensor(sensor::Sensor *pv_current_2_sensor);
+            void set_pv_power_2_sensor(sensor::Sensor *pv_power_2_sensor);
+            void set_pv_power_total_sensor(sensor::Sensor *pv_power_total_sensor);
+            void set_battery_power_total_sensor(sensor::Sensor *battery_power_total_sensor);
+            void set_battery_state_of_charge_total_sensor(sensor::Sensor *battery_state_of_charge_total_sensor);
+            void set_desired_grid_power_sensor(sensor::Sensor *desired_grid_power_sensor);
+            void set_minimum_battery_power_sensor(sensor::Sensor *minimum_battery_power_sensor);
+            void set_maximum_battery_power_sensor(sensor::Sensor *maximum_battery_power_sensor);
+            void set_energy_storage_mode_sensor(sensor::Sensor *energy_storage_mode_sensor);
+            void set_battery_conf_id_sensor(sensor::Sensor *battery_conf_id_sensor);
+            void set_battery_conf_address_sensor(sensor::Sensor *battery_conf_address_sensor);
+            void set_battery_conf_protocol_sensor(sensor::Sensor *battery_conf_protocol_sensor);
+            void set_battery_conf_voltage_nominal_sensor(sensor::Sensor *battery_conf_voltage_nominal_sensor);
+            void set_battery_conf_voltage_over_sensor(sensor::Sensor *battery_conf_voltage_over_sensor);
+            void set_battery_conf_voltage_charge_sensor(sensor::Sensor *battery_conf_voltage_charge_sensor);
+            void set_battery_conf_voltage_lack_sensor(sensor::Sensor *battery_conf_voltage_lack_sensor);
+            void set_battery_conf_voltage_discharge_stop_sensor(sensor::Sensor *battery_conf_voltage_discharge_stop_sensor);
+            void set_battery_conf_current_charge_limit_sensor(sensor::Sensor *battery_conf_current_charge_limit_sensor);
+            void set_battery_conf_current_discharge_limit_sensor(sensor::Sensor *battery_conf_current_discharge_limit_sensor);
+            void set_battery_conf_depth_of_discharge_sensor(sensor::Sensor *battery_conf_depth_of_discharge_sensor);
+            void set_battery_conf_end_of_discharge_sensor(sensor::Sensor *battery_conf_end_of_discharge_sensor);
+            void set_battery_conf_capacity_sensor(sensor::Sensor *battery_conf_capacity_sensor);
+            void set_battery_conf_cell_type_sensor(sensor::Sensor *battery_conf_cell_type_sensor);
+            void set_battery_conf_eps_buffer_sensor(sensor::Sensor *battery_conf_eps_buffer_sensor);
+            void set_battery_conf_control_sensor(sensor::Sensor *battery_conf_control_sensor);
+			void set_grid_frequency_sensor(sensor::Sensor *grid_frequency_sensor);
+			void set_grid_voltage_phase_r_sensor(sensor::Sensor *grid_voltage_phase_r_sensor);
+			void set_grid_current_phase_r_sensor(sensor::Sensor *grid_current_phase_r_sensor);
+			void set_grid_power_phase_r_sensor(sensor::Sensor *grid_power_phase_r_sensor);
+			void set_grid_voltage_phase_s_sensor(sensor::Sensor *grid_voltage_phase_s_sensor);
+			void set_grid_current_phase_s_sensor(sensor::Sensor *grid_current_phase_s_sensor);
+			void set_grid_power_phase_s_sensor(sensor::Sensor *grid_power_phase_s_sensor);
+			void set_grid_voltage_phase_t_sensor(sensor::Sensor *grid_voltage_phase_t_sensor);
+			void set_grid_current_phase_t_sensor(sensor::Sensor *grid_current_phase_t_sensor);
+			void set_grid_power_phase_t_sensor(sensor::Sensor *grid_power_phase_t_sensor);
+			void set_off_grid_power_total_sensor(sensor::Sensor *off_grid_power_total_sensor);
+			void set_off_grid_frequency_sensor(sensor::Sensor *off_grid_frequency_sensor);
+			void set_off_grid_voltage_phase_r_sensor(sensor::Sensor *off_grid_voltage_phase_r_sensor);
+			void set_off_grid_current_phase_r_sensor(sensor::Sensor *off_grid_current_phase_r_sensor);
+			void set_off_grid_power_phase_r_sensor(sensor::Sensor *off_grid_power_phase_r_sensor);
+			void set_off_grid_voltage_phase_s_sensor(sensor::Sensor *off_grid_voltage_phase_s_sensor);
+			void set_off_grid_current_phase_s_sensor(sensor::Sensor *off_grid_current_phase_s_sensor);
+			void set_off_grid_power_phase_s_sensor(sensor::Sensor *off_grid_power_phase_s_sensor);
+			void set_off_grid_voltage_phase_t_sensor(sensor::Sensor *off_grid_voltage_phase_t_sensor);
+			void set_off_grid_current_phase_t_sensor(sensor::Sensor *off_grid_current_phase_t_sensor);
+			void set_off_grid_power_phase_t_sensor(sensor::Sensor *off_grid_power_phase_t_sensor);
 
             // Set update intervals for sensors
 
-            void set_pv_generation_today_sensor_update_interval(int pv_generation_today_sensor_update_interval) { registers_G3[0].update_interval = pv_generation_today_sensor_update_interval; pv_generation_today_sensor_update_interval_ = pv_generation_today_sensor_update_interval; }
-            void set_pv_generation_total_sensor_update_interval(int pv_generation_total_sensor_update_interval) { registers_G3[1].update_interval = pv_generation_total_sensor_update_interval; pv_generation_total_sensor_update_interval_ = pv_generation_total_sensor_update_interval; }
-            void set_load_consumption_today_sensor_update_interval(int load_consumption_today_sensor_update_interval) { registers_G3[2].update_interval = load_consumption_today_sensor_update_interval; load_consumption_today_sensor_update_interval_ = load_consumption_today_sensor_update_interval; }
-            void set_load_consumption_total_sensor_update_interval(int load_consumption_total_sensor_update_interval) { registers_G3[3].update_interval = load_consumption_total_sensor_update_interval; load_consumption_total_sensor_update_interval_ = load_consumption_total_sensor_update_interval; }
-            void set_battery_charge_today_sensor_update_interval(int battery_charge_today_sensor_update_interval) { registers_G3[4].update_interval = battery_charge_today_sensor_update_interval; battery_charge_today_sensor_update_interval_ = battery_charge_today_sensor_update_interval; }
-            void set_battery_charge_total_sensor_update_interval(int battery_charge_total_sensor_update_interval) { registers_G3[5].update_interval = battery_charge_total_sensor_update_interval; battery_charge_total_sensor_update_interval_ = battery_charge_total_sensor_update_interval; }
-            void set_battery_discharge_today_sensor_update_interval(int battery_discharge_today_sensor_update_interval) { registers_G3[6].update_interval = battery_discharge_today_sensor_update_interval; battery_discharge_today_sensor_update_interval_ = battery_discharge_today_sensor_update_interval; }
-            void set_battery_discharge_total_sensor_update_interval(int battery_discharge_total_sensor_update_interval) { registers_G3[7].update_interval = battery_discharge_total_sensor_update_interval; battery_discharge_total_sensor_update_interval_ = battery_discharge_total_sensor_update_interval; }
-            void set_total_active_power_inverter_sensor_update_interval(int total_active_power_inverter_sensor_update_interval) { registers_G3[8].update_interval = total_active_power_inverter_sensor_update_interval; total_active_power_inverter_sensor_update_interval_ = total_active_power_inverter_sensor_update_interval; }
-            void set_pv_voltage_1_sensor_update_interval(int pv_voltage_1_sensor_update_interval) { registers_G3[9].update_interval = pv_voltage_1_sensor_update_interval; pv_voltage_1_sensor_update_interval_ = pv_voltage_1_sensor_update_interval; }
-            void set_pv_current_1_sensor_update_interval(int pv_current_1_sensor_update_interval) { registers_G3[10].update_interval = pv_current_1_sensor_update_interval; pv_current_1_sensor_update_interval_ = pv_current_1_sensor_update_interval; }
-            void set_pv_power_1_sensor_update_interval(int pv_power_1_sensor_update_interval) { registers_G3[11].update_interval = pv_power_1_sensor_update_interval; pv_power_1_sensor_update_interval_ = pv_power_1_sensor_update_interval; }
-            void set_pv_voltage_2_sensor_update_interval(int pv_voltage_2_sensor_update_interval) { registers_G3[12].update_interval = pv_voltage_2_sensor_update_interval; pv_voltage_2_sensor_update_interval_ = pv_voltage_2_sensor_update_interval; }
-            void set_pv_current_2_sensor_update_interval(int pv_current_2_sensor_update_interval) { registers_G3[13].update_interval = pv_current_2_sensor_update_interval; pv_current_2_sensor_update_interval_ = pv_current_2_sensor_update_interval; }
-            void set_pv_power_2_sensor_update_interval(int pv_power_2_sensor_update_interval) { registers_G3[14].update_interval = pv_power_2_sensor_update_interval; pv_power_2_sensor_update_interval_ = pv_power_2_sensor_update_interval; }
-            void set_pv_power_total_sensor_update_interval(int pv_power_total_sensor_update_interval) { registers_G3[15].update_interval = pv_power_total_sensor_update_interval; pv_power_total_sensor_update_interval_ = pv_power_total_sensor_update_interval; }
-            void set_battery_power_total_sensor_update_interval(int battery_power_total_sensor_update_interval) { registers_G3[16].update_interval = battery_power_total_sensor_update_interval; battery_power_total_sensor_update_interval_ = battery_power_total_sensor_update_interval; }
-            void set_battery_state_of_charge_total_sensor_update_interval(int battery_state_of_charge_total_sensor_update_interval) { registers_G3[17].update_interval = battery_state_of_charge_total_sensor_update_interval; battery_state_of_charge_total_sensor_update_interval_ = battery_state_of_charge_total_sensor_update_interval; }
-            void set_desired_grid_power_sensor_update_interval(int desired_grid_power_sensor_update_interval) { registers_G3[18].update_interval = desired_grid_power_sensor_update_interval; desired_grid_power_sensor_update_interval_ = desired_grid_power_sensor_update_interval; }
-            void set_minimum_battery_power_sensor_update_interval(int minimum_battery_power_sensor_update_interval) { registers_G3[19].update_interval = minimum_battery_power_sensor_update_interval; minimum_battery_power_sensor_update_interval_ = minimum_battery_power_sensor_update_interval; }
-            void set_maximum_battery_power_sensor_update_interval(int maximum_battery_power_sensor_update_interval) { registers_G3[20].update_interval = maximum_battery_power_sensor_update_interval; maximum_battery_power_sensor_update_interval_ = maximum_battery_power_sensor_update_interval; }
-            void set_energy_storage_mode_sensor_update_interval(int energy_storage_mode_sensor_update_interval) { registers_G3[21].update_interval = energy_storage_mode_sensor_update_interval; energy_storage_mode_sensor_update_interval_ = energy_storage_mode_sensor_update_interval; }
-            void set_battery_conf_id_sensor_update_interval(int battery_conf_id_sensor_update_interval) { registers_G3[22].update_interval = battery_conf_id_sensor_update_interval; battery_conf_id_sensor_update_interval_ = battery_conf_id_sensor_update_interval; }
-            void set_battery_conf_address_sensor_update_interval(int battery_conf_address_sensor_update_interval) { registers_G3[23].update_interval = battery_conf_address_sensor_update_interval; battery_conf_address_sensor_update_interval_ = battery_conf_address_sensor_update_interval; }
-            void set_battery_conf_protocol_sensor_update_interval(int battery_conf_protocol_sensor_update_interval) { registers_G3[24].update_interval = battery_conf_protocol_sensor_update_interval; battery_conf_protocol_sensor_update_interval_ = battery_conf_protocol_sensor_update_interval; }
-            void set_battery_conf_voltage_nominal_sensor_update_interval(int battery_conf_voltage_nominal_sensor_update_interval) { registers_G3[25].update_interval = battery_conf_voltage_nominal_sensor_update_interval; battery_conf_voltage_nominal_sensor_update_interval_ = battery_conf_voltage_nominal_sensor_update_interval; }
-            void set_battery_conf_voltage_over_sensor_update_interval(int battery_conf_voltage_over_sensor_update_interval) { registers_G3[26].update_interval = battery_conf_voltage_over_sensor_update_interval; battery_conf_voltage_over_sensor_update_interval_ = battery_conf_voltage_over_sensor_update_interval; }
-            void set_battery_conf_voltage_charge_sensor_update_interval(int battery_conf_voltage_charge_sensor_update_interval) { registers_G3[27].update_interval = battery_conf_voltage_charge_sensor_update_interval; battery_conf_voltage_charge_sensor_update_interval_ = battery_conf_voltage_charge_sensor_update_interval; }
-            void set_battery_conf_voltage_lack_sensor_update_interval(int battery_conf_voltage_lack_sensor_update_interval) { registers_G3[28].update_interval = battery_conf_voltage_lack_sensor_update_interval; battery_conf_voltage_lack_sensor_update_interval_ = battery_conf_voltage_lack_sensor_update_interval; }
-            void set_battery_conf_voltage_discharge_stop_sensor_update_interval(int battery_conf_voltage_discharge_stop_sensor_update_interval) { registers_G3[29].update_interval = battery_conf_voltage_discharge_stop_sensor_update_interval; battery_conf_voltage_discharge_stop_sensor_update_interval_ = battery_conf_voltage_discharge_stop_sensor_update_interval; }
-            void set_battery_conf_current_charge_limit_sensor_update_interval(int battery_conf_current_charge_limit_sensor_update_interval) { registers_G3[30].update_interval = battery_conf_current_charge_limit_sensor_update_interval; battery_conf_current_charge_limit_sensor_update_interval_ = battery_conf_current_charge_limit_sensor_update_interval; }
-            void set_battery_conf_current_discharge_limit_sensor_update_interval(int battery_conf_current_discharge_limit_sensor_update_interval) { registers_G3[31].update_interval = battery_conf_current_discharge_limit_sensor_update_interval; battery_conf_current_discharge_limit_sensor_update_interval_ = battery_conf_current_discharge_limit_sensor_update_interval; }
-            void set_battery_conf_depth_of_discharge_sensor_update_interval(int battery_conf_depth_of_discharge_sensor_update_interval) { registers_G3[32].update_interval = battery_conf_depth_of_discharge_sensor_update_interval; battery_conf_depth_of_discharge_sensor_update_interval_ = battery_conf_depth_of_discharge_sensor_update_interval; }
-            void set_battery_conf_end_of_discharge_sensor_update_interval(int battery_conf_end_of_discharge_sensor_update_interval) { registers_G3[33].update_interval = battery_conf_end_of_discharge_sensor_update_interval; battery_conf_end_of_discharge_sensor_update_interval_ = battery_conf_end_of_discharge_sensor_update_interval; }
-            void set_battery_conf_capacity_sensor_update_interval(int battery_conf_capacity_sensor_update_interval) { registers_G3[34].update_interval = battery_conf_capacity_sensor_update_interval; battery_conf_capacity_sensor_update_interval_ = battery_conf_capacity_sensor_update_interval; }
-            void set_battery_conf_cell_type_sensor_update_interval(int battery_conf_cell_type_sensor_update_interval) { registers_G3[35].update_interval = battery_conf_cell_type_sensor_update_interval; battery_conf_cell_type_sensor_update_interval_ = battery_conf_cell_type_sensor_update_interval; }
-            void set_battery_conf_eps_buffer_sensor_update_interval(int battery_conf_eps_buffer_sensor_update_interval) { registers_G3[36].update_interval = battery_conf_eps_buffer_sensor_update_interval; battery_conf_eps_buffer_sensor_update_interval_ = battery_conf_eps_buffer_sensor_update_interval; }
-            void set_battery_conf_control_sensor_update_interval(int battery_conf_control_sensor_update_interval) { registers_G3[37].update_interval = battery_conf_control_sensor_update_interval; battery_conf_control_sensor_update_interval_ = battery_conf_control_sensor_update_interval; }
-			void set_grid_frequency_sensor_update_interval(int grid_frequency_sensor_update_interval) { registers_G3[38].update_interval = grid_frequency_sensor_update_interval; grid_frequency_sensor_update_interval_ = grid_frequency_sensor_update_interval; }
-			void set_grid_voltage_phase_r_sensor_update_interval(int grid_voltage_phase_r_sensor_update_interval) { registers_G3[39].update_interval = grid_voltage_phase_r_sensor_update_interval; grid_voltage_phase_r_sensor_update_interval_ = grid_voltage_phase_r_sensor_update_interval; }
-			void set_grid_current_phase_r_sensor_update_interval(int grid_current_phase_r_sensor_update_interval) { registers_G3[40].update_interval = grid_current_phase_r_sensor_update_interval; grid_current_phase_r_sensor_update_interval_ = grid_current_phase_r_sensor_update_interval; }
-			void set_grid_power_phase_r_sensor_update_interval(int grid_power_phase_r_sensor_update_interval) { registers_G3[41].update_interval = grid_power_phase_r_sensor_update_interval; grid_power_phase_r_sensor_update_interval_ = grid_power_phase_r_sensor_update_interval; }
-			void set_grid_voltage_phase_s_sensor_update_interval(int grid_voltage_phase_s_sensor_update_interval) { registers_G3[42].update_interval = grid_voltage_phase_s_sensor_update_interval; grid_voltage_phase_s_sensor_update_interval_ = grid_voltage_phase_s_sensor_update_interval; }
-			void set_grid_current_phase_s_sensor_update_interval(int grid_current_phase_s_sensor_update_interval) { registers_G3[43].update_interval = grid_current_phase_s_sensor_update_interval; grid_current_phase_s_sensor_update_interval_ = grid_current_phase_s_sensor_update_interval; }
-			void set_grid_power_phase_s_sensor_update_interval(int grid_power_phase_s_sensor_update_interval) { registers_G3[44].update_interval = grid_power_phase_s_sensor_update_interval; grid_power_phase_s_sensor_update_interval_ = grid_power_phase_s_sensor_update_interval; }
-			void set_grid_voltage_phase_t_sensor_update_interval(int grid_voltage_phase_t_sensor_update_interval) { registers_G3[45].update_interval = grid_voltage_phase_t_sensor_update_interval; grid_voltage_phase_t_sensor_update_interval_ = grid_voltage_phase_t_sensor_update_interval; }
-			void set_grid_current_phase_t_sensor_update_interval(int grid_current_phase_t_sensor_update_interval) { registers_G3[46].update_interval = grid_current_phase_t_sensor_update_interval; grid_current_phase_t_sensor_update_interval_ = grid_current_phase_t_sensor_update_interval; }
-			void set_grid_power_phase_t_sensor_update_interval(int grid_power_phase_t_sensor_update_interval) { registers_G3[47].update_interval = grid_power_phase_t_sensor_update_interval; grid_power_phase_t_sensor_update_interval_ = grid_power_phase_t_sensor_update_interval; }
-			void set_off_grid_power_total_sensor_update_interval(int off_grid_power_total_sensor_update_interval) { registers_G3[48].update_interval = off_grid_power_total_sensor_update_interval; off_grid_power_total_sensor_update_interval_ = off_grid_power_total_sensor_update_interval; }
-			void set_off_grid_frequency_sensor_update_interval(int off_grid_frequency_sensor_update_interval) { registers_G3[49].update_interval = off_grid_frequency_sensor_update_interval; off_grid_frequency_sensor_update_interval_ = off_grid_frequency_sensor_update_interval; }
-			void set_off_grid_voltage_phase_r_sensor_update_interval(int off_grid_voltage_phase_r_sensor_update_interval) { registers_G3[50].update_interval = off_grid_voltage_phase_r_sensor_update_interval; off_grid_voltage_phase_r_sensor_update_interval_ = off_grid_voltage_phase_r_sensor_update_interval; }
-			void set_off_grid_current_phase_r_sensor_update_interval(int off_grid_current_phase_r_sensor_update_interval) { registers_G3[51].update_interval = off_grid_current_phase_r_sensor_update_interval; off_grid_current_phase_r_sensor_update_interval_ = off_grid_current_phase_r_sensor_update_interval; }
-			void set_off_grid_power_phase_r_sensor_update_interval(int off_grid_power_phase_r_sensor_update_interval) { registers_G3[52].update_interval = off_grid_power_phase_r_sensor_update_interval; off_grid_power_phase_r_sensor_update_interval_ = off_grid_power_phase_r_sensor_update_interval; }
-			void set_off_grid_voltage_phase_s_sensor_update_interval(int off_grid_voltage_phase_s_sensor_update_interval) { registers_G3[53].update_interval = off_grid_voltage_phase_s_sensor_update_interval; off_grid_voltage_phase_s_sensor_update_interval_ = off_grid_voltage_phase_s_sensor_update_interval; }
-			void set_off_grid_current_phase_s_sensor_update_interval(int off_grid_current_phase_s_sensor_update_interval) { registers_G3[54].update_interval = off_grid_current_phase_s_sensor_update_interval; off_grid_current_phase_s_sensor_update_interval_ = off_grid_current_phase_s_sensor_update_interval; }
-			void set_off_grid_power_phase_s_sensor_update_interval(int off_grid_power_phase_s_sensor_update_interval) { registers_G3[55].update_interval = off_grid_power_phase_s_sensor_update_interval; off_grid_power_phase_s_sensor_update_interval_ = off_grid_power_phase_s_sensor_update_interval; }
-			void set_off_grid_voltage_phase_t_sensor_update_interval(int off_grid_voltage_phase_t_sensor_update_interval) { registers_G3[56].update_interval = off_grid_voltage_phase_t_sensor_update_interval; off_grid_voltage_phase_t_sensor_update_interval_ = off_grid_voltage_phase_t_sensor_update_interval; }
-			void set_off_grid_current_phase_t_sensor_update_interval(int off_grid_current_phase_t_sensor_update_interval) { registers_G3[57].update_interval = off_grid_current_phase_t_sensor_update_interval; off_grid_current_phase_t_sensor_update_interval_ = off_grid_current_phase_t_sensor_update_interval; }
-			void set_off_grid_power_phase_t_sensor_update_interval(int off_grid_power_phase_t_sensor_update_interval) { registers_G3[58].update_interval = off_grid_power_phase_t_sensor_update_interval; off_grid_power_phase_t_sensor_update_interval_ = off_grid_power_phase_t_sensor_update_interval; }
+            void set_pv_generation_today_sensor_update_interval(int pv_generation_today_sensor_update_interval);
+            void set_pv_generation_total_sensor_update_interval(int pv_generation_total_sensor_update_interval);
+            void set_load_consumption_today_sensor_update_interval(int load_consumption_today_sensor_update_interval);
+            void set_load_consumption_total_sensor_update_interval(int load_consumption_total_sensor_update_interval);
+            void set_battery_charge_today_sensor_update_interval(int battery_charge_today_sensor_update_interval);
+            void set_battery_charge_total_sensor_update_interval(int battery_charge_total_sensor_update_interval);
+            void set_battery_discharge_today_sensor_update_interval(int battery_discharge_today_sensor_update_interval);
+            void set_battery_discharge_total_sensor_update_interval(int battery_discharge_total_sensor_update_interval);
+            void set_total_active_power_inverter_sensor_update_interval(int total_active_power_inverter_sensor_update_interval);
+            void set_pv_voltage_1_sensor_update_interval(int pv_voltage_1_sensor_update_interval);
+            void set_pv_current_1_sensor_update_interval(int pv_current_1_sensor_update_interval);
+            void set_pv_power_1_sensor_update_interval(int pv_power_1_sensor_update_interval);
+            void set_pv_voltage_2_sensor_update_interval(int pv_voltage_2_sensor_update_interval);
+            void set_pv_current_2_sensor_update_interval(int pv_current_2_sensor_update_interval);
+            void set_pv_power_2_sensor_update_interval(int pv_power_2_sensor_update_interval);
+            void set_pv_power_total_sensor_update_interval(int pv_power_total_sensor_update_interval);
+            void set_battery_power_total_sensor_update_interval(int battery_power_total_sensor_update_interval);
+            void set_battery_state_of_charge_total_sensor_update_interval(int battery_state_of_charge_total_sensor_update_interval);
+            void set_desired_grid_power_sensor_update_interval(int desired_grid_power_sensor_update_interval);
+            void set_minimum_battery_power_sensor_update_interval(int minimum_battery_power_sensor_update_interval);
+            void set_maximum_battery_power_sensor_update_interval(int maximum_battery_power_sensor_update_interval);
+            void set_energy_storage_mode_sensor_update_interval(int energy_storage_mode_sensor_update_interval);
+            void set_battery_conf_id_sensor_update_interval(int battery_conf_id_sensor_update_interval);
+            void set_battery_conf_address_sensor_update_interval(int battery_conf_address_sensor_update_interval);
+            void set_battery_conf_protocol_sensor_update_interval(int battery_conf_protocol_sensor_update_interval);
+            void set_battery_conf_voltage_nominal_sensor_update_interval(int battery_conf_voltage_nominal_sensor_update_interval);
+            void set_battery_conf_voltage_over_sensor_update_interval(int battery_conf_voltage_over_sensor_update_interval);
+            void set_battery_conf_voltage_charge_sensor_update_interval(int battery_conf_voltage_charge_sensor_update_interval);
+            void set_battery_conf_voltage_lack_sensor_update_interval(int battery_conf_voltage_lack_sensor_update_interval);
+            void set_battery_conf_voltage_discharge_stop_sensor_update_interval(int battery_conf_voltage_discharge_stop_sensor_update_interval);
+            void set_battery_conf_current_charge_limit_sensor_update_interval(int battery_conf_current_charge_limit_sensor_update_interval);
+            void set_battery_conf_current_discharge_limit_sensor_update_interval(int battery_conf_current_discharge_limit_sensor_update_interval);
+            void set_battery_conf_depth_of_discharge_sensor_update_interval(int battery_conf_depth_of_discharge_sensor_update_interval);
+            void set_battery_conf_end_of_discharge_sensor_update_interval(int battery_conf_end_of_discharge_sensor_update_interval);
+            void set_battery_conf_capacity_sensor_update_interval(int battery_conf_capacity_sensor_update_interval);
+            void set_battery_conf_cell_type_sensor_update_interval(int battery_conf_cell_type_sensor_update_interval);
+            void set_battery_conf_eps_buffer_sensor_update_interval(int battery_conf_eps_buffer_sensor_update_interval);
+            void set_battery_conf_control_sensor_update_interval(int battery_conf_control_sensor_update_interval);
+			void set_grid_frequency_sensor_update_interval(int grid_frequency_sensor_update_interval);
+			void set_grid_voltage_phase_r_sensor_update_interval(int grid_voltage_phase_r_sensor_update_interval);
+			void set_grid_current_phase_r_sensor_update_interval(int grid_current_phase_r_sensor_update_interval);
+			void set_grid_power_phase_r_sensor_update_interval(int grid_power_phase_r_sensor_update_interval);
+			void set_grid_voltage_phase_s_sensor_update_interval(int grid_voltage_phase_s_sensor_update_interval);
+			void set_grid_current_phase_s_sensor_update_interval(int grid_current_phase_s_sensor_update_interval);
+			void set_grid_power_phase_s_sensor_update_interval(int grid_power_phase_s_sensor_update_interval);
+			void set_grid_voltage_phase_t_sensor_update_interval(int grid_voltage_phase_t_sensor_update_interval);
+			void set_grid_current_phase_t_sensor_update_interval(int grid_current_phase_t_sensor_update_interval);
+			void set_grid_power_phase_t_sensor_update_interval(int grid_power_phase_t_sensor_update_interval);
+			void set_off_grid_power_total_sensor_update_interval(int off_grid_power_total_sensor_update_interval);
+			void set_off_grid_frequency_sensor_update_interval(int off_grid_frequency_sensor_update_interval);
+			void set_off_grid_voltage_phase_r_sensor_update_interval(int off_grid_voltage_phase_r_sensor_update_interval);
+			void set_off_grid_current_phase_r_sensor_update_interval(int off_grid_current_phase_r_sensor_update_interval);
+			void set_off_grid_power_phase_r_sensor_update_interval(int off_grid_power_phase_r_sensor_update_interval);
+			void set_off_grid_voltage_phase_s_sensor_update_interval(int off_grid_voltage_phase_s_sensor_update_interval);
+			void set_off_grid_current_phase_s_sensor_update_interval(int off_grid_current_phase_s_sensor_update_interval);
+			void set_off_grid_power_phase_s_sensor_update_interval(int off_grid_power_phase_s_sensor_update_interval);
+			void set_off_grid_voltage_phase_t_sensor_update_interval(int off_grid_voltage_phase_t_sensor_update_interval);
+			void set_off_grid_current_phase_t_sensor_update_interval(int off_grid_current_phase_t_sensor_update_interval);
+			void set_off_grid_power_phase_t_sensor_update_interval(int off_grid_power_phase_t_sensor_update_interval);
 
-			void set_desired_grid_power_sensor_default_value(int64_t default_value) { registers_G3[18].default_value.int64_value = default_value; registers_G3[18].is_default_value_set = true; }
-			void set_minimum_battery_power_sensor_default_value(int64_t default_value) { registers_G3[19].default_value.int64_value = default_value; registers_G3[19].is_default_value_set = true; }
-			void set_maximum_battery_power_sensor_default_value(int64_t default_value) { registers_G3[20].default_value.int64_value = default_value; registers_G3[20].is_default_value_set = true; }
-			void set_energy_storage_mode_sensor_default_value(int64_t default_value) { registers_G3[21].default_value.int64_value = default_value; registers_G3[21].is_default_value_set = true; }
-			void set_battery_conf_id_sensor_default_value(int64_t default_value) { registers_G3[22].default_value.int64_value = default_value; registers_G3[22].is_default_value_set = true; }
-			void set_battery_conf_address_sensor_default_value(int64_t default_value) { registers_G3[23].default_value.int64_value = default_value; registers_G3[23].is_default_value_set = true; }
-			void set_battery_conf_protocol_sensor_default_value(int64_t default_value) { registers_G3[24].default_value.int64_value = default_value; registers_G3[24].is_default_value_set = true; }
-			void set_battery_conf_voltage_nominal_sensor_default_value(float default_value) { registers_G3[25].default_value.int64_value = (int64_t) (default_value / registers_G3[25].scale); registers_G3[25].is_default_value_set = true; }
-			void set_battery_conf_voltage_over_sensor_default_value(float default_value) { registers_G3[26].default_value.int64_value = (int64_t) (default_value / registers_G3[26].scale); registers_G3[26].is_default_value_set = true; }
-			void set_battery_conf_voltage_charge_sensor_default_value(float default_value) { registers_G3[27].default_value.int64_value = (int64_t) (default_value / registers_G3[27].scale); registers_G3[27].is_default_value_set = true; }
-			void set_battery_conf_voltage_lack_sensor_default_value(float default_value) { registers_G3[28].default_value.int64_value = (int64_t) (default_value / registers_G3[28].scale); registers_G3[28].is_default_value_set = true; }
-			void set_battery_conf_voltage_discharge_stop_sensor_default_value(float default_value) { registers_G3[29].default_value.int64_value = (int64_t) (default_value / registers_G3[29].scale); registers_G3[29].is_default_value_set = true; }
-			void set_battery_conf_current_charge_limit_sensor_default_value(float default_value) { registers_G3[30].default_value.int64_value = (int64_t) (default_value / registers_G3[30].scale); registers_G3[30].is_default_value_set = true; }
-			void set_battery_conf_current_discharge_limit_sensor_default_value(float default_value) { registers_G3[31].default_value.int64_value = (int64_t) (default_value / registers_G3[31].scale); registers_G3[31].is_default_value_set = true; }
-			void set_battery_conf_depth_of_discharge_sensor_default_value(int64_t default_value) { registers_G3[32].default_value.int64_value = default_value; registers_G3[32].is_default_value_set = true; }
-			void set_battery_conf_end_of_discharge_sensor_default_value(int64_t default_value) { registers_G3[33].default_value.int64_value = default_value; registers_G3[33].is_default_value_set = true; }
-			void set_battery_conf_capacity_sensor_default_value(int64_t default_value) { registers_G3[34].default_value.int64_value = default_value; registers_G3[34].is_default_value_set = true; }
-			void set_battery_conf_cell_type_sensor_default_value(int64_t default_value) { registers_G3[35].default_value.int64_value = default_value; registers_G3[35].is_default_value_set = true; }
-			void set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value) { registers_G3[36].default_value.int64_value = default_value; registers_G3[36].is_default_value_set = true; }
+			void set_desired_grid_power_sensor_default_value(int64_t default_value);
+			void set_minimum_battery_power_sensor_default_value(int64_t default_value);
+			void set_maximum_battery_power_sensor_default_value(int64_t default_value);
+			void set_energy_storage_mode_sensor_default_value(int64_t default_value);
+			void set_battery_conf_id_sensor_default_value(int64_t default_value);
+			void set_battery_conf_address_sensor_default_value(int64_t default_value);
+			void set_battery_conf_protocol_sensor_default_value(int64_t default_value);
+			void set_battery_conf_voltage_nominal_sensor_default_value(float default_value);
+			void set_battery_conf_voltage_over_sensor_default_value(float default_value);
+			void set_battery_conf_voltage_charge_sensor_default_value(float default_value);
+			void set_battery_conf_voltage_lack_sensor_default_value(float default_value);
+			void set_battery_conf_voltage_discharge_stop_sensor_default_value(float default_value);
+			void set_battery_conf_current_charge_limit_sensor_default_value(float default_value);
+			void set_battery_conf_current_discharge_limit_sensor_default_value(float default_value);
+			void set_battery_conf_depth_of_discharge_sensor_default_value(int64_t default_value);
+			void set_battery_conf_end_of_discharge_sensor_default_value(int64_t default_value);
+			void set_battery_conf_capacity_sensor_default_value(int64_t default_value);
+			void set_battery_conf_cell_type_sensor_default_value(int64_t default_value);
+			void set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value);
 
 			void set_desired_grid_power_sensor_enforce_default_value(bool enforce_default_value);
 			void set_minimum_battery_power_sensor_enforce_default_value(bool enforce_default_value);
