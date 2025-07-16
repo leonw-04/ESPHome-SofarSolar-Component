@@ -40,7 +40,7 @@ namespace esphome {
             uint8_t number_of_registers; // Length of the data to write
         };
 
-        registers_G3 = {
+        this.registers_G3 = {
 			{PV_GENERATION_TODAY, SofarSolar_Register{0x0684, 2, 2, 1, 0.01, false}}, // PV Generation Today
             {PV_GENERATION_TOTAL, SofarSolar_Register{0x0686, 2, 2, 0, 0.1, false}}, // PV Generation Total
             {LOAD_CONSUMPTION_TODAY, SofarSolar_Register{0x0688, 2, 2, 1, 0.01, false}}, // Load Consumption Today
