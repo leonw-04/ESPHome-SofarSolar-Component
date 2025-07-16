@@ -8,7 +8,7 @@
 #define PV_GENERATION_TODAY = 1;
 #define PV_GENERATION_TOTAL = 2;
 #define LOAD_CONSUMPTION_TODAY = 3;
-#define PV_GENERATION_TOTAL = 4;
+#define LOAD_CONSUMPTION_TOTAL = 4;
 #define BATTERY_CHARGE_TODAY = 5;
 #define BATTERY_CHARGE_TOTAL = 6;
 #define BATTERY_DISCHARGE_TODAY = 7;
@@ -100,8 +100,8 @@ namespace esphome {
 		struct register_read_task {
 			SofarSolar_Register *register_ptr; // Pointer to the register to read
 		    SofarSolar_RegisterValue read_value; // Value to read
-            bool operator<(const RegisterTask &other) const {
-                return inverter->registers_G3[this->register_index].priority > inverter->registers_G3[other.register_index].priority;
+            bool operator<(const register_read_task &other) const {
+                return this->register_ptr.priority > other.register_ptr.priority;
             }         
 		};
 
