@@ -90,6 +90,8 @@ namespace esphome {
 
             std::map<uint8_t, SofarSolar_Register> registers_G3;
 
+            SofarSolar_Inverter();
+
             void setup() override;
             void loop() override;
             void dump_config() override;

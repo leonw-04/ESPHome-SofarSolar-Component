@@ -40,7 +40,8 @@ namespace esphome {
             uint8_t number_of_registers; // Length of the data to write
         };
 
-        this.registers_G3 = {
+        SofarSolar_Inverter::SofarSolar_Inverter() {
+            this.registers_G3 = {
 			{PV_GENERATION_TODAY, SofarSolar_Register{0x0684, 2, 2, 1, 0.01, false}}, // PV Generation Today
             {PV_GENERATION_TOTAL, SofarSolar_Register{0x0686, 2, 2, 0, 0.1, false}}, // PV Generation Total
             {LOAD_CONSUMPTION_TODAY, SofarSolar_Register{0x0688, 2, 2, 1, 0.01, false}}, // Load Consumption Today
@@ -99,7 +100,8 @@ namespace esphome {
             {OFF_GRID_VOLTAGE_PHASE_T, SofarSolar_Register{0x05B8 ,1 ,0 ,2 ,0.1 ,false}}, // Off Grid Voltage Phase T
             {OFF_GRID_CURRENT_PHASE_T, SofarSolar_Register{0x05B9, 1, 0, 2, 0.01, false}}, // Off Grid Current Phase T
             {OFF_GRID_POWER_PHASE_T, SofarSolar_Register{0x05BA, 1, 0, 2, 10, false}} // Off Grid Power Phase T
-        };
+            };
+        }
 
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
