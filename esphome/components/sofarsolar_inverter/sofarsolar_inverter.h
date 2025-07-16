@@ -1,6 +1,7 @@
 #pragma once
 #include "queue"
 #include "vector"
+#include "map"
 #include "esphome/components/sensor/sensor.h"
 #include "esphome/components/uart/uart.h"
 #include "esphome/core/component.h"
@@ -101,7 +102,7 @@ namespace esphome {
 			SofarSolar_Register *register_ptr; // Pointer to the register to read
 		    SofarSolar_RegisterValue read_value; // Value to read
             bool operator<(const register_read_task &other) const {
-                return this->register_ptr.priority > other.register_ptr.priority;
+                return this->register_ptr->priority > other.register_ptr->priority;
             }         
 		};
 
