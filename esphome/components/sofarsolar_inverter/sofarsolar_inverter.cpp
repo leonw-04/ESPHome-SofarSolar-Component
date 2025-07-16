@@ -7,6 +7,39 @@ namespace esphome {
     namespace sofarsolar_inverter {
         static const char *TAG = "sofarsolar_inverter.component";
 
+        struct SofarSolar_Register {
+            uint16_t start_address; // Start address of the register
+            uint16_t quantity; // Number of registers to read
+            uint8_t type; // Type of the register (0: uint16_t, 1: int16_t, 2: uint32_t, 3: int32_t, 4: float16, 5: float32)
+            uint8_t priority; // Priority of the register for reading
+            float scale; // Scale factor for the register value
+            uint16_t update_interval = 0; // Update interval in seconds for the register
+            uint64_t timer = 0; // Timer in seconds for reading the register
+            SofarSolar_RegisterValue write_value; // Current value of the register
+			SofarSolar_RegisterValue default_value; // Default value of the register
+            bool write_set_value = false; // Flag to indicate if the register has a write value
+		    bool is_default_value_set = false; // Flag to check if default value is set
+			bool enforce_default_value = false; // Flag to enforce default value
+            sensor::Sensor *sensor = nullptr; // Pointer to the sensor to update
+            bool is_queued = false; // Flag to indicate if the register is queued for reading
+			bool writeable;
+			void (*write_funktion)(register_write_task) = nullptr; // Function pointer for writing to the register
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, bool writeable, void (*write_funktion)(register_write_task) = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), writeable(writeable), write_funktion(write_funktion) {}
+        };
+
+		struct register_read_task {
+			SofarSolar_Register *register_ptr; // Pointer to the register to read
+		    SofarSolar_RegisterValue read_value; // Value to read
+            bool operator<(const register_read_task &other) const {
+                return this->register_ptr->priority > other.register_ptr->priority;
+            }
+		};
+
+        struct register_write_task {
+			SofarSolar_Register *register_ptr; // Pointer to the register to read
+            uint8_t number_of_registers; // Length of the data to write
+        };
+
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
         register_write_task current_write; // Pointer to the current write task
