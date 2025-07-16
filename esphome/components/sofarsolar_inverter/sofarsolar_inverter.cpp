@@ -60,9 +60,9 @@ namespace esphome {
             {PV_POWER_TOTAL ,SofarSolar_Register{0x05C4 ,1 ,0 ,3 ,100 ,false}}, // PV Power Total
             {BATTERY_POWER_TOTAL ,SofarSolar_Register{0x0667 ,1 ,1 ,3 ,100 ,false}}, // Battery Power Total
             {BATTERY_STATE_OF_CHARGE_TOTAL ,SofarSolar_Register{0x0668 ,1 ,0 ,1 ,1 ,false}}, // Battery State of Charge Total
-            {DESIRED_GRID_POWER ,SofarSolar_Register{0x1187 ,2 ,3 ,3 ,1 ,true, write_desired_grid_power}}, // Desired Grid Power
-            {MINIMUM_BATTERY_POWER ,SofarSolar_Register{0x1189 ,2 ,3 ,3 ,1 ,true, write_desired_grid_power}}, // Minimum Battery Power
-            {MAXIMUM_BATTERY_POWER ,SofarSolar_Register{0x118B ,2 ,3 ,3 ,1 ,true, write_desired_grid_power}}, // Maximum Battery Power
+            {DESIRED_GRID_POWER ,SofarSolar_Register{0x1187 ,2 ,3 ,3 ,1 ,true, static_cast<void (*)(register_write_task)>(write_desired_grid_power)}}, // Desired Grid Power
+            {MINIMUM_BATTERY_POWER ,SofarSolar_Register{0x1189 ,2 ,3 ,3 ,1 ,true, static_cast<void (*)(register_write_task)>(write_desired_grid_power)}}, // Minimum Battery Power
+            {MAXIMUM_BATTERY_POWER ,SofarSolar_Register{0x118B ,2 ,3 ,3 ,1 ,true, static_cast<void (*)(register_write_task)>(write_desired_grid_power)}}, // Maximum Battery Power
             {ENERGY_STORAGE_MODE, SofarSolar_Register{0x1110, 1, 0, 0, 1, true, write_single_register}}, // Energy Storage Mode
             {BATTERY_CONF_ID, SofarSolar_Register{0x1044, 1, 0, 0, 1, true, write_battery_conf}}, // Battery Conf ID
             {BATTERY_CONF_ADDRESS, SofarSolar_Register{0x1045, 1, 0, 0, 1, true, write_battery_conf}}, // Battery Conf Address
