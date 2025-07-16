@@ -9,6 +9,7 @@ namespace esphome {
 
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
+        register_write_task current_write; // Pointer to the current write task
         bool current_zero_export_write = false; // Pointer to the current reading task
         uint64_t time_begin_modbus_operation = 0;
         uint64_t zero_export_last_update = 0;
@@ -24,22 +25,17 @@ namespace esphome {
                 zero_export_last_update = millis();
                 ESP_LOGD(TAG, "Updating zero export status");
                 // Read the current zero export status
-                int32_t new_desired_grid_power = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
-                int32_t minimum_battery_power = -5000;
-                int32_t maximum_battery_power = 5000;
-                std::vector<uint8_t> data = {
-                    static_cast<uint8_t>(new_desired_grid_power >> 24), static_cast<uint8_t>(new_desired_grid_power >> 16),
-                    static_cast<uint8_t>(new_desired_grid_power >> 8), static_cast<uint8_t>(new_desired_grid_power & 0xFF),
-                    static_cast<uint8_t>(minimum_battery_power >> 24), static_cast<uint8_t>(minimum_battery_power >> 16),
-                    static_cast<uint8_t>(minimum_battery_power >> 8), static_cast<uint8_t>(minimum_battery_power & 0xFF),
-                    static_cast<uint8_t>(maximum_battery_power >> 24), static_cast<uint8_t>(maximum_battery_power >> 16),
-                    static_cast<uint8_t>(maximum_battery_power >> 8), static_cast<uint8_t>(maximum_battery_power & 0xFF)
-                };
+                registers_G3[DESIRED_GRID_POWER].write_value.int32_value = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
+                registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = -5000;
+                registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = 5000;
                 ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, new_desired_grid_power);
-                current_zero_export_write = true; // Set the flag to indicate that a zero export write is in progress
+                register_write_task data;
+                data.start_address = registers_G3[DESIRED_GRID_POWER].start_address;
+                data.quantity = 6; // Number of registers to write
+                current_write = data; // Set the flag to indicate that a zero export write is in progress
                 time_begin_modbus_operation = millis();
                 this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
-                this->send_write_modbus_registers(registers_G3[18].start_address, 6, data); // Write the new desired grid power, minimum battery power, and maximum battery power
+                this->write_desired_grid_power(); // Write the new desired grid power, minimum battery power, and maximum battery power
             }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
@@ -77,90 +73,475 @@ namespace esphome {
                     return;
                 }
                 std::vector<uint8_t> response;
-                if (!receive_modbus_response(response, 3 + registers_G3[register_tasks.top().register_index].quantity * 2 + 2)) {
-                    ESP_LOGE(TAG, "No response received");
-                } else {
+                if (check_for_response()) {
                     current_reading = false;
-                    if (check_crc(response) && response[1] == 0x03) {
-                    // Process the response based on the register type
-                        uint16_t start_address = registers_G3[register_tasks.top().register_index].start_address;
-                        uint8_t quantity = registers_G3[register_tasks.top().register_index].quantity;
-                        ESP_LOGD(TAG, "Received response for register %04X with quantity %d", start_address, quantity);
-                        update_sensor(register_tasks.top().register_index, response, 3); // Offset 3 for Modbus response
-                        registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
-                        register_tasks.pop(); // Remove the task from the queue
+                    if (read_response(response, registers_G3[register_tasks.top().register_index])) {
+                        SofarSolar_RegisterValue value;
+                        value.uint64_value = extract_data_from_response(response);
+                        if (registers_G3[register_tasks.top().register_index].is_default_value_set) {
+                            if (value.uint64_value != registers_G3[register_tasks.top().register_index].default_value.uint64_value) { // Use default value if set
+                                current_write = registers_G3[register_tasks.top().register_index]; // Set the flag to indicate that a write operation is in progress
+                                time_begin_modbus_operation = millis();
+                                registers_G3[register_tasks.top().register_index].write_funktion(registers_G3[register_tasks.top().register_index].start_address, registers_G3[register_tasks.top().register_index].quantity, registers_G3[register_tasks.top().register_index].default_value); // Call the write function if the value is not equal to the default value
+                            }
+                        }
+                        update_sensor(register_tasks.top().register_index, value);
                     } else {
                         registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
                         register_tasks.pop(); // Remove the task from the queue
                         ESP_LOGE(TAG, "Invalid response");
                     }
+                } else {
+                    ESP_LOGE(TAG, "No response received");
                 }
-            } else if (current_zero_export_write) {
+            } else if (current_write) {
                 if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for zero export write response");
-                    current_zero_export_write = false;
+                    current_write = nullptr;
                     return;
                 }
                 std::vector<uint8_t> response;
-                if (!receive_modbus_response(response, 8)) {
+                if (!check_for_response()) {
                     ESP_LOGE(TAG, "No response received for zero export write");
                 } else {
-                    current_zero_export_write = false;
-                    if (check_crc(response) && response[1] == 0x10 && response[2] ==registers_G3[18].start_address >> 8 && response[3] == (registers_G3[18].start_address & 0xFF) && response[4] == 0x00 && response[5] == 0x06) {
-                        ESP_LOGD(TAG, "Zero export write successful");
+                    current_write = nullptr;
+                    if (write_response(response)) {
+                        ESP_LOGD(TAG, "Write successful");
                     } else {
-                        ESP_LOGE(TAG, "Invalid response for zero export write");
+                        ESP_LOGE(TAG, "Invalid response for write");
                     }
                 }
             }
         }
 
-        void SofarSolar_Inverter::update_sensor(uint8_t register_index, std::vector<uint8_t> &response, uint8_t offset) {
-            // Update the sensor based on the register index and response data
-            if (register_index < sizeof(registers_G3) / sizeof(registers_G3[0])) {
-                switch (registers_G3[register_index].type) {
-                    case 0: // uint16_t
-                        if (this->registers_G3[register_index].sensor != nullptr) {
-                            if (registers_G3[register_index].scale < 1) {
-                                this->registers_G3[register_index].sensor->publish_state(((float) uint16_t_from_bytes(response, offset) * registers_G3[register_index].scale));
-                            } else {
-                                this->registers_G3[register_index].sensor->publish_state(uint16_t_from_bytes(response, offset) * registers_G3[register_index].scale);
-                            }
+        bool check_for_response() {
+            // Check if there is a response available in the UART buffer
+            if (this->available() < 5) {
+                return false; // Not enough bytes for a valid response
+            }
+            return this->peek() != -1;
+        }
 
-                        }
+        bool read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info) {
+            // Read the response from the UART buffer
+            response.clear();
+            while (this->available() > 0 && response.size()) {
+                uint8_t byte = this->read();
+                response.push_back(byte);
+            }
+            if (!check_crc(response)) { // Check CRC after reading the response
+                return false; // Invalid CRC
+            }
+            if (!check_for_error_code(response)) {
+                return false; // Error code present in the response
+            }
+            if response.data()[1] != 0x03) {
+                ESP_LOGE(TAG, "Invalid Modbus response function code: %02X", response.data()[1]);
+                response.clear(); // Clear the response on invalid function code
+                return false; // Invalid function code
+            }
+            if (response.data()[2] != response.size() - 5 && response.data()[2] != register_info.quantity * 2) {
+                ESP_LOGE(TAG, "Invalid response size: expected %d, got %d", response.data()[2], response.size() - 5);
+                response.clear(); // Clear the response on invalid size
+                return false; // Invalid response size
+            }
+            return true; // Valid read response
+        }
+
+        uint64_t extract_data_from_response(std::vector<uint8_t> &response) {
+            switch (response.data()[2]) {
+                case 2:
+                    return (response.data()[3] << 8) | response.data()[4]; // 2 bytes for start address
+                case 4:
+                    return (response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]; // 4 bytes for start address
+                case 8:
+                    return (response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
+                           (response.data()[7] << 24) | (response.data()[8] << 16) | (response.data()[9] << 8) | response.data()[10]; // 8 bytes for start address
+                default:
+                    ESP_LOGE(TAG, "Invalid response size for extracting value");
+                    return false; // Invalid response
+        }
+
+        bool write_response(SofarSolar_Register &register_info) {
+            // Read the response from the UART buffer
+            response.clear();
+            while (this->available() > 0 && response.size()) {
+                uint8_t byte = this->read();
+                response.push_back(byte);
+            }
+            if (!check_crc(response)) { // Check CRC after reading the response
+                return false; // Invalid CRC
+            }
+            if (!check_for_error_code(response)) {
+                return false; // Error code present in the response
+            }
+            if response.data()[1] != 0x10) {
+                ESP_LOGE(TAG, "Invalid Modbus response function code: %02X", response.data()[1]);
+                response.clear(); // Clear the response on invalid function code
+                return false; // Invalid function code
+            }
+            if (registers_G3[register_info.register_index].start_address != response.data()[2] << 8 | response.data()[3] && registers_G3[register_info.register_index].quantity != response.data()[4]) {
+                ESP_LOGE(TAG, "Invalid response size: expected %04X, got %02X%02X", registers_G3[register_info.register_index].start_address, response.data()[2], response.data()[3]);
+                return false; // Invalid response size
+            }
+            return true; // Valid write response
+        }
+
+        bool check_for_error_code(const std::vector<uint8_t> &response) {
+            // Check if the response contains an error code
+            if (response.data()[1] == 0x90) {
+                switch (response.data()[2]) {
+                    case 0x01:
+                        ESP_LOGE(TAG, "Modbus error: Illegal function");
                         break;
-                    case 1: // int16_t
-                        if (this->registers_G3[register_index].sensor != nullptr) {
-                            if (registers_G3[register_index].scale < 1) {
-                                this->registers_G3[register_index].sensor->publish_state(((float) int16_t_from_bytes(response, offset) * registers_G3[register_index].scale));
-                            } else {
-                                this->registers_G3[register_index].sensor->publish_state(int16_t_from_bytes(response, offset) * registers_G3[register_index].scale);
-                            }
-                        }
+                    case 0x02:
+                        ESP_LOGE(TAG, "Modbus error: Illegal data address");
                         break;
-                    case 2: // uint32_t
-                        if (this->registers_G3[register_index].sensor != nullptr) {
-                            if (registers_G3[register_index].scale < 1) {
-                                this->registers_G3[register_index].sensor->publish_state(((float) uint32_t_from_bytes(response, offset) * registers_G3[register_index].scale));
-                            } else {
-                                this->registers_G3[register_index].sensor->publish_state(uint32_t_from_bytes(response, offset) * registers_G3[register_index].scale);
-                            }
-                        }
+                    case 0x03:
+                        ESP_LOGE(TAG, "Modbus error: Illegal data value");
                         break;
-                    case 3: // int32_t
-                        if (this->registers_G3[register_index].sensor != nullptr) {
-                            if (registers_G3[register_index].scale < 1) {
-                                this->registers_G3[register_index].sensor->publish_state(((float) int32_t_from_bytes(response, offset) * registers_G3[register_index].scale));
-                            } else {
-                                this->registers_G3[register_index].sensor->publish_state(int32_t_from_bytes(response, offset) * registers_G3[register_index].scale);
-                            }
-                        }
+                    case 0x04:
+                        ESP_LOGE(TAG, "Modbus error: Slave equipment failure");
+                        break;
+                    case 0x07:
+                        ESP_LOGE(TAG, "Modbus error: Busy with slave equipment");
                         break;
                     default:
-                        ESP_LOGE(TAG, "Unknown register type for index %d", register_index);
+                        ESP_LOGE(TAG, "Modbus error: Unknown error code %02X", response.data()[2]);
                 }
+                response.clear(); // Clear the response on error
+                return false; // Modbus error response
+            }
+            return true; // No error code present
+        }
+
+        void SofarSolar_Inverter::write_desired_grid_power(register_write_task &task) {
+            // Write the desired grid power, minimum battery power, and maximum battery power
+            int32_t new_desired_grid_power;
+            if (registers_G3[DESIRED_GRID_POWER].enforce_default_value && registers_G3[DESIRED_GRID_POWER].is_default_value_set) {
+                new_desired_grid_power = registers_G3[DESIRED_GRID_POWER].default_value.int32_value;
+            } else if (registers_G3[DESIRED_GRID_POWER].write_set_value) {
+                new_desired_grid_power = registers_G3[DESIRED_GRID_POWER].write_value.int32_value;
             } else {
-                ESP_LOGE(TAG, "Register index out of bounds: %d", register_index);
+                new_desired_grid_power = registers_G3[DESIRED_GRID_POWER].sensor->state;
+            }
+            int32_t new_minimum_battery_power;
+            if (registers_G3[MINIMUM_BATTERY_POWER].enforce_default_value && registers_G3[MINIMUM_BATTERY_POWER].is_default_value_set) {
+                new_minimum_battery_power = registers_G3[MINIMUM_BATTERY_POWER].default_value.int32_value;
+            } else if (registers_G3[DESIRED_GRID_POWER].write_set_value) {
+                new_minimum_battery_power = registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value;
+            } else {
+                new_minimum_battery_power = registers_G3[MINIMUM_BATTERY_POWER].sensor->state;
+            }
+            int32_t new_maximum_battery_power;
+            if (registers_G3[MAXIMUM_BATTERY_POWER].enforce_default_value && registers_G3[DESIRED_GRID_POWER].is_default_value_set) {
+                new_maximum_battery_power = registers_G3[MAXIMUM_BATTERY_POWER].default_value.int32_value;
+            } else if (registers_G3[DESIRED_GRID_POWER].write_set_value) {
+                new_maximum_battery_power = registers_G3[MAXIMUM_BATTERY_POWER].write_value.int32_value;
+            } else {
+                new_maximum_battery_power = registers_G3[MAXIMUM_BATTERY_POWER].sensor->state;
+            }
+            ESP_LOGD(TAG, "Writing desired grid power: %d W", registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
+            ESP_LOGD(TAG, "Writing minimum battery power: %d W", registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value);
+            ESP_LOGD(TAG, "Writing maximum battery power: %d W", registers_G3[MAXIMUM_BATTERY_POWER].write_value.int32_value);
+            std::vector<uint8_t> data;
+            data.push_back(static_cast<uint8_t>(new_desired_grid_power >> 24));
+            data.push_back(static_cast<uint8_t>(new_desired_grid_power >> 16));
+            data.push_back(static_cast<uint8_t>(new_desired_grid_power >> 8));
+            data.push_back(static_cast<uint8_t>(new_desired_grid_power & 0xFF));
+            data.push_back(static_cast<uint8_t>(new_minimum_battery_power >> 24));
+            data.push_back(static_cast<uint8_t>(new_minimum_battery_power >> 16));
+            data.push_back(static_cast<uint8_t>(new_minimum_battery_power >> 8));
+            data.push_back(static_cast<uint8_t>(new_minimum_battery_power & 0xFF));
+            data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 24));
+            data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 16));
+            data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 8));
+            data.push_back(static_cast<uint8_t>(new_maximum_battery_power & 0xFF));
+            uint16_t address = registers_G3[DESIRED_GRID_POWER].start_address;
+            uint16_t quantity = registers_G3[DESIRED_GRID_POWER].quantity + registers_G3[MINIMUM_BATTERY_POWER].quantity + registers_G3[MAXIMUM_BATTERY_POWER].quantity;
+            send_write_modbus_registers(address, quantity, data);
+        }
+
+        void SofarSolar_Inverter::write_battery_conf(register_write_task &task) {
+            // Write the battery configuration
+            ESP_LOGD(TAG, "Writing battery configuration");
+            uint16_t new_battery_conf_id;
+            if (registers_G3[BATTERY_CONF_ID].enforce_default_value && registers_G3[BATTERY_CONF_ID].is_default_value_set) {
+                new_battery_conf_id = registers_G3[BATTERY_CONF_ID].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_ID].write_set_value) {
+                new_battery_conf_id = registers_G3[BATTERY_CONF_ID].write_value.uint16_value;
+            } else {
+                new_battery_conf_id = registers_G3[BATTERY_CONF_ID].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_id >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_id & 0xFF));
+            uint16_t new_battery_conf_address;
+            if (registers_G3[BATTERY_CONF_ADDRESS].enforce_default_value && registers_G3[BATTERY_CONF_ADDRESS].is_default_value_set) {
+                new_battery_conf_address = registers_G3[BATTERY_CONF_ADDRESS].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_ADDRESS].write_set_value) {
+                new_battery_conf_address = registers_G3[BATTERY_CONF_ADDRESS].write_value.uint16_value;
+            } else {
+                new_battery_conf_address = registers_G3[BATTERY_CONF_ADDRESS].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_address >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_address & 0xFF));
+            uint16_t new_battery_conf_protocol;
+            if (registers_G3[BATTERY_CONF_PROTOCOL].enforce_default_value && registers_G3[BATTERY_CONF_PROTOCOL].is_default_value_set) {
+                new_battery_conf_protocol = registers_G3[BATTERY_CONF_PROTOCOL].default_value.uint16_t_value;
+            } else if (registers_G3[BATTERY_CONF_PROTOCOL].write_set_value) {
+                new_battery_conf_protocol = registers_G3[BATTERY_CONF_PROTOCOL].write_value.uint16_t_value;
+            } else {
+                new_battery_conf_protocol = registers_G3[BATTERY_CONF_PROTOCOL].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_protocol >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_protocol & 0xFF));
+            uint16_t new_battery_conf_voltage_over;
+            if (registers_G3[BATTERY_CONF_VOLTAGE_OVER].enforce_default_value && registers_G3[BATTERY_CONF_VOLTAGE_OVER].is_default_value_set) {
+                new_battery_conf_voltage_over = registers_G3[BATTERY_CONF_VOLTAGE_OVER].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_VOLTAGE_OVER].write_set_value) {
+                new_battery_conf_voltage_over = registers_G3[BATTERY_CONF_VOLTAGE_OVER].write_value.uint16_value;
+            } else {
+                new_battery_conf_voltage_over = registers_G3[BATTERY_CONF_VOLTAGE_OVER].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_over >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_over & 0xFF));
+            uint16_t new_battery_conf_voltage_charge;
+            if (registers_G3[BATTERY_CONF_VOLTAGE_CHARGE].enforce_default_value && registers_G3[BATTERY_CONF_VOLTAGE_CHARGE].is_default_value_set) {
+                new_battery_conf_voltage_charge = registers_G3[BATTERY_CONF_VOLTAGE_CHARGE].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_VOLTAGE_CHARGE].write_set_value) {
+                new_battery_conf_voltage_charge = registers_G3[BATTERY_CONF_VOLTAGE_CHARGE].write_value.uint16_value;
+            } else {
+                new_battery_conf_voltage_charge = registers_G3[BATTERY_CONF_VOLTAGE_CHARGE].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_charge >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_charge & 0xFF));
+            uint16_t new_battery_conf_voltage_lack;
+            if (registers_G3[BATTERY_CONF_VOLTAGE_LACK].enforce_default_value && registers_G3[BATTERY_CONF_VOLTAGE_LACK].is_default_value_set) {
+                new_battery_conf_voltage_lack = registers_G3[BATTERY_CONF_VOLTAGE_LACK].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_VOLTAGE_LACK].write_set_value) {
+                new_battery_conf_voltage_lack = registers_G3[BATTERY_CONF_VOLTAGE_LACK].write_value.uint16_value;
+            } else {
+                new_battery_conf_voltage_lack = registers_G3[BATTERY_CONF_VOLTAGE_LACK].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_lack >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_lack & 0xFF));
+            uint16_t new_battery_conf_voltage_discharge_stop;
+            if (registers_G3[BATTERY_CONF_VOLTAGE_DISCHARGE_STOP].enforce_default_value && registers_G3[BATTERY_CONF_VOLTAGE_DISCHARGE_STOP].is_default_value_set) {
+                new_battery_conf_voltage_discharge_stop = registers_G3[BATTERY_CONF_VOLTAGE_DISCHARGE_STOP].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_VOLTAGE_DISCHARGE_STOP].write_set_value) {
+                new_battery_conf_voltage_discharge_stop = registers_G3[BATTERY_CONF_VOLTAGE_DISCHARGE_STOP].write_value.uint16_value;
+            } else {
+                new_battery_conf_voltage_discharge_stop = registers_G3[BATTERY_CONF_VOLTAGE_DISCHARGE_STOP].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_discharge_stop >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_discharge_stop & 0xFF));
+            uint16_t new_battery_conf_current_charge_limit;
+            if (registers_G3[BATTERY_CONF_CURRENT_CHARGE_LIMIT].enforce_default_value && registers_G3[BATTERY_CONF_CURRENT_CHARGE_LIMIT].is_default_value_set) {
+                new_battery_conf_current_charge_limit = registers_G3[BATTERY_CONF_CURRENT_CHARGE_LIMIT].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_CURRENT_CHARGE_LIMIT].write_set_value) {
+                new_battery_conf_current_charge_limit = registers_G3[BATTERY_CONF_CURRENT_CHARGE_LIMIT].write_value.uint16_value;
+            } else {
+                new_battery_conf_current_charge_limit = registers_G3[BATTERY_CONF_CURRENT_CHARGE_LIMIT].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_current_charge_limit >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_current_charge_limit & 0xFF));
+            uint16_t new_battery_conf_current_discharge_limit;
+            if (registers_G3[BATTERY_CONF_CURRENT_DISCHARGE_LIMIT].enforce_default_value && registers_G3[BATTERY_CONF_CURRENT_DISCHARGE_LIMIT].is_default_value_set) {
+                new_battery_conf_current_discharge_limit = registers_G3[BATTERY_CONF_CURRENT_DISCHARGE_LIMIT].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_CURRENT_DISCHARGE_LIMIT].write_set_value) {
+                new_battery_conf_current_discharge_limit = registers_G3[BATTERY_CONF_CURRENT_DISCHARGE_LIMIT].write_value.uint16_value;
+            } else {
+                new_battery_conf_current_discharge_limit = registers_G3[BATTERY_CONF_CURRENT_DISCHARGE_LIMIT].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_current_discharge_limit >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_current_discharge_limit & 0xFF));
+            uint16_t new_battery_conf_depth_of_discharge;
+            if (registers_G3[BATTERY_CONF_DEPTH_OF_DISCHARGE].enforce_default_value && registers_G3[BATTERY_CONF_DEPTH_OF_DISCHARGE].is_default_value_set) {
+                new_battery_conf_depth_of_discharge = registers_G3[BATTERY_CONF_DEPTH_OF_DISCHARGE].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_DEPTH_OF_DISCHARGE].write_set_value) {
+                new_battery_conf_depth_of_discharge = registers_G3[BATTERY_CONF_DEPTH_OF_DISCHARGE].write_value.uint16_value;
+            } else {
+                new_battery_conf_depth_of_discharge = registers_G3[BATTERY_CONF_DEPTH_OF_DISCHARGE].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_depth_of_discharge >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_depth_of_discharge & 0xFF));
+            uint16_t new_battery_conf_end_of_discharge;
+            if (registers_G3[BATTERY_CONF_END_OF_DISCHARGE].enforce_default_value && registers_G3[BATTERY_CONF_END_OF_DISCHARGE].is_default_value_set) {
+                new_battery_conf_end_of_discharge = registers_G3[BATTERY_CONF_END_OF_DISCHARGE].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_END_OF_DISCHARGE].write_set_value) {
+                new_battery_conf_end_of_discharge = registers_G3[BATTERY_CONF_END_OF_DISCHARGE].write_value.uint16_value;
+            } else {
+                new_battery_conf_end_of_discharge = registers_G3[BATTERY_CONF_END_OF_DISCHARGE].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_end_of_discharge >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_end_of_discharge & 0xFF));
+            uint16_t new_battery_conf_capacity;
+            if (registers_G3[BATTERY_CONF_CAPACITY].enforce_default_value && registers_G3[BATTERY_CONF_CAPACITY].is_default_value_set) {
+                new_battery_conf_capacity = registers_G3[BATTERY_CONF_CAPACITY].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_CAPACITY].write_set_value) {
+                new_battery_conf_capacity = registers_G3[BATTERY_CONF_CAPACITY].write_value.uint16_value;
+            } else {
+                new_battery_conf_capacity = registers_G3[BATTERY_CONF_CAPACITY].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_capacity >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_capacity & 0xFF));
+            uint16_t new_battery_conf_voltage_nominal;
+            if (registers_G3[BATTERY_CONF_VOLTAGE_NOMINAL].enforce_default_value && registers_G3[BATTERY_CONF_VOLTAGE_NOMINAL].is_default_value_set) {
+                new_battery_conf_voltage_nominal = registers_G3[BATTERY_CONF_VOLTAGE_NOMINAL].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_VOLTAGE_NOMINAL].write_set_value) {
+                new_battery_conf_voltage_nominal = registers_G3[BATTERY_CONF_VOLTAGE_NOMINAL].write_value.uint16_value;
+            } else {
+                new_battery_conf_voltage_nominal = registers_G3[BATTERY_CONF_VOLTAGE_NOMINAL].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal & 0xFF));
+            uint16_t new_battery_conf_cell_type;
+            if (registers_G3[BATTERY_CONF_CELL_TYPE].enforce_default_value && registers_G3[BATTERY_CONF_CELL_TYPE].is_default_value_set) {
+                new_battery_conf_cell_type = registers_G3[BATTERY_CONF_CELL_TYPE].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_CELL_TYPE].write_set_value) {
+                new_battery_conf_cell_type = registers_G3[BATTERY_CONF_CELL_TYPE].write_value.uint16_value;
+            } else {
+                new_battery_conf_cell_type = registers_G3[BATTERY_CONF_CELL_TYPE].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type & 0xFF));
+            uint16_t new_battery_conf_eps_buffer;
+            if (registers_G3[BATTERY_CONF_EPS_BUFFER].enforce_default_value && registers_G3[BATTERY_CONF_EPS_BUFFER].is_default_value_set) {
+                new_battery_conf_eps_buffer = registers_G3[BATTERY_CONF_EPS_BUFFER].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_CONF_EPS_BUFFER].write_set_value) {
+                new_battery_conf_eps_buffer = registers_G3[BATTERY_CONF_EPS_BUFFER].write_value.uint16_value;
+            } else {
+                new_battery_conf_eps_buffer = registers_G3[BATTERY_CONF_EPS_BUFFER].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
+            data.push_back(static_cast<uint8_t>(0x01 >> 8));
+            data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
+        }
+
+        void SofarSolar_Inverter::write_single_register(register_write_task &task) {
+            SofarSolar_RegisterValue value;
+            if (task.register_ptr.enforce_default_value && task.register_ptr.is_default_value_set) {
+                value = task.register_ptr.default_value; // Use default value if set
+            } else if (task.register_ptr.write_set_value) {
+                value = task.register_ptr.write_value; // Use write value if set
+            } else {
+                value = task.register_ptr.sensor->state; // Use sensor value
+            }
+            std::vector<uint8_t> data;
+            uint8_t data_length;
+            switch (task.register_ptr.type) {
+                case 0: // uint16_t
+                    data.push_back(static_cast<uint8_t>(value.uint16_t >> 8));
+                    data.push_back(static_cast<uint8_t>(value.uint16_t & 0xFF));
+                    break;
+                case 1: // int16_t
+                    data.push_back(static_cast<uint8_t>(value.int16_t >> 8));
+                    data.push_back(static_cast<uint8_t>(value.int16_t & 0xFF));
+                    break;
+                case 2: // uint32_t
+                    data.push_back(static_cast<uint8_t>(value.uint32_t >> 24));
+                    data.push_back(static_cast<uint8_t>(value.uint32_t >> 16));
+                    data.push_back(static_cast<uint8_t>(value.uint32_t >> 8));
+                    data.push_back(static_cast<uint8_t>(value.uint32_t & 0xFF));
+                    break;
+                case 3: // int32_t
+                    data.push_back(static_cast<uint8_t>(value.int32_t >> 24));
+                    data.push_back(static_cast<uint8_t>(value.int32_t >> 16));
+                    data.push_back(static_cast<uint8_t>(value.int32_t >> 8));
+                    data.push_back(static_cast<uint8_t>(value.int32_t & 0xFF));
+                    break;
+                case 4: // uint64_t
+                    data.push_back(static_cast<uint8_t>(value.uint64_value >> 56));
+                    data.push_back(static_cast<uint8_t>(value.uint64_value >> 48));
+                    data.push_back(static_cast<uint8_t>(value.uint64_value >> 40));
+                    data.push_back(static_cast<uint8_t>(value.uint64_value >> 32));
+                    data.push_back(static_cast<uint8_t>(value.uint64_value >> 24));
+                    data.push_back(static_cast<uint8_t>(value.uint64_value >> 16));
+                    data.push_back(static_cast<uint8_t>(value.uint64_value >> 8));
+                    data.push_back(static_cast<uint8_t>(value.uint64_value & 0xFF));
+                    break;
+                case 5: // int64_t
+                    data.push_back(static_cast<uint8_t>(value.int64_value >> 56));
+                    data.push_back(static_cast<uint8_t>(value.int64_value >> 48));
+                    data.push_back(static_cast<uint8_t>(value.int64_value >> 40));
+                    data.push_back(static_cast<uint8_t>(value.int64_value >> 32));
+                    data.push_back(static_cast<uint8_t>(value.int64_value >> 24));
+                    data.push_back(static_cast<uint8_t>(value.int64_value >> 16));
+                    data.push_back(static_cast<uint8_t>(value.int64_value >> 8));
+                    data.push_back(static_cast<uint8_t>(value.int64_value & 0xFF));
+                    break;
+                case 6: // float
+                    uint32_t float_value;
+                    memcpy(&float_value, &value.float_value, sizeof(float_value));
+                    data.push_back(static_cast<uint8_t>(float_value >> 24));
+                    data.push_back(static_cast<uint8_t>(float_value >> 16));
+                    data.push_back(static_cast<uint8_t>(float_value >> 8));
+                    data.push_back(static_cast<uint8_t>(float_value & 0xFF));
+                    break;
+                case 7: // double
+                    uint64_t double_value;
+                    memcpy(&double_value, &value.double_value, sizeof(double_value));
+                    data.push_back(static_cast<uint8_t>(double_value >> 56));
+                    data.push_back(static_cast<uint8_t>(double_value >> 48));
+                    data.push_back(static_cast<uint8_t>(double_value >> 40));
+                    data.push_back(static_cast<uint8_t>(double_value >> 32));
+                    data.push_back(static_cast<uint8_t>(double_value >> 24));
+                    data.push_back(static_cast<uint8_t>(double_value >> 16));
+                    data.push_back(static_cast<uint8_t>(double_value >> 8));
+                    data.push_back(static_cast<uint8_t>(double_value & 0xFF));
+                    break;
+                default:
+                    ESP_LOGE(TAG, "Unknown register type for writing: %d", task.register_ptr.type);
+                    return; // Exit if the register type is unknown
+            }
+            send_write_modbus_registers(task.register_ptr.start_address, task.quantity, data);
+        }
+
+
+
+        void SofarSolar_Inverter::update_sensor(uint8_t register_index, SofarSolar_RegisterValue &response) {
+            // Update the sensor based on the register index and response data
+            switch (registers_G3[register_index].type) {
+                case 0: // uint16_t
+                    if (this->registers_G3[register_index].sensor != nullptr) {
+                        if (registers_G3[register_index].scale < 1) {
+                            this->registers_G3[register_index].sensor->publish_state(((float) response.uint16_t * registers_G3[register_index].scale));
+                        } else {
+                            this->registers_G3[register_index].sensor->publish_state(response.uint16_t * registers_G3[register_index].scale);
+                        }
+
+                    }
+                    break;
+                case 1: // int16_t
+                    if (this->registers_G3[register_index].sensor != nullptr) {
+                        if (registers_G3[register_index].scale < 1) {
+                            this->registers_G3[register_index].sensor->publish_state(((float) response.int16_t * registers_G3[register_index].scale));
+                        } else {
+                            this->registers_G3[register_index].sensor->publish_state(response.int16_t * registers_G3[register_index].scale);
+                        }
+                    }
+                    break;
+                case 2: // uint32_t
+                    if (this->registers_G3[register_index].sensor != nullptr) {
+                        if (registers_G3[register_index].scale < 1) {
+                            this->registers_G3[register_index].sensor->publish_state(((float) response.uint32_t * registers_G3[register_index].scale));
+                        } else {
+                            this->registers_G3[register_index].sensor->publish_state(response.uint32_t * registers_G3[register_index].scale);
+                        }
+                    }
+                    break;
+                case 3: // int32_t
+                    if (this->registers_G3[register_index].sensor != nullptr) {
+                        if (registers_G3[register_index].scale < 1) {
+                            this->registers_G3[register_index].sensor->publish_state(((float) response.int32_t * registers_G3[register_index].scale));
+                        } else {
+                            this->registers_G3[register_index].sensor->publish_state(response.int32_t * registers_G3[register_index].scale);
+                        }
+                    }
+                    break;
+                default:
+                    ESP_LOGE(TAG, "Unknown register type for index %d", register_index);
             }
         }
 
@@ -169,6 +550,9 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "  model = %s", this->model_.c_str());
             ESP_LOGCONFIG(TAG, "  modbus_address = %i", this->modbus_address_);
             ESP_LOGCONFIG(TAG, "  zero_export = %s", TRUEFALSE(this->zero_export_));
+            ESP_LOGCONFIG(TAG, "  power_sensor = %s", this->power_sensor_ ? this->power_sensor_->get_name().c_str() : "None");
+            ESP_LOGCONFIG(TAG, "  pv_generation_today_sensor = %s", this->pv_generation_today_sensor_ ? this->pv_generation_today_sensor_->get_name().c_str() : "Not set");
+            ESP_LOGCONFIG(TAG, "      with update interval: %d seconds, default value: %f, enforce default value: %s", registers_G3[0].update_interval, registers_G3[i].is_default_value_set ? registers_G3[0].default_value * registers_G3[0].scale : 0.0, TRUEFALSE(registers_G3[0].enforce_default_value));
         }
 
         void SofarSolar_Inverter::send_read_modbus_registers(uint16_t start_address, uint16_t quantity) {
