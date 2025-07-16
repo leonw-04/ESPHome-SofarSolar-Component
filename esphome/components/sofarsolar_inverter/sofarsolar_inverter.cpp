@@ -107,7 +107,7 @@ namespace esphome {
         bool current_zero_export_write = false; // Pointer to the current reading task
         uint64_t time_begin_modbus_operation = 0;
         uint64_t zero_export_last_update = 0;
-        std::priority_queue<RegisterTask> register_tasks;
+        std::priority_queue<register_read_task> register_tasks;
 
         void SofarSolar_Inverter::setup() {
             // Code here should perform all component initialization,
