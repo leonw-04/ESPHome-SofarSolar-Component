@@ -23,8 +23,8 @@ namespace esphome {
             sensor::Sensor *sensor = nullptr; // Pointer to the sensor to update
             bool is_queued = false; // Flag to indicate if the register is queued for reading
 			bool writeable;
-			void (*write_funktion)(register_write_task) = nullptr; // Function pointer for writing to the register
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, bool writeable, void (*write_funktion)(register_write_task) = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), writeable(writeable), write_funktion(write_funktion) {}
+			void (*)(register_write_task) write_funktion = nullptr; // Function pointer for writing to the register
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, bool writeable, void (*)(register_write_task) write_funktion = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), writeable(writeable), write_funktion(write_funktion) {}
         };
 
 		struct register_read_task {
@@ -60,9 +60,9 @@ namespace esphome {
             {PV_POWER_TOTAL ,SofarSolar_Register{0x05C4 ,1 ,0 ,3 ,100 ,false}}, // PV Power Total
             {BATTERY_POWER_TOTAL ,SofarSolar_Register{0x0667 ,1 ,1 ,3 ,100 ,false}}, // Battery Power Total
             {BATTERY_STATE_OF_CHARGE_TOTAL ,SofarSolar_Register{0x0668 ,1 ,0 ,1 ,1 ,false}}, // Battery State of Charge Total
-            {DESIRED_GRID_POWER ,SofarSolar_Register{0x1187 ,2 ,3 ,3 ,1 ,true, static_cast<void (*)(register_write_task)>(write_desired_grid_power)}}, // Desired Grid Power
-            {MINIMUM_BATTERY_POWER ,SofarSolar_Register{0x1189 ,2 ,3 ,3 ,1 ,true, static_cast<void (*)(register_write_task)>(write_desired_grid_power)}}, // Minimum Battery Power
-            {MAXIMUM_BATTERY_POWER ,SofarSolar_Register{0x118B ,2 ,3 ,3 ,1 ,true, static_cast<void (*)(register_write_task)>(write_desired_grid_power)}}, // Maximum Battery Power
+            {DESIRED_GRID_POWER ,SofarSolar_Register{0x1187 ,2 ,3 ,3 ,1 ,true, write_desired_grid_power}}, // Desired Grid Power
+            {MINIMUM_BATTERY_POWER ,SofarSolar_Register{0x1189 ,2 ,3 ,3 ,1 ,true, write_desired_grid_power}}, // Minimum Battery Power
+            {MAXIMUM_BATTERY_POWER ,SofarSolar_Register{0x118B ,2 ,3 ,3 ,1 ,true, write_desired_grid_power}}, // Maximum Battery Power
             {ENERGY_STORAGE_MODE, SofarSolar_Register{0x1110, 1, 0, 0, 1, true, write_single_register}}, // Energy Storage Mode
             {BATTERY_CONF_ID, SofarSolar_Register{0x1044, 1, 0, 0, 1, true, write_battery_conf}}, // Battery Conf ID
             {BATTERY_CONF_ADDRESS, SofarSolar_Register{0x1045, 1, 0, 0, 1, true, write_battery_conf}}, // Battery Conf Address
