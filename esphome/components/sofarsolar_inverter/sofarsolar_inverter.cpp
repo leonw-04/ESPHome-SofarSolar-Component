@@ -105,7 +105,8 @@ namespace esphome {
 
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
-        register_write_task current_write; // Pointer to the current write task
+        bool current_writing = false; // Pointer to the current writing task
+        register_write_task current_write_task; // Pointer to the current write task
         bool current_zero_export_write = false; // Pointer to the current reading task
         uint64_t time_begin_modbus_operation = 0;
         uint64_t zero_export_last_update = 0;
@@ -128,7 +129,8 @@ namespace esphome {
                 register_write_task data;
                 data.register_ptr = &registers_G3[DESIRED_GRID_POWER];
                 data.number_of_registers = 1; // Number of registers to write
-                current_write = data; // Set the flag to indicate that a zero export write is in progress
+                current_writing = true; // Set the flag to indicate that a zero export write is in progress
+                current_write_task = data; // Set the flag to indicate that a zero export write is in progress
                 time_begin_modbus_operation = millis();
                 this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
                 this->write_desired_grid_power(data); // Write the new desired grid power, minimum battery power, and maximum battery power
@@ -170,12 +172,11 @@ namespace esphome {
                 std::vector<uint8_t> response;
                 if (check_for_response()) {
                     current_reading = false;
-                    if (read_response(response, &register_tasks.top().register_ptr)) {
+                    if (read_response(response, register_tasks.top().register_ptr)) {
                         SofarSolar_RegisterValue value;
                         value.uint64_value = extract_data_from_response(response);
                         if (register_tasks.top().register_ptr->is_default_value_set) {
                             if (value.uint64_value != register_tasks.top().register_ptr->default_value.uint64_value) { // Use default value if set
-                                current_write = &register_tasks.top().register_ptr; // Set the flag to indicate that a write operation is in progress
                                 time_begin_modbus_operation = millis();
                                 switch (register_tasks.top().register_ptr->write_funktion) {
                                     case DESIRED_GRID_POWER_WRITE:
@@ -184,6 +185,8 @@ namespace esphome {
                                         register_write_task write_task;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         write_task.number_of_registers = 1; // Number of registers to write
+                                        current_writing = true; // Set the flag to indicate that a write is in progress
+                                        current_write_task = write_task; // Set the current write task
                                         this->write_desired_grid_power(write_task);
                                         break;
                                     case BATTERY_CONF_WRITE:
@@ -191,6 +194,8 @@ namespace esphome {
                                         register_tasks.top().register_ptr->write_value.uint16_value = value.uint16_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         write_task.number_of_registers = 1; // Number of registers to write
+                                        current_writing = true; // Set the flag to indicate that a write is in progress
+                                        current_write_task = write_task; // Set the current write task
                                         this->write_battery_conf(write_task);
                                         break;
                                     case SINGLE_REGISTER_WRITE:
@@ -198,6 +203,8 @@ namespace esphome {
                                         register_tasks.top().register_ptr->write_value.uint64_value = value.uint64_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         write_task.number_of_registers = 1; // Number of registers to write
+                                        current_writing = true; // Set the flag to indicate that a write is in progress
+                                        current_write_task = write_task; // Set the current write task
                                         this->write_single_register(write_task);
                                         break;
                                     default:
@@ -215,17 +222,17 @@ namespace esphome {
                 } else {
                     ESP_LOGE(TAG, "No response received");
                 }
-            } else if (current_write) {
+            } else if (current_write_task) {
                 if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for zero export write response");
-                    current_write = nullptr;
+                    current_write_task = nullptr;
                     return;
                 }
                 std::vector<uint8_t> response;
                 if (!check_for_response()) {
                     ESP_LOGE(TAG, "No response received for zero export write");
                 } else {
-                    current_write = nullptr;
+                    current_write_task = nullptr;
                     if (write_response(response)) {
                         ESP_LOGD(TAG, "Write successful");
                     } else {
@@ -621,48 +628,49 @@ namespace esphome {
 
 
 
-        void SofarSolar_Inverter::update_sensor(uint8_t register_index, SofarSolar_RegisterValue &response) {
+        void SofarSolar_Inverter::update_sensor(register_read_task task) {
             // Update the sensor based on the register index and response data
-            switch (registers_G3[register_index].type) {
+            switch (task.register_ptr->type) {
                 case 0: // uint16_t
-                    if (this->registers_G3[register_index].sensor != nullptr) {
-                        if (registers_G3[register_index].scale < 1) {
-                            this->registers_G3[register_index].sensor->publish_state(((float) response.uint16_t * registers_G3[register_index].scale));
+                    if (task.register_ptr->sensor != nullptr) {
+                        if (task.register_ptr->scale < 1) {
+                            task.register_ptr->sensor->publish_state(((float) response.uint16_t * registers_G3[register_index].scale));
                         } else {
-                            this->registers_G3[register_index].sensor->publish_state(response.uint16_t * registers_G3[register_index].scale);
+                            task.register_ptr->sensor->publish_state(response.uint16_t * registers_G3[register_index].scale);
                         }
 
                     }
                     break;
                 case 1: // int16_t
-                    if (this->registers_G3[register_index].sensor != nullptr) {
-                        if (registers_G3[register_index].scale < 1) {
-                            this->registers_G3[register_index].sensor->publish_state(((float) response.int16_t * registers_G3[register_index].scale));
+                    if (task.register_ptr->sensor != nullptr) {
+                        if (task.register_ptr->scale < 1) {
+                            task.register_ptr->sensor->publish_state(((float) response.int16_t * registers_G3[register_index].scale));
                         } else {
-                            this->registers_G3[register_index].sensor->publish_state(response.int16_t * registers_G3[register_index].scale);
+                            task.register_ptr->sensor->publish_state(response.int16_t * registers_G3[register_index].scale);
                         }
                     }
                     break;
                 case 2: // uint32_t
-                    if (this->registers_G3[register_index].sensor != nullptr) {
-                        if (registers_G3[register_index].scale < 1) {
-                            this->registers_G3[register_index].sensor->publish_state(((float) response.uint32_t * registers_G3[register_index].scale));
+                    if (task.register_ptr->sensor != nullptr) {
+                        if (task.register_ptr->scale < 1) {
+                            task.register_ptr->sensor->publish_state(((float) response.uint32_t * registers_G3[register_index].scale));
                         } else {
-                            this->registers_G3[register_index].sensor->publish_state(response.uint32_t * registers_G3[register_index].scale);
+                            task.register_ptr->sensor->publish_state(response.uint32_t * registers_G3[register_index].scale);
                         }
                     }
                     break;
                 case 3: // int32_t
-                    if (this->registers_G3[register_index].sensor != nullptr) {
+                    if (task.register_ptr->sensor != nullptr) {
                         if (registers_G3[register_index].scale < 1) {
-                            this->registers_G3[register_index].sensor->publish_state(((float) response.int32_t * registers_G3[register_index].scale));
+                            task.register_ptr->sensor->publish_state(((float) response.int32_t * registers_G3[register_index].scale));
                         } else {
-                            this->registers_G3[register_index].sensor->publish_state(response.int32_t * registers_G3[register_index].scale);
+                            task.register_ptr->sensor->publish_state(response.int32_t * registers_G3[register_index].scale);
                         }
                     }
                     break;
                 default:
-                    ESP_LOGE(TAG, "Unknown register type for index %d", register_index);
+                    ESP_LOGE(TAG, "Unknown register type for updating sensor: %d", task.register_ptr->type);
+                    return; // Exit if the register type is unknown
             }
         }
 
