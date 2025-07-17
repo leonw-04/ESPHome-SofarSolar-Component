@@ -213,7 +213,7 @@ namespace esphome {
                                 }
                             }
                         }
-                        update_sensor(register_tasks.top().register_index, value);
+                        update_sensor(register_tasks.top());
                     } else {
                         register_tasks.top().register_ptr->is_queued = false; // Mark the register as not queued anymore
                         register_tasks.pop(); // Remove the task from the queue
@@ -222,17 +222,17 @@ namespace esphome {
                 } else {
                     ESP_LOGE(TAG, "No response received");
                 }
-            } else if (current_write_task) {
+            } else if (current_write) {
                 if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for zero export write response");
-                    current_write_task = nullptr;
+                    current_writing = false;
                     return;
                 }
                 std::vector<uint8_t> response;
                 if (!check_for_response()) {
                     ESP_LOGE(TAG, "No response received for zero export write");
                 } else {
-                    current_write_task = nullptr;
+                    current_writing = false;
                     if (write_response(response)) {
                         ESP_LOGD(TAG, "Write successful");
                     } else {
