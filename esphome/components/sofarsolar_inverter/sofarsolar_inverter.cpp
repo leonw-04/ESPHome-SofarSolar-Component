@@ -158,7 +158,7 @@ namespace esphome {
                 current_reading = true;
                 time_begin_modbus_operation = millis();
                 empty_uart_buffer(); // Clear the UART buffer before sending a new request
-                send_read_modbus_registers(registers_G3[task.register_index].start_address, registers_G3[task.register_index].quantity);
+                send_read_modbus_registers(task.register_ptr->start_address, task.register_ptr->.quantity);
             } else if (current_reading) {
                 if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for response");
@@ -175,7 +175,7 @@ namespace esphome {
                         value.uint64_value = extract_data_from_response(response);
                         if (register_tasks.top().register_ptr->is_default_value_set) {
                             if (value.uint64_value != register_tasks.top().register_ptr->default_value.uint64_value) { // Use default value if set
-                                current_write = register_tasks.top().register_ptr; // Set the flag to indicate that a write operation is in progress
+                                current_write = &register_tasks.top().register_ptr; // Set the flag to indicate that a write operation is in progress
                                 time_begin_modbus_operation = millis();
                                 switch (register_tasks.top().register_ptr->write_funktion) {
                                     case DESIRED_GRID_POWER_WRITE:
