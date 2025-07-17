@@ -135,7 +135,7 @@ namespace esphome {
                 current_write_task = data; // Set the flag to indicate that a zero export write is in progress
             }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
-            for (const auto &pair : registers_G3) {
+            for (auto &pair : registers_G3) {
                 if (pair.second.sensor == nullptr) {
                     ESP_LOGVV(TAG, "Sensor for register %d is not set", pair.second.start_address);
                     continue;
