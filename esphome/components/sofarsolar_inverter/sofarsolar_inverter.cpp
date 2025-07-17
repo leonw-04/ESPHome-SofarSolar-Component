@@ -560,7 +560,6 @@ namespace esphome {
                 value = task.register_ptr->sensor->state; // Use sensor value
             }
             std::vector<uint8_t> data;
-            uint8_t data_length;
             switch (task.register_ptr->type) {
                 case 0: // uint16_t
                     data.push_back(static_cast<uint8_t>(value.uint16_value >> 8));
@@ -626,7 +625,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "Unknown register type for writing: %d", task.register_ptr->type);
                     return; // Exit if the register type is unknown
             }
-            send_write_modbus_registers(task.register_ptr->start_address, task.quantity, data);
+            send_write_modbus_registers(task.register_ptr->start_address, task.number_of_registers, data);
         }
 
         void SofarSolar_Inverter::update_sensor(const register_read_task task) {
