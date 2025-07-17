@@ -122,7 +122,7 @@ namespace esphome {
             }
             bool check_for_response();
             bool read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info);
-            uint64_t extract_data_from_response(std::vector<uint8_t> &response);
+            bool extract_data_from_response(std::vector<uint8_t> &response, register_read_task &task);
             bool write_response(register_write_task &task);
             bool check_for_error_code(std::vector<uint8_t> &response);
 
