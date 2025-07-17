@@ -662,7 +662,7 @@ namespace esphome {
                     break;
                 case 3: // int32_t
                     if (task.register_ptr->sensor != nullptr) {
-                        if (registers_G3[register_index].scale < 1) {
+                        if (task.register_ptr->scale < 1) {
                             task.register_ptr->sensor->publish_state(((float) task.read_value.int32_value * task.register_ptr->scale));
                         } else {
                             task.register_ptr->sensor->publish_state(task.read_value.int32_value * task.register_ptr->scale);
