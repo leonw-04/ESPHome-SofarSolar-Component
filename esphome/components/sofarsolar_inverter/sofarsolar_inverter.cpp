@@ -172,7 +172,7 @@ namespace esphome {
                 std::vector<uint8_t> response;
                 if (check_for_response()) {
                     current_reading = false;
-                    if (read_response(response, register_tasks.top().register_ptr)) {
+                    if (read_response(response, *register_tasks.top().register_ptr)) {
                         SofarSolar_RegisterValue value;
                         value.uint64_value = extract_data_from_response(response);
                         if (register_tasks.top().register_ptr->is_default_value_set) {
