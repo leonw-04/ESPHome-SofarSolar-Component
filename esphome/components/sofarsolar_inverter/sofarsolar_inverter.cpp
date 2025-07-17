@@ -219,7 +219,7 @@ namespace esphome {
                 } else {
                     ESP_LOGE(TAG, "No response received");
                 }
-            } else if (current_writing) {
+            } else if (current_writing && current_write_task != nullptr) {
                 if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for write response");
                     current_writing = false;
