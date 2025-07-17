@@ -129,7 +129,6 @@ namespace esphome {
                 ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
                 register_write_task data;
                 data.register_ptr = &registers_G3[DESIRED_GRID_POWER];
-                data.number_of_registers = 1; // Number of registers to write
                 current_writing = true; // Set the flag to indicate that a zero export write is in progress
                 current_write_task = data; // Set the flag to indicate that a zero export write is in progress
                 time_begin_modbus_operation = millis();
@@ -390,7 +389,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 16));
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 8));
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power & 0xFF));
-            task.number_of_registers = data.size() >> 1; // Number of registers to write
+            task.number_of_registers = (data.size() >> 1); // Number of registers to write
             send_write_modbus_registers(registers_G3[DESIRED_GRID_POWER].start_address, task.number_of_registers, data);
         }
 
@@ -550,7 +549,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
             data.push_back(static_cast<uint8_t>(0x01 >> 8));
             data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
-            task.number_of_registers = data.size() >> 1; // Number of registers to write
+            task.number_of_registers = (data.size() >> 1); // Number of registers to write
             send_write_modbus_registers(registers_G3[BATTERY_CONF_ID].start_address, task.number_of_registers, data);
         }
 
@@ -630,7 +629,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "Unknown register type for writing: %d", task.register_ptr->type);
                     return; // Exit if the register type is unknown
             }
-            task.number_of_registers = data.size() >> 1; // Number of registers to write
+            task.number_of_registers = (data.size() >> 1); // Number of registers to write
             send_write_modbus_registers(task.register_ptr->start_address, task.number_of_registers, data);
         }
 
