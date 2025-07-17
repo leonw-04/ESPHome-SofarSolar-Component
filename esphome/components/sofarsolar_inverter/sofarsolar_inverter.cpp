@@ -552,16 +552,16 @@ namespace esphome {
 
         void SofarSolar_Inverter::write_single_register(register_write_task &task) {
             SofarSolar_RegisterValue value;
-            if (task.register_ptr.enforce_default_value && task.register_ptr.is_default_value_set) {
-                value = task.register_ptr.default_value; // Use default value if set
-            } else if (task.register_ptr.write_set_value) {
-                value = task.register_ptr.write_value; // Use write value if set
+            if (task.register_ptr->enforce_default_value && task.register_ptr->is_default_value_set) {
+                value = task.register_ptr->default_value; // Use default value if set
+            } else if (task.register_ptr->write_set_value) {
+                value = task.register_ptr->write_value; // Use write value if set
             } else {
-                value = task.register_ptr.sensor->state; // Use sensor value
+                value = task.register_ptr->sensor->state; // Use sensor value
             }
             std::vector<uint8_t> data;
             uint8_t data_length;
-            switch (task.register_ptr.type) {
+            switch (task.register_ptr->type) {
                 case 0: // uint16_t
                     data.push_back(static_cast<uint8_t>(value.uint16_t >> 8));
                     data.push_back(static_cast<uint8_t>(value.uint16_t & 0xFF));
@@ -626,7 +626,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "Unknown register type for writing: %d", task.register_ptr.type);
                     return; // Exit if the register type is unknown
             }
-            send_write_modbus_registers(task.register_ptr.start_address, task.quantity, data);
+            send_write_modbus_registers(task.register_ptr->start_address, task.quantity, data);
         }
 
         void SofarSolar_Inverter::update_sensor(const register_read_task task) {
