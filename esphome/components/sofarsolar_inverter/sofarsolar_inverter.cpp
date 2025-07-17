@@ -185,7 +185,7 @@ namespace esphome {
                                 time_begin_modbus_operation = millis();
                                 switch (task.register_ptr->write_funktion) {
                                     case DESIRED_GRID_POWER_WRITE:
-                                        ESP_LOGD(TAG, "Writing desired grid power: %d W", value.int32_value);
+                                        ESP_LOGD(TAG, "Writing desired grid power");
                                         task.register_ptr->write_value.int32_value = value.int32_value;
                                         register_write_task write_task;
                                         write_task.register_ptr = task.register_ptr;
