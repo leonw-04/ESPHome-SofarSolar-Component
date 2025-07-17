@@ -108,7 +108,6 @@ namespace esphome {
         bool current_reading = false; // Pointer to the current reading task
         bool current_writing = false; // Pointer to the current writing task
         register_write_task current_write_task; // Pointer to the current writing task
-        bool current_zero_export_write = false; // Pointer to the current reading task
         uint64_t time_begin_modbus_operation = 0;
         uint64_t zero_export_last_update = 0;
         std::priority_queue<register_read_task> register_tasks;
@@ -119,7 +118,7 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::loop() {
-            if (!current_reading && !current_zero_export_write && this->zero_export_ && millis() - zero_export_last_update > 1000) { // Update zero export every second
+            if (!current_reading && !current_writing && this->zero_export_ && millis() - zero_export_last_update > 1000) { // Update zero export every second
                 zero_export_last_update = millis();
                 ESP_LOGD(TAG, "Updating zero export status");
                 // Read the current zero export status
@@ -136,25 +135,25 @@ namespace esphome {
                 current_write_task = data; // Set the flag to indicate that a zero export write is in progress
             }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
-            for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
-                if (registers_G3[i].sensor == nullptr) {
-                    ESP_LOGVV(TAG, "Sensor for register %d is not set", registers_G3[i].start_address);
+            for (const auto &pair : my_map) {
+                if (pair.second.sensor == nullptr) {
+                    ESP_LOGVV(TAG, "Sensor for register %d is not set", pair.second.start_address);
                     continue;
                 }
-                ESP_LOGVV(TAG, "Checking register %04X: Time since last update: %d seconds, Update interval: %d seconds", registers_G3[i].start_address, millis() / 1000 - registers_G3[i].timer, registers_G3[i].update_interval);
-                if (millis() - registers_G3[i].timer > registers_G3[i].update_interval * 1000 && !registers_G3[i].is_queued) {
-                    registers_G3[i].timer = millis();
+                ESP_LOGVV(TAG, "Checking register %04X: Time since last update: %d seconds, Update interval: %d seconds", pair.second.start_address, millis() / 1000 - pair.second.timer, pair.second.update_interval);
+                if (millis() - pair.second.timer > pair.second.update_interval * 1000 && !pair.second.is_queued) {
+                    pair.second.timer = millis();
                     // Create a task for the register
                     register_read_task task;
-                    task.register_ptr = &registers_G3[i];
+                    task.register_ptr = &pair.second;
                     // Add the task to a priority queue
                     register_tasks.push(task);
-                    registers_G3[i].is_queued = true;
-                    ESP_LOGV(TAG, "Register %04X is queued for reading", registers_G3[i].start_address);
+                    pair.second.is_queued = true;
+                    ESP_LOGV(TAG, "Register %04X is queued for reading", pair.second.start_address);
                 }
             }
 
-            if (!current_reading && !current_zero_export_write && !register_tasks.empty()) {
+            if (!current_reading && current_writing && !current_zero_export_write && !register_tasks.empty()) {
                 // Get the highest priority task
                 register_read_task task = register_tasks.top();
                 current_reading = true;
@@ -390,7 +389,6 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 8));
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power & 0xFF));
             task.number_of_registers = (data.size() >> 1); // Number of registers to write
-            ESP_LOGW(TAG, "Writing %d registers starting from address %04X", task.number_of_registers, registers_G3[DESIRED_GRID_POWER].start_address);
             send_write_modbus_registers(registers_G3[DESIRED_GRID_POWER].start_address, task.number_of_registers, data);
         }
 
