@@ -172,10 +172,14 @@ namespace esphome {
                 if (check_for_response()) {
                     current_reading = false;
                     if (read_response(response, *register_tasks.top().register_ptr)) {
-                        SofarSolar_RegisterValue value;
-                        value.uint64_value = extract_data_from_response(response);
+                        if (extract_data_from_response(response, register_tasks.top())) {
+                            ESP_LOGD(TAG, "Read successful for register %04X: Value: %s", register_tasks.top().register_ptr->start_address, vector_to_string(response).c_str());
+                            update_sensor(register_tasks.top());
+                        } else {
+                            ESP_LOGE(TAG, "Failed to extract data from response for register %04X", register_tasks.top().register_ptr->start_address);
+                        }
                         if (register_tasks.top().register_ptr->is_default_value_set) {
-                            if (value.uint64_value != register_tasks.top().register_ptr->default_value.uint64_value) { // Use default value if set
+                            if (register_tasks.top().read_value.uint64_value != register_tasks.top().register_ptr->default_value.uint64_value) { // Use default value if set
                                 time_begin_modbus_operation = millis();
                                 switch (register_tasks.top().register_ptr->write_funktion) {
                                     case DESIRED_GRID_POWER_WRITE:
@@ -209,7 +213,6 @@ namespace esphome {
                                 }
                             }
                         }
-                        update_sensor(register_tasks.top());
                     } else {
                         register_tasks.top().register_ptr->is_queued = false; // Mark the register as not queued anymore
                         register_tasks.pop(); // Remove the task from the queue
@@ -274,19 +277,20 @@ namespace esphome {
             return true; // Valid read response
         }
 
-        uint64_t SofarSolar_Inverter::extract_data_from_response(std::vector<uint8_t> &response) {
+        bool SofarSolar_Inverter::extract_data_from_response(std::vector<uint8_t> &response, register_read_task &task) {
             switch (response.data()[2]) {
                 case 2:
-                    return reinterpret_cast<uint64_t>((response.data()[3] << 8) | response.data()[4]); // 2 bytes for start address
+                    task.read_value.uint16_t = ((response.data()[3] << 8) | response.data()[4]); // 2 bytes for start address
                 case 4:
-                    return reinterpret_cast<uint64_t>((response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]); // 4 bytes for start address
+                    task.read_value.uint32_t = ((response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]); // 4 bytes for start address
                 case 8:
-                    return reinterpret_cast<uint64_t>((response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
+                    task.read_value.uint64_t = ((response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
                            (response.data()[7] << 24) | (response.data()[8] << 16) | (response.data()[9] << 8) | response.data()[10]); // 8 bytes for start address
                 default:
                     ESP_LOGE(TAG, "Invalid response size for extracting value");
-                    return false; // Invalid response
+                    return false; // Invalid response size
             }
+            return true; // Valid data extraction
         }
 
         bool SofarSolar_Inverter::write_response(register_write_task &task) {
