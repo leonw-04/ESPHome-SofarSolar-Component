@@ -729,8 +729,12 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "  modbus_address = %i", this->modbus_address_);
             ESP_LOGCONFIG(TAG, "  zero_export = %s", TRUEFALSE(this->zero_export_));
             ESP_LOGCONFIG(TAG, "  power_sensor = %s", this->power_sensor_ ? this->power_sensor_->get_name().c_str() : "None");
-            ESP_LOGCONFIG(TAG, "  pv_generation_today_sensor = %s", this->pv_generation_today_sensor_ ? this->pv_generation_today_sensor_->get_name().c_str() : "Not set");
-            ESP_LOGCONFIG(TAG, "      with update interval: %d seconds, default value: %f, enforce default value: %s", registers_G3[PV_GENERATION_TODAY].update_interval, registers_G3[PV_GENERATION_TODAY].is_default_value_set ? registers_G3[PV_GENERATION_TODAY].default_value.int64_value * registers_G3[PV_GENERATION_TODAY].scale : 0.0, TRUEFALSE(registers_G3[PV_GENERATION_TODAY].enforce_default_value));
+            for (const auto &reg : registers_G3) {
+                ESP_LOGCONFIG(TAG, "  %s: start_address = %04X, type = %d, scale = %f, default_value = %s, enforce_default_value = %s, write_set_value = %s",
+                              reg.name.c_str(), reg.start_address, reg.type, reg.scale,
+                              reg.is_default_value_set ? reg.default_value.to_string().c_str() : "Not set",
+                              TRUEFALSE(reg.enforce_default_value), TRUEFALSE(reg.write_set_value));
+            }
         }
 
         void SofarSolar_Inverter::send_read_modbus_registers(uint16_t start_address, uint16_t quantity) {
