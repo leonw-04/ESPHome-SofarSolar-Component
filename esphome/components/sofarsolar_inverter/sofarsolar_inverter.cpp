@@ -637,7 +637,7 @@ namespace esphome {
                         if (task.register_ptr->scale < 1) {
                             task.register_ptr->sensor->publish_state(((float) task.read_value.uint16_value * task.register_ptr->scale));
                         } else {
-                            task.register_ptr->sensor->publish_state(task.read_value.uint16_value * task.register_ptr->.scale);
+                            task.register_ptr->sensor->publish_state(task.read_value.uint16_value * task.register_ptr->scale);
                         }
 
                     }
@@ -718,7 +718,7 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "  zero_export = %s", TRUEFALSE(this->zero_export_));
             ESP_LOGCONFIG(TAG, "  power_sensor = %s", this->power_sensor_ ? this->power_sensor_->get_name().c_str() : "None");
             ESP_LOGCONFIG(TAG, "  pv_generation_today_sensor = %s", this->pv_generation_today_sensor_ ? this->pv_generation_today_sensor_->get_name().c_str() : "Not set");
-            ESP_LOGCONFIG(TAG, "      with update interval: %d seconds, default value: %f, enforce default value: %s", registers_G3[PV_GENERATION_TODAY].update_interval, registers_G3[PV_GENERATION_TODAY].is_default_value_set ? registers_G3[PV_GENERATION_TODAY].default_value * registers_G3[PV_GENERATION_TODAY].scale : 0.0, TRUEFALSE(registers_G3[PV_GENERATION_TODAY].enforce_default_value));
+            ESP_LOGCONFIG(TAG, "      with update interval: %d seconds, default value: %f, enforce default value: %s", registers_G3[PV_GENERATION_TODAY].update_interval, registers_G3[PV_GENERATION_TODAY].is_default_value_set ? registers_G3[PV_GENERATION_TODAY].default_value.int64_value * registers_G3[PV_GENERATION_TODAY].scale : 0.0, TRUEFALSE(registers_G3[PV_GENERATION_TODAY].enforce_default_value));
         }
 
         void SofarSolar_Inverter::send_read_modbus_registers(uint16_t start_address, uint16_t quantity) {
