@@ -295,7 +295,7 @@ namespace esphome {
             // Read the response from the UART buffer
             std::vector<uint8_t> response;
             response.clear();
-            while (this->available() > 0 && task.register_ptr->size()) {
+            while (this->available()) {
                 uint8_t byte = this->read();
                 response.push_back(byte);
             }
@@ -305,7 +305,7 @@ namespace esphome {
             if (!check_for_error_code(response)) {
                 return false; // Error code present in the response
             }
-            if response.data()[1] != 0x10) {
+            if (response.data()[1] != 0x10) {
                 ESP_LOGE(TAG, "Invalid Modbus response function code: %02X", response.data()[1]);
                 response.clear(); // Clear the response on invalid function code
                 return false; // Invalid function code
