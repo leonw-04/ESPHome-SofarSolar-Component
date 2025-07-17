@@ -557,7 +557,7 @@ namespace esphome {
             } else if (task.register_ptr->write_set_value) {
                 value = task.register_ptr->write_value; // Use write value if set
             } else {
-                value = task.register_ptr->sensor->state; // Use sensor value
+                value = task.register_ptr.sensor->state; // Use sensor value
             }
             std::vector<uint8_t> data;
             switch (task.register_ptr->type) {
