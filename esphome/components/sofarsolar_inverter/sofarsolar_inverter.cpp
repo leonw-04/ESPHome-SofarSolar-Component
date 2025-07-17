@@ -288,6 +288,7 @@ namespace esphome {
                 default:
                     ESP_LOGE(TAG, "Invalid response size for extracting value");
                     return false; // Invalid response
+            }
         }
 
         bool SofarSolar_Inverter::write_response(register_write_task &task) {
