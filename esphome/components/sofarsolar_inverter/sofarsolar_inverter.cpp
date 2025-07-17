@@ -281,13 +281,13 @@ namespace esphome {
         bool SofarSolar_Inverter::extract_data_from_response(std::vector<uint8_t> &response, register_read_task &task) {
             switch (response.data()[2]) {
                 case 2:
-                    task.read_value.uint16_t = ((response.data()[3] << 8) | response.data()[4]); // 2 bytes for start address
+                    task.read_value.uint16_value = ((response.data()[3] << 8) | response.data()[4]); // 2 bytes for start address
                     break;
                 case 4:
-                    task.read_value.uint32_t = ((response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]); // 4 bytes for start address
+                    task.read_value.uint32_value = ((response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]); // 4 bytes for start address
                     break;
                 case 8:
-                    task.read_value.uint64_t = ((response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
+                    task.read_value.uint64_value = ((response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
                            (response.data()[7] << 24) | (response.data()[8] << 16) | (response.data()[9] << 8) | response.data()[10]); // 8 bytes for start address
                     break;
                 default:
