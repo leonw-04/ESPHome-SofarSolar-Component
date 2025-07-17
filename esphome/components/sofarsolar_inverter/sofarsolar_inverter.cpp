@@ -233,7 +233,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received for zero export write");
                 } else {
                     current_writing = false;
-                    if (write_response(current_write_task)) {
+                    if (write_response(&current_write_task)) {
                         ESP_LOGD(TAG, "Write successful");
                     } else {
                         ESP_LOGE(TAG, "Invalid response for write");
@@ -263,7 +263,7 @@ namespace esphome {
             if (!check_for_error_code(response)) {
                 return false; // Error code present in the response
             }
-            if response.data()[1] != 0x03) {
+            if (response.data()[1] != 0x03) {
                 ESP_LOGE(TAG, "Invalid Modbus response function code: %02X", response.data()[1]);
                 response.clear(); // Clear the response on invalid function code
                 return false; // Invalid function code
