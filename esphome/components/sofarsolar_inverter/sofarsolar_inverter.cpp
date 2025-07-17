@@ -630,7 +630,7 @@ namespace esphome {
 
 
 
-        void SofarSolar_Inverter::update_sensor(register_read_task task) {
+        void SofarSolar_Inverter::update_sensor(const register_read_task task) {
             // Update the sensor based on the register index and response data
             switch (task.register_ptr->type) {
                 case 0: // uint16_t
