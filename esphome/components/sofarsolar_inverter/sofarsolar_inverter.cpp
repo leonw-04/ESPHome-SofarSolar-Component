@@ -316,8 +316,8 @@ namespace esphome {
                 ESP_LOGE(TAG, "Invalid response address: expected %04X, got %02X%02X", task.register_ptr->start_address, response.data()[2], response.data()[3]);
                 return false; // Invalid response size
             }
-            if (task.number_of_registers != response.data()[4]) {
-                ESP_LOGE(TAG, "Invalid response quantity: expected %d, got %02X", task.number_of_registers, response.data()[4]);
+            if (task.number_of_registers != ((response.data()[4] << 8) | (response.data()[5]))) {
+                ESP_LOGE(TAG, "Invalid response quantity: expected %d, got %02X", task.number_of_registers, ((response.data()[4] << 8) | (response.data()[5])));
                 return false; // Invalid response size
             }
             return true; // Valid write response
