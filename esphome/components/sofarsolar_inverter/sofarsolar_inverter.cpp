@@ -246,10 +246,10 @@ namespace esphome {
         bool SofarSolar_Inverter::check_for_response() {
             // Check if there is a response available in the UART buffer
             this->peek(); // Peek to check if there is data available
-            if (this->available() < 5) {
-                return false; // Not enough bytes for a valid response
+            if (this->available()) {
+                return true; // Not enough bytes for a valid response
             }
-            return this->peek() != -1;
+            return false;
         }
 
         bool SofarSolar_Inverter::read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info) {
@@ -312,8 +312,12 @@ namespace esphome {
                 response.clear(); // Clear the response on invalid function code
                 return false; // Invalid function code
             }
-            if (task.register_ptr->start_address != response.data()[2] << 8 | response.data()[3] && task.register_ptr->quantity != response.data()[4]) {
-                ESP_LOGE(TAG, "Invalid response size: expected %04X, got %02X%02X", task.register_ptr->start_address, response.data()[2], response.data()[3]);
+            if (task.register_ptr->start_address != (response.data()[2] << 8) | (response.data()[3])) {
+                ESP_LOGE(TAG, "Invalid response address: expected %04X, got %02X%02X", task.register_ptr->start_address, response.data()[2], response.data()[3]);
+                return false; // Invalid response size
+            }
+            if (task.number_of_registers != response.data()[4]) {
+                ESP_LOGE(TAG, "Invalid response quantity: expected %d, got %02X", task.number_of_registers, response.data()[4]);
                 return false; // Invalid response size
             }
             return true; // Valid write response
@@ -389,9 +393,8 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 16));
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 8));
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power & 0xFF));
-            uint16_t address = registers_G3[DESIRED_GRID_POWER].start_address;
-            uint16_t quantity = registers_G3[DESIRED_GRID_POWER].quantity + registers_G3[MINIMUM_BATTERY_POWER].quantity + registers_G3[MAXIMUM_BATTERY_POWER].quantity;
-            send_write_modbus_registers(address, quantity, data);
+            task.number_of_registers = 0x03; // Number of registers to write
+            send_write_modbus_registers(registers_G3[DESIRED_GRID_POWER].start_address, task.number_of_registers, data);
         }
 
         void SofarSolar_Inverter::write_battery_conf(register_write_task &task) {
@@ -550,6 +553,8 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
             data.push_back(static_cast<uint8_t>(0x01 >> 8));
             data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
+            task.number_of_registers = 0x16; // Number of registers to write
+            send_write_modbus_registers(registers_G3[BATTERY_CONF_ID].start_address, task.number_of_registers, data);
         }
 
         void SofarSolar_Inverter::write_single_register(register_write_task &task) {
@@ -628,6 +633,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "Unknown register type for writing: %d", task.register_ptr->type);
                     return; // Exit if the register type is unknown
             }
+            task.number_of_registers = 0x1; // Number of registers to write
             send_write_modbus_registers(task.register_ptr->start_address, task.number_of_registers, data);
         }
 
