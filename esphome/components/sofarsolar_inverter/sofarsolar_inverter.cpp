@@ -126,8 +126,8 @@ namespace esphome {
                 registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = 5000;
                 ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
                 register_write_task data;
-                data.start_address = registers_G3[DESIRED_GRID_POWER].start_address;
-                data.quantity = 6; // Number of registers to write
+                data.register_ptr = registers_G3[DESIRED_GRID_POWER];
+                data.length = 1; // Number of registers to write
                 current_write = data; // Set the flag to indicate that a zero export write is in progress
                 time_begin_modbus_operation = millis();
                 this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
