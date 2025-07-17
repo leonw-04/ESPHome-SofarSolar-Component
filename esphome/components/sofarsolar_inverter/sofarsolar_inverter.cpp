@@ -134,6 +134,7 @@ namespace esphome {
                 time_begin_modbus_operation = millis();
                 this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
                 this->write_desired_grid_power(data); // Write the new desired grid power, minimum battery power, and maximum battery power
+                ESP_LOGW(TAG, "Number of registers written: %d", data.number_of_registers);
             }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
@@ -390,6 +391,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 8));
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power & 0xFF));
             task.number_of_registers = (data.size() >> 1); // Number of registers to write
+            ESP_LOGW(TAG, "Writing %d registers starting from address %04X", task.number_of_registers, registers_G3[DESIRED_GRID_POWER].start_address);
             send_write_modbus_registers(registers_G3[DESIRED_GRID_POWER].start_address, task.number_of_registers, data);
         }
 
