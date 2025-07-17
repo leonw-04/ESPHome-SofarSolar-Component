@@ -131,7 +131,7 @@ namespace esphome {
                 current_write = data; // Set the flag to indicate that a zero export write is in progress
                 time_begin_modbus_operation = millis();
                 this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
-                this->write_desired_grid_power(); // Write the new desired grid power, minimum battery power, and maximum battery power
+                this->write_desired_grid_power(data); // Write the new desired grid power, minimum battery power, and maximum battery power
             }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
