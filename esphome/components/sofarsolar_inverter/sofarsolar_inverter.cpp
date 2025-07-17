@@ -213,7 +213,7 @@ namespace esphome {
                                 }
                             }
                         }
-                        update_sensor(register_tasks.top());
+                        update_sensor(&register_tasks.top());
                     } else {
                         register_tasks.top().register_ptr->is_queued = false; // Mark the register as not queued anymore
                         register_tasks.pop(); // Remove the task from the queue
@@ -222,7 +222,7 @@ namespace esphome {
                 } else {
                     ESP_LOGE(TAG, "No response received");
                 }
-            } else if (current_write) {
+            } else if (current_writing) {
                 if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for zero export write response");
                     current_writing = false;
