@@ -418,9 +418,9 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_address & 0xFF));
             uint16_t new_battery_conf_protocol;
             if (registers_G3[BATTERY_CONF_PROTOCOL].enforce_default_value && registers_G3[BATTERY_CONF_PROTOCOL].is_default_value_set) {
-                new_battery_conf_protocol = registers_G3[BATTERY_CONF_PROTOCOL].default_value.uint16_t_value;
+                new_battery_conf_protocol = registers_G3[BATTERY_CONF_PROTOCOL].default_value.uint16_value;
             } else if (registers_G3[BATTERY_CONF_PROTOCOL].write_set_value) {
-                new_battery_conf_protocol = registers_G3[BATTERY_CONF_PROTOCOL].write_value.uint16_t_value;
+                new_battery_conf_protocol = registers_G3[BATTERY_CONF_PROTOCOL].write_value.uint16_value;
             } else {
                 new_battery_conf_protocol = registers_G3[BATTERY_CONF_PROTOCOL].sensor->state;
             }
