@@ -185,7 +185,7 @@ namespace esphome {
                                         register_write_task write_task;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
+                                        current_write_task = &write_task; // Set the current write task
                                         this->write_desired_grid_power(write_task);
                                         break;
                                     case BATTERY_CONF_WRITE:
@@ -193,7 +193,7 @@ namespace esphome {
                                         register_tasks.top().register_ptr->write_value.uint16_value = value.uint16_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
+                                        current_write_task = &write_task; // Set the current write task
                                         this->write_battery_conf(write_task);
                                         break;
                                     case SINGLE_REGISTER_WRITE:
@@ -201,7 +201,7 @@ namespace esphome {
                                         register_tasks.top().register_ptr->write_value.uint64_value = value.uint64_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
+                                        current_write_task = &write_task; // Set the current write task
                                         this->write_single_register(write_task);
                                         break;
                                     default:
