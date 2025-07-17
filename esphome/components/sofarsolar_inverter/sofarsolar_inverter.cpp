@@ -557,7 +557,7 @@ namespace esphome {
             } else if (task.register_ptr->write_set_value) {
                 value = task.register_ptr->write_value; // Use write value if set
             } else {
-                value = task.register_ptr->sensor.state; // Use sensor value
+                value = task.register_ptr->sensor->state; // Use sensor value
             }
             std::vector<uint8_t> data;
             uint8_t data_length;
@@ -623,7 +623,7 @@ namespace esphome {
                     data.push_back(static_cast<uint8_t>(double_value & 0xFF));
                     break;
                 default:
-                    ESP_LOGE(TAG, "Unknown register type for writing: %d", task.register_ptr.type);
+                    ESP_LOGE(TAG, "Unknown register type for writing: %d", task.register_ptr->type);
                     return; // Exit if the register type is unknown
             }
             send_write_modbus_registers(task.register_ptr->start_address, task.quantity, data);
