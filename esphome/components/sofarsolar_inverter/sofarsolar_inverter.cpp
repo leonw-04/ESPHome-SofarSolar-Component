@@ -124,7 +124,7 @@ namespace esphome {
                 // Read the current zero export status
                 registers_G3[DESIRED_GRID_POWER].write_value.int32_value = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
                 registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = -5000;
-                registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = 5000;
+                registers_G3[MAXIMUM_BATTERY_POWER].write_value.int32_value = 5000;
                 ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
                 register_write_task data;
                 data.register_ptr = &registers_G3[DESIRED_GRID_POWER];
@@ -368,7 +368,7 @@ namespace esphome {
             int32_t new_minimum_battery_power;
             if (registers_G3[MINIMUM_BATTERY_POWER].enforce_default_value && registers_G3[MINIMUM_BATTERY_POWER].is_default_value_set) {
                 new_minimum_battery_power = registers_G3[MINIMUM_BATTERY_POWER].default_value.int32_value;
-            } else if (registers_G3[DESIRED_GRID_POWER].write_set_value) {
+            } else if (registers_G3[MINIMUM_BATTERY_POWER].write_set_value) {
                 new_minimum_battery_power = registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value;
             } else {
                 new_minimum_battery_power = registers_G3[MINIMUM_BATTERY_POWER].sensor->state;
@@ -376,7 +376,7 @@ namespace esphome {
             int32_t new_maximum_battery_power;
             if (registers_G3[MAXIMUM_BATTERY_POWER].enforce_default_value && registers_G3[DESIRED_GRID_POWER].is_default_value_set) {
                 new_maximum_battery_power = registers_G3[MAXIMUM_BATTERY_POWER].default_value.int32_value;
-            } else if (registers_G3[DESIRED_GRID_POWER].write_set_value) {
+            } else if (registers_G3[MAXIMUM_BATTERY_POWER].write_set_value) {
                 new_maximum_battery_power = registers_G3[MAXIMUM_BATTERY_POWER].write_value.int32_value;
             } else {
                 new_maximum_battery_power = registers_G3[MAXIMUM_BATTERY_POWER].sensor->state;
