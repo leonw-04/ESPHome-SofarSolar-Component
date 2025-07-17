@@ -213,7 +213,7 @@ namespace esphome {
                                 }
                             }
                         }
-                        update_sensor(&register_tasks.top());
+                        update_sensor(register_tasks.top());
                     } else {
                         register_tasks.top().register_ptr->is_queued = false; // Mark the register as not queued anymore
                         register_tasks.pop(); // Remove the task from the queue
