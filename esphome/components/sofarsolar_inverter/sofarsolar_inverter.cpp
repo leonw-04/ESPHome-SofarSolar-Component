@@ -107,7 +107,7 @@ namespace esphome {
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
         bool current_writing = false; // Pointer to the current writing task
-        register_write_task current_write_task; // Pointer to the current write task
+        register_write_task &current_write_task; // Pointer to the current write task
         bool current_zero_export_write = false; // Pointer to the current reading task
         uint64_t time_begin_modbus_operation = 0;
         uint64_t zero_export_last_update = 0;
