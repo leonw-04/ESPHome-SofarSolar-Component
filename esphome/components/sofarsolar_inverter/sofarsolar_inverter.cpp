@@ -233,7 +233,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received for zero export write");
                 } else {
                     current_writing = false;
-                    if (write_response(response)) {
+                    if (write_response(current_write_task.register_ptr)) {
                         ESP_LOGD(TAG, "Write successful");
                     } else {
                         ESP_LOGE(TAG, "Invalid response for write");
@@ -242,7 +242,7 @@ namespace esphome {
             }
         }
 
-        bool check_for_response() {
+        bool SofarSolar_Inverter::check_for_response() {
             // Check if there is a response available in the UART buffer
             if (this->available() < 5) {
                 return false; // Not enough bytes for a valid response
@@ -250,7 +250,7 @@ namespace esphome {
             return this->peek() != -1;
         }
 
-        bool read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info) {
+        bool SofarSolar_Inverter::read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info) {
             // Read the response from the UART buffer
             response.clear();
             while (this->available() > 0 && response.size()) {
@@ -276,7 +276,7 @@ namespace esphome {
             return true; // Valid read response
         }
 
-        uint64_t extract_data_from_response(std::vector<uint8_t> &response) {
+        uint64_t SofarSolar_Inverter::extract_data_from_response(std::vector<uint8_t> &response) {
             switch (response.data()[2]) {
                 case 2:
                     return (response.data()[3] << 8) | response.data()[4]; // 2 bytes for start address
@@ -290,8 +290,9 @@ namespace esphome {
                     return false; // Invalid response
         }
 
-        bool write_response(SofarSolar_Register &register_info) {
+        bool SofarSolar_Inverter::write_response(SofarSolar_Register &register_info) {
             // Read the response from the UART buffer
+            std::vector<uint8_t> response;
             response.clear();
             while (this->available() > 0 && response.size()) {
                 uint8_t byte = this->read();
@@ -315,7 +316,7 @@ namespace esphome {
             return true; // Valid write response
         }
 
-        bool check_for_error_code(const std::vector<uint8_t> &response) {
+        bool SofarSolar_Inverter::check_for_error_code(const std::vector<uint8_t> &response) {
             // Check if the response contains an error code
             if (response.data()[1] == 0x90) {
                 switch (response.data()[2]) {
