@@ -143,9 +143,8 @@ namespace esphome {
                 if (millis() - registers_G3[i].timer > registers_G3[i].update_interval * 1000 && !registers_G3[i].is_queued) {
                     registers_G3[i].timer = millis();
                     // Create a task for the register
-                    RegisterTask task;
-                    task.register_index = i;
-                    task.inverter = this;
+                    register_read_task task;
+                    task.register_ptr = &registers_G3[i];
                     // Add the task to a priority queue
                     register_tasks.push(task);
                     registers_G3[i].is_queued = true;
@@ -155,7 +154,7 @@ namespace esphome {
 
             if (!current_reading && !current_zero_export_write && !register_tasks.empty()) {
                 // Get the highest priority task
-                RegisterTask task = register_tasks.top();
+                register_read_task task = register_tasks.top();
                 current_reading = true;
                 time_begin_modbus_operation = millis();
                 empty_uart_buffer(); // Clear the UART buffer before sending a new request
@@ -164,24 +163,24 @@ namespace esphome {
                 if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for response");
                     current_reading = false;
-                    registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
+                    register_tasks.top().register_ptr->is_queued = false; // Mark the register as not queued anymore
                     register_tasks.pop(); // Remove the task from the queue
                     return;
                 }
                 std::vector<uint8_t> response;
                 if (check_for_response()) {
                     current_reading = false;
-                    if (read_response(response, registers_G3[register_tasks.top().register_index])) {
+                    if (read_response(response, register_tasks.top().register_ptr)) {
                         SofarSolar_RegisterValue value;
                         value.uint64_value = extract_data_from_response(response);
-                        if (registers_G3[register_tasks.top().register_index].is_default_value_set) {
-                            if (value.uint64_value != registers_G3[register_tasks.top().register_index].default_value.uint64_value) { // Use default value if set
-                                current_write = registers_G3[register_tasks.top().register_index]; // Set the flag to indicate that a write operation is in progress
+                        if (register_tasks.top().register_ptr->is_default_value_set) {
+                            if (value.uint64_value != register_tasks.top().register_ptr->default_value.uint64_value) { // Use default value if set
+                                current_write = register_tasks.top().register_ptr; // Set the flag to indicate that a write operation is in progress
                                 time_begin_modbus_operation = millis();
-                                switch (registers_G3[register_tasks.top().register_index].write_funktion) {
+                                switch (register_tasks.top().register_ptr->write_funktion) {
                                     case DESIRED_GRID_POWER_WRITE:
                                         ESP_LOGD(TAG, "Writing desired grid power: %d W", value.int32_value);
-                                        registers_G3[register_tasks.top().register_index].write_value.int32_value = value.int32_value;
+                                        register_tasks.top().register_ptr->write_value.int32_value = value.int32_value;
                                         register_write_task write_task;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         write_task.number_of_registers = 1; // Number of registers to write
@@ -189,27 +188,27 @@ namespace esphome {
                                         break;
                                     case BATTERY_CONF_WRITE:
                                         ESP_LOGD(TAG, "Writing battery configuration");
-                                        registers_G3[register_tasks.top().register_index].write_value.uint16_value = value.uint16_value;
+                                        register_tasks.top().register_ptr->write_value.uint16_value = value.uint16_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         write_task.number_of_registers = 1; // Number of registers to write
                                         this->write_battery_conf(write_task);
                                         break;
                                     case SINGLE_REGISTER_WRITE:
-                                        ESP_LOGD(TAG, "Writing single register: %04X", registers_G3[register_tasks.top().register_index].start_address);
-                                        registers_G3[register_tasks.top().register_index].write_value.uint64_value = value.uint64_value;
+                                        ESP_LOGD(TAG, "Writing single register: %04X", register_tasks.top().register_ptr->start_address);
+                                        register_tasks.top().register_ptr->write_value.uint64_value = value.uint64_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         write_task.number_of_registers = 1; // Number of registers to write
                                         this->write_single_register(write_task);
                                         break;
                                     default:
-                                        ESP_LOGE(TAG, "Unknown write function: %d", registers_G3[register_tasks.top().register_index].write_funktion);
+                                        ESP_LOGE(TAG, "Unknown write function: %d", register_tasks.top().register_ptr->write_funktion);
                                         break;
                                 }
                             }
                         }
                         update_sensor(register_tasks.top().register_index, value);
                     } else {
-                        registers_G3[register_tasks.top().register_index].is_queued = false; // Mark the register as not queued anymore
+                        register_tasks.top().register_ptr->is_queued = false; // Mark the register as not queued anymore
                         register_tasks.pop(); // Remove the task from the queue
                         ESP_LOGE(TAG, "Invalid response");
                     }
