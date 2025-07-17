@@ -312,7 +312,7 @@ namespace esphome {
                 response.clear(); // Clear the response on invalid function code
                 return false; // Invalid function code
             }
-            if (task.register_ptr->start_address != (response.data()[2] << 8) | (response.data()[3])) {
+            if (task.register_ptr->start_address != ((response.data()[2] << 8) | (response.data()[3]))) {
                 ESP_LOGE(TAG, "Invalid response address: expected %04X, got %02X%02X", task.register_ptr->start_address, response.data()[2], response.data()[3]);
                 return false; // Invalid response size
             }
