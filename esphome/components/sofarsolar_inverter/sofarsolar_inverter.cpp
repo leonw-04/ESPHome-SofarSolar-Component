@@ -629,8 +629,6 @@ namespace esphome {
             send_write_modbus_registers(task.register_ptr.start_address, task.quantity, data);
         }
 
-
-
         void SofarSolar_Inverter::update_sensor(const register_read_task task) {
             // Update the sensor based on the register index and response data
             switch (task.register_ptr->type) {
