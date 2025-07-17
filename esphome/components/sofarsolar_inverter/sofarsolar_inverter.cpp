@@ -158,7 +158,7 @@ namespace esphome {
                 current_reading = true;
                 time_begin_modbus_operation = millis();
                 empty_uart_buffer(); // Clear the UART buffer before sending a new request
-                send_read_modbus_registers(task.register_ptr->start_address, task.register_ptr->.quantity);
+                send_read_modbus_registers(task.register_ptr->start_address, task.register_ptr->quantity);
             } else if (current_reading) {
                 if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for response");
@@ -170,7 +170,7 @@ namespace esphome {
                 std::vector<uint8_t> response;
                 if (check_for_response()) {
                     current_reading = false;
-                    if (read_response(response, register_tasks.top().register_ptr)) {
+                    if (read_response(response, &register_tasks.top().register_ptr)) {
                         SofarSolar_RegisterValue value;
                         value.uint64_value = extract_data_from_response(response);
                         if (register_tasks.top().register_ptr->is_default_value_set) {
