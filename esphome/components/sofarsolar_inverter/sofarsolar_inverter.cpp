@@ -277,12 +277,12 @@ namespace esphome {
         uint64_t SofarSolar_Inverter::extract_data_from_response(std::vector<uint8_t> &response) {
             switch (response.data()[2]) {
                 case 2:
-                    return (response.data()[3] << 8) | response.data()[4]; // 2 bytes for start address
+                    return reinterpret_cast<uint64_t>((response.data()[3] << 8) | response.data()[4]); // 2 bytes for start address
                 case 4:
-                    return (response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]; // 4 bytes for start address
+                    return reinterpret_cast<uint64_t>((response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]); // 4 bytes for start address
                 case 8:
-                    return (response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
-                           (response.data()[7] << 24) | (response.data()[8] << 16) | (response.data()[9] << 8) | response.data()[10]; // 8 bytes for start address
+                    return reinterpret_cast<uint64_t>((response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
+                           (response.data()[7] << 24) | (response.data()[8] << 16) | (response.data()[9] << 8) | response.data()[10]); // 8 bytes for start address
                 default:
                     ESP_LOGE(TAG, "Invalid response size for extracting value");
                     return false; // Invalid response
