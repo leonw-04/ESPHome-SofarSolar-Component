@@ -140,7 +140,7 @@ namespace esphome {
                     ESP_LOGVV(TAG, "Sensor for register %d is not set", pair.second.start_address);
                     continue;
                 }
-                ESP_LOGW(TAG, "Checking register %04X: Time since last update: %d seconds, Update interval: %d seconds", pair.second.start_address, millis() / 1000 - pair.second.timer, pair.second.update_interval);
+                ESP_LOGW(TAG, "Checking register %04X: Time since last update: %d seconds, Update interval: %d seconds", pair.second.start_address, (millis() - pair.second.timer) / 1000, pair.second.update_interval);
                 if (millis() - pair.second.timer > pair.second.update_interval * 1000 && !pair.second.is_queued) {
                     pair.second.timer = millis();
                     // Create a task for the register
