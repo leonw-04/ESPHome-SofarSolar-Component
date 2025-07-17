@@ -135,7 +135,7 @@ namespace esphome {
                 current_write_task = data; // Set the flag to indicate that a zero export write is in progress
             }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
-            for (const auto &pair : my_map) {
+            for (const auto &pair : registers_G3) {
                 if (pair.second.sensor == nullptr) {
                     ESP_LOGVV(TAG, "Sensor for register %d is not set", pair.second.start_address);
                     continue;
@@ -153,7 +153,7 @@ namespace esphome {
                 }
             }
 
-            if (!current_reading && current_writing && !current_zero_export_write && !register_tasks.empty()) {
+            if (!current_reading && !current_writing && !register_tasks.empty()) {
                 // Get the highest priority task
                 register_read_task task = register_tasks.top();
                 current_reading = true;
