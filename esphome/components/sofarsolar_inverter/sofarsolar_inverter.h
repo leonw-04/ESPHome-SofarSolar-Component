@@ -100,7 +100,7 @@ namespace esphome {
             void loop() override;
             void dump_config() override;
 
-            void update_sensor(uint8_t register_index, std::vector<uint8_t> &response, uint8_t offset);
+            void update_sensor(register_read_task &task);
             void send_modbus(std::vector<uint8_t> frame);
             void calculate_crc(std::vector<uint8_t> &frame);
             bool check_crc(std::vector<uint8_t> frame);
