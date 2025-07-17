@@ -557,7 +557,8 @@ namespace esphome {
             } else if (task.register_ptr->write_set_value) {
                 value = task.register_ptr->write_value; // Use write value if set
             } else {
-                value = task.register_ptr.sensor->state; // Use sensor value
+                ESP_LOGE(TAG, "No value set for writing to register %04X", task.register_ptr->start_address);
+                return; // Exit if no value is set
             }
             std::vector<uint8_t> data;
             switch (task.register_ptr->type) {
