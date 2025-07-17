@@ -563,24 +563,24 @@ namespace esphome {
             uint8_t data_length;
             switch (task.register_ptr->type) {
                 case 0: // uint16_t
-                    data.push_back(static_cast<uint8_t>(value.uint16_t >> 8));
-                    data.push_back(static_cast<uint8_t>(value.uint16_t & 0xFF));
+                    data.push_back(static_cast<uint8_t>(value.uint16_value >> 8));
+                    data.push_back(static_cast<uint8_t>(value.uint16_value & 0xFF));
                     break;
                 case 1: // int16_t
-                    data.push_back(static_cast<uint8_t>(value.int16_t >> 8));
-                    data.push_back(static_cast<uint8_t>(value.int16_t & 0xFF));
+                    data.push_back(static_cast<uint8_t>(value.int16_value >> 8));
+                    data.push_back(static_cast<uint8_t>(value.int16_value & 0xFF));
                     break;
                 case 2: // uint32_t
-                    data.push_back(static_cast<uint8_t>(value.uint32_t >> 24));
-                    data.push_back(static_cast<uint8_t>(value.uint32_t >> 16));
-                    data.push_back(static_cast<uint8_t>(value.uint32_t >> 8));
-                    data.push_back(static_cast<uint8_t>(value.uint32_t & 0xFF));
+                    data.push_back(static_cast<uint8_t>(value.uint32_value >> 24));
+                    data.push_back(static_cast<uint8_t>(value.uint32_value >> 16));
+                    data.push_back(static_cast<uint8_t>(value.uint32_value >> 8));
+                    data.push_back(static_cast<uint8_t>(value.uint32_value & 0xFF));
                     break;
                 case 3: // int32_t
-                    data.push_back(static_cast<uint8_t>(value.int32_t >> 24));
-                    data.push_back(static_cast<uint8_t>(value.int32_t >> 16));
-                    data.push_back(static_cast<uint8_t>(value.int32_t >> 8));
-                    data.push_back(static_cast<uint8_t>(value.int32_t & 0xFF));
+                    data.push_back(static_cast<uint8_t>(value.int32_value >> 24));
+                    data.push_back(static_cast<uint8_t>(value.int32_value >> 16));
+                    data.push_back(static_cast<uint8_t>(value.int32_value >> 8));
+                    data.push_back(static_cast<uint8_t>(value.int32_value & 0xFF));
                     break;
                 case 4: // uint64_t
                     data.push_back(static_cast<uint8_t>(value.uint64_value >> 56));

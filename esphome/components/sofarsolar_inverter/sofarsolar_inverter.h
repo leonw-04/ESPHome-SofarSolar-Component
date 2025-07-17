@@ -80,6 +80,8 @@ namespace esphome {
 			int32_t int32_value;
 			uint64_t uint64_value;
 		    int64_t int64_value;
+            float float_value;
+            double double_value;
 		};
 
         struct SofarSolar_Register;
