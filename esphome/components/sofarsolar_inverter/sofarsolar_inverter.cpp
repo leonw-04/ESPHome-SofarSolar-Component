@@ -123,8 +123,11 @@ namespace esphome {
                 ESP_LOGD(TAG, "Updating zero export status");
                 // Read the current zero export status
                 registers_G3[DESIRED_GRID_POWER].write_value.int32_value = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
+                registers_G3[DESIRED_GRID_POWER].write_set_value = true;
                 registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = -5000;
+                registers_G3[MINIMUM_BATTERY_POWER].write_set_value = true;
                 registers_G3[MAXIMUM_BATTERY_POWER].write_value.int32_value = 5000;
+                registers_G3[MAXIMUM_BATTERY_POWER].write_set_value = true;
                 ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
                 register_write_task data;
                 data.register_ptr = &registers_G3[DESIRED_GRID_POWER];
@@ -187,6 +190,7 @@ namespace esphome {
                                     case DESIRED_GRID_POWER_WRITE:
                                         ESP_LOGD(TAG, "Writing desired grid power");
                                         task.register_ptr->write_value.int32_value = task.read_value.int32_value;
+                                        task.register_ptr->write_set_value = true; // Set the flag to indicate that a write value is set
                                         register_write_task write_task;
                                         write_task.register_ptr = task.register_ptr;
                                         this->write_desired_grid_power(write_task);
@@ -196,6 +200,7 @@ namespace esphome {
                                     case BATTERY_CONF_WRITE:
                                         ESP_LOGD(TAG, "Writing battery configuration");
                                         task.register_ptr->write_value.uint16_value = task.read_value.uint16_value;
+                                        task.register_ptr->write_set_value = true; // Set the flag to indicate that a write value is set
                                         write_task.register_ptr = task.register_ptr;
                                         this->write_battery_conf(write_task);
                                         current_writing = true; // Set the flag to indicate that a write is in progress
@@ -204,6 +209,7 @@ namespace esphome {
                                     case SINGLE_REGISTER_WRITE:
                                         ESP_LOGD(TAG, "Writing single register: %04X", task.register_ptr->start_address);
                                         task.register_ptr->write_value.uint64_value = task.read_value.uint64_value;
+                                        task.register_ptr->write_set_value = true; // Set the flag to indicate that a write value is set
                                         write_task.register_ptr = task.register_ptr;
                                         this->write_single_register(write_task);
                                         current_writing = true; // Set the flag to indicate that a write is in progress
