@@ -250,10 +250,11 @@ namespace esphome {
         bool SofarSolar_Inverter::read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info) {
             // Read the response from the UART buffer
             response.clear();
-            while (this->available() > 0 && response.size()) {
+            while (this->available()) {
                 uint8_t byte = this->read();
                 response.push_back(byte);
             }
+            ESP_LOGVV(TAG, "Received response: %s", vector_to_string(response).c_str());
             if (!check_crc(response)) { // Check CRC after reading the response
                 return false; // Invalid CRC
             }
