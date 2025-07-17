@@ -170,7 +170,8 @@ namespace esphome {
                 }
                 std::vector<uint8_t> response;
                 if (check_for_response()) {
-                    register_read_task task = register_tasks.pop();
+                    register_read_task task = register_tasks.top(); // Get the current task
+                    register_tasks.pop();
                     current_reading = false;
                     if (read_response(response, *task.register_ptr)) {
                         if (extract_data_from_response(response, task)) {
