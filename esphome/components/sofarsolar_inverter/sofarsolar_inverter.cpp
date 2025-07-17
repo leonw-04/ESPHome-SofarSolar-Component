@@ -107,7 +107,7 @@ namespace esphome {
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
         bool current_writing = false; // Pointer to the current writing task
-        register_write_task &current_write_task; // Pointer to the current write task
+        register_write_task *current_write_task = nullptr; // Pointer to the current write task
         bool current_zero_export_write = false; // Pointer to the current reading task
         uint64_t time_begin_modbus_operation = 0;
         uint64_t zero_export_last_update = 0;
@@ -130,7 +130,7 @@ namespace esphome {
                 register_write_task data;
                 data.register_ptr = &registers_G3[DESIRED_GRID_POWER];
                 current_writing = true; // Set the flag to indicate that a zero export write is in progress
-                current_write_task = data; // Set the flag to indicate that a zero export write is in progress
+                current_write_task = &data; // Set the flag to indicate that a zero export write is in progress
                 time_begin_modbus_operation = millis();
                 this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
                 this->write_desired_grid_power(data); // Write the new desired grid power, minimum battery power, and maximum battery power
@@ -185,7 +185,7 @@ namespace esphome {
                                         register_write_task write_task;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
+                                        current_write_task = &write_task; // Set the current write task
                                         this->write_desired_grid_power(write_task);
                                         break;
                                     case BATTERY_CONF_WRITE:
@@ -193,7 +193,7 @@ namespace esphome {
                                         register_tasks.top().register_ptr->write_value.uint16_value = value.uint16_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
+                                        current_write_task = &write_task; // Set the current write task
                                         this->write_battery_conf(write_task);
                                         break;
                                     case SINGLE_REGISTER_WRITE:
@@ -201,7 +201,7 @@ namespace esphome {
                                         register_tasks.top().register_ptr->write_value.uint64_value = value.uint64_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
                                         current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
+                                        current_write_task = &write_task; // Set the current write task
                                         this->write_single_register(write_task);
                                         break;
                                     default:
