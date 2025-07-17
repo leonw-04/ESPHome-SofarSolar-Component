@@ -149,7 +149,7 @@ namespace esphome {
                     // Add the task to a priority queue
                     register_tasks.push(task);
                     pair.second.is_queued = true;
-                    ESP_LOGV(TAG, "Register %04X is queued for reading", pair.second.start_address);
+                    ESP_LOGE(TAG, "Register %04X is queued for reading", pair.second.start_address);
                 }
             }
 
