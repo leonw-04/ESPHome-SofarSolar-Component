@@ -124,7 +124,7 @@ namespace esphome {
                 registers_G3[DESIRED_GRID_POWER].write_value.int32_value = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
                 registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = -5000;
                 registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = 5000;
-                ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, new_desired_grid_power);
+                ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
                 register_write_task data;
                 data.start_address = registers_G3[DESIRED_GRID_POWER].start_address;
                 data.quantity = 6; // Number of registers to write
