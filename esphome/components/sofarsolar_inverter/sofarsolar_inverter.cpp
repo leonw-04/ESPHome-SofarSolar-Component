@@ -729,11 +729,11 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "  modbus_address = %i", this->modbus_address_);
             ESP_LOGCONFIG(TAG, "  zero_export = %s", TRUEFALSE(this->zero_export_));
             ESP_LOGCONFIG(TAG, "  power_sensor = %s", this->power_sensor_ ? this->power_sensor_->get_name().c_str() : "None");
-            for (const auto &reg : registers_G3) {
-                ESP_LOGCONFIG(TAG, "  %s: start_address = %04X, type = %d, scale = %f, enforce_default_value = %s",
-                              reg.second.sensor->get_name().c_str(), reg.second.start_address, reg.second.type, reg.second.scale,
-                              TRUEFALSE(reg.second.enforce_default_value));
-            }
+            //for (const auto &reg : registers_G3) {
+            //    ESP_LOGCONFIG(TAG, "  %s: start_address = %04X, type = %d, scale = %f, enforce_default_value = %s",
+            //                  reg.second.sensor->get_name().c_str(), reg.second.start_address, reg.second.type, reg.second.scale,
+            //                  TRUEFALSE(reg.second.enforce_default_value));
+            //}
         }
 
         void SofarSolar_Inverter::send_read_modbus_registers(uint16_t start_address, uint16_t quantity) {
