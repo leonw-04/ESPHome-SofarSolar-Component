@@ -317,7 +317,7 @@ namespace esphome {
             return true; // Valid write response
         }
 
-        bool SofarSolar_Inverter::check_for_error_code(const std::vector<uint8_t> &response) {
+        bool SofarSolar_Inverter::check_for_error_code(std::vector<uint8_t> &response) {
             // Check if the response contains an error code
             if (response.data()[1] == 0x90) {
                 switch (response.data()[2]) {
