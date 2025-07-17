@@ -225,13 +225,13 @@ namespace esphome {
                 }
             } else if (current_writing) {
                 if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
-                    ESP_LOGE(TAG, "Timeout while waiting for zero export write response");
+                    ESP_LOGE(TAG, "Timeout while waiting for write response");
                     current_writing = false;
                     return;
                 }
                 std::vector<uint8_t> response;
                 if (!check_for_response()) {
-                    ESP_LOGE(TAG, "No response received for zero export write");
+                    ESP_LOGV(TAG, "No response received write");
                 } else {
                     current_writing = false;
                     if (write_response(current_write_task)) {
