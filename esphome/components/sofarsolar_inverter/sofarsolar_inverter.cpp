@@ -635,9 +635,9 @@ namespace esphome {
                 case 0: // uint16_t
                     if (task.register_ptr->sensor != nullptr) {
                         if (task.register_ptr->scale < 1) {
-                            task.register_ptr->sensor->publish_state(((float) response.uint16_t * registers_G3[register_index].scale));
+                            task.register_ptr->sensor->publish_state(((float) task.read_value.uint16_value * task.register_ptr->scale));
                         } else {
-                            task.register_ptr->sensor->publish_state(response.uint16_t * registers_G3[register_index].scale);
+                            task.register_ptr->sensor->publish_state(task.read_value.uint16_value * task.register_ptr->.scale);
                         }
 
                     }
@@ -645,27 +645,63 @@ namespace esphome {
                 case 1: // int16_t
                     if (task.register_ptr->sensor != nullptr) {
                         if (task.register_ptr->scale < 1) {
-                            task.register_ptr->sensor->publish_state(((float) response.int16_t * registers_G3[register_index].scale));
+                            task.register_ptr->sensor->publish_state(((float) task.read_value.int16_value * task.register_ptr->scale));
                         } else {
-                            task.register_ptr->sensor->publish_state(response.int16_t * registers_G3[register_index].scale);
+                            task.register_ptr->sensor->publish_state(task.read_value.int16_value * task.register_ptr->scale);
                         }
                     }
                     break;
                 case 2: // uint32_t
                     if (task.register_ptr->sensor != nullptr) {
                         if (task.register_ptr->scale < 1) {
-                            task.register_ptr->sensor->publish_state(((float) response.uint32_t * registers_G3[register_index].scale));
+                            task.register_ptr->sensor->publish_state(((float) task.read_value.uint32_value * task.register_ptr->scale));
                         } else {
-                            task.register_ptr->sensor->publish_state(response.uint32_t * registers_G3[register_index].scale);
+                            task.register_ptr->sensor->publish_state(task.read_value.uint32_value * task.register_ptr->scale);
                         }
                     }
                     break;
                 case 3: // int32_t
                     if (task.register_ptr->sensor != nullptr) {
                         if (registers_G3[register_index].scale < 1) {
-                            task.register_ptr->sensor->publish_state(((float) response.int32_t * registers_G3[register_index].scale));
+                            task.register_ptr->sensor->publish_state(((float) task.read_value.int32_value * task.register_ptr->scale));
                         } else {
-                            task.register_ptr->sensor->publish_state(response.int32_t * registers_G3[register_index].scale);
+                            task.register_ptr->sensor->publish_state(task.read_value.int32_value * task.register_ptr->scale);
+                        }
+                    }
+                    break;
+                case 4: // uint64_t
+                    if (task.register_ptr->sensor != nullptr) {
+                        if (task.register_ptr->scale < 1) {
+                            task.register_ptr->sensor->publish_state(((float) task.read_value.uint64_value * task.register_ptr->scale));
+                        } else {
+                            task.register_ptr->sensor->publish_state(task.read_value.uint64_value * task.register_ptr->scale);
+                        }
+                    }
+                    break;
+                case 5: // int64_t
+                    if (task.register_ptr->sensor != nullptr) {
+                        if (task.register_ptr->scale < 1) {
+                            task.register_ptr->sensor->publish_state(((float) task.read_value.int64_value * task.register_ptr->scale));
+                        } else {
+                            task.register_ptr->sensor->publish_state(task.read_value.int64_value * task.register_ptr->scale);
+                        }
+                    }
+                    break;
+                case 6: // float
+                    if (task.register_ptr->sensor != nullptr) {
+                        if (task.register_ptr->scale < 1) {
+                            task.register_ptr->sensor->publish_state(((float) task.read_value.float_value * task.register_ptr->scale));
+                        } else {
+                            task.register_ptr->sensor->publish_state(task.read_value.float_value * task.register_ptr->scale);
+                        }
+                    }
+                    break;
+                case 7: // double
+                    if (task.register_ptr->sensor != nullptr) {
+                        if (task.register_ptr->scale < 1) {
+                            task.register_ptr->sensor->publish_state(((float) task.read_value.double_value * task.register_ptr->scale));
+                        } else {
+                            task.register_ptr->sensor->publish_state(task.read_value.double_value * task.register_ptr->scale);
                         }
                     }
                     break;
