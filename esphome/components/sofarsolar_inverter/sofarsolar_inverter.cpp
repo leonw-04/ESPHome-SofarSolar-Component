@@ -24,7 +24,7 @@ namespace esphome {
             bool is_queued = false; // Flag to indicate if the register is queued for reading
 			bool writeable;
 			uint8_t write_funktion = 0; // Function pointer for writing to the register
-            SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0f), writeable(false), write_funktion(0) {}
+            SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0.0f), writeable(false), write_funktion(0) {}
             SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, bool writeable, uint8_t write_funktion) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), writeable(writeable), write_funktion(write_funktion) {}
         };
 
