@@ -135,6 +135,7 @@ namespace esphome {
                 this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
                 this->write_desired_grid_power(data); // Write the new desired grid power, minimum battery power, and maximum battery power
                 ESP_LOGW(TAG, "Number of registers written: %d", data.number_of_registers);
+                ESP_LOGW(TAG, "Number of registers written: %d", current_write_task.number_of_registers);
             }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
