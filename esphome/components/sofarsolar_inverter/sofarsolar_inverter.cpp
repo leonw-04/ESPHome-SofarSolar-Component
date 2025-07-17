@@ -185,7 +185,6 @@ namespace esphome {
                                         register_tasks.top().register_ptr->write_value.int32_value = value.int32_value;
                                         register_write_task write_task;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
-                                        write_task.number_of_registers = 1; // Number of registers to write
                                         current_writing = true; // Set the flag to indicate that a write is in progress
                                         current_write_task = write_task; // Set the current write task
                                         this->write_desired_grid_power(write_task);
@@ -194,7 +193,6 @@ namespace esphome {
                                         ESP_LOGD(TAG, "Writing battery configuration");
                                         register_tasks.top().register_ptr->write_value.uint16_value = value.uint16_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
-                                        write_task.number_of_registers = 1; // Number of registers to write
                                         current_writing = true; // Set the flag to indicate that a write is in progress
                                         current_write_task = write_task; // Set the current write task
                                         this->write_battery_conf(write_task);
@@ -203,7 +201,6 @@ namespace esphome {
                                         ESP_LOGD(TAG, "Writing single register: %04X", register_tasks.top().register_ptr->start_address);
                                         register_tasks.top().register_ptr->write_value.uint64_value = value.uint64_value;
                                         write_task.register_ptr = register_tasks.top().register_ptr;
-                                        write_task.number_of_registers = 1; // Number of registers to write
                                         current_writing = true; // Set the flag to indicate that a write is in progress
                                         current_write_task = write_task; // Set the current write task
                                         this->write_single_register(write_task);
