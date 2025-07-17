@@ -126,7 +126,7 @@ namespace esphome {
                 registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = 5000;
                 ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
                 register_write_task data;
-                data.register_ptr = *registers_G3[DESIRED_GRID_POWER];
+                data.register_ptr = registers_G3[DESIRED_GRID_POWER];
                 data.number_of_registers = 1; // Number of registers to write
                 current_write = data; // Set the flag to indicate that a zero export write is in progress
                 time_begin_modbus_operation = millis();
@@ -182,17 +182,17 @@ namespace esphome {
                                     case DESIRED_GRID_POWER_WRITE:
                                         ESP_LOGD(TAG, "Writing desired grid power: %d W", value.int32_value);
                                         registers_G3[register_tasks.top().register_index].write_value.int32_value = value.int32_value;
-                                        write_desired_grid_power(register_tasks.top());
+                                        this->write_desired_grid_power(register_tasks.top());
                                         break;
                                     case BATTERY_CONF_WRITE:
                                         ESP_LOGD(TAG, "Writing battery configuration");
                                         registers_G3[register_tasks.top().register_index].write_value.uint16_value = value.uint16_value;
-                                        write_battery_conf(register_tasks.top());
+                                        this->write_battery_conf(register_tasks.top());
                                         break;
                                     case SINGLE_REGISTER_WRITE:
                                         ESP_LOGD(TAG, "Writing single register: %04X", registers_G3[register_tasks.top().register_index].start_address);
                                         registers_G3[register_tasks.top().register_index].write_value.uint64_value = value.uint64_value;
-                                        write_single_register(register_tasks.top());
+                                        this->write_single_register(register_tasks.top());
                                         break;
                                     default:
                                         ESP_LOGE(TAG, "Unknown write function: %d", registers_G3[register_tasks.top().register_index].write_funktion);
