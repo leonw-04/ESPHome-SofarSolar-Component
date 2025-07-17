@@ -230,7 +230,7 @@ namespace esphome {
                     ESP_LOGV(TAG, "No response received write");
                 } else {
                     current_writing = false;
-                    if (write_response(current_write_task)) {
+                    if (write_response(*current_write_task)) {
                         ESP_LOGD(TAG, "Write successful");
                     } else {
                         ESP_LOGE(TAG, "Invalid response for write");
