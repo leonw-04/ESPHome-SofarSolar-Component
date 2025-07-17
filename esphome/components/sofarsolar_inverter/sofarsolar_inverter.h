@@ -66,6 +66,10 @@
 #define OFF_GRID_CURRENT_PHASE_T 58
 #define OFF_GRID_POWER_PHASE_T 59
 
+#define SINGLE_REGISTER_WRITE 1
+#define DESIRED_GRID_POWER_WRITE 2
+#define BATTERY_CONF_WRITE 3
+
 namespace esphome {
     namespace sofarsolar_inverter {
 

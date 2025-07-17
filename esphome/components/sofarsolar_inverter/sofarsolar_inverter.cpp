@@ -23,8 +23,8 @@ namespace esphome {
             sensor::Sensor *sensor = nullptr; // Pointer to the sensor to update
             bool is_queued = false; // Flag to indicate if the register is queued for reading
 			bool writeable;
-			void (*write_funktion)(register_write_task) = nullptr; // Function pointer for writing to the register
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, bool writeable, void (*write_funktion)(register_write_task) = nullptr) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), writeable(writeable), write_funktion(write_funktion) {}
+			uint8_t write_funktion = 0; // Function pointer for writing to the register
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, bool writeable, uint8_t write_funktion = 0) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), writeable(writeable), write_funktion(write_funktion) {}
         };
 
 		struct register_read_task {
@@ -60,26 +60,26 @@ namespace esphome {
             {PV_POWER_TOTAL ,SofarSolar_Register{0x05C4 ,1 ,0 ,3 ,100 ,false}}, // PV Power Total
             {BATTERY_POWER_TOTAL ,SofarSolar_Register{0x0667 ,1 ,1 ,3 ,100 ,false}}, // Battery Power Total
             {BATTERY_STATE_OF_CHARGE_TOTAL ,SofarSolar_Register{0x0668 ,1 ,0 ,1 ,1 ,false}}, // Battery State of Charge Total
-            {DESIRED_GRID_POWER ,SofarSolar_Register{0x1187 ,2 ,3 ,3 ,1 ,true, write_desired_grid_power}}, // Desired Grid Power
-            {MINIMUM_BATTERY_POWER ,SofarSolar_Register{0x1189 ,2 ,3 ,3 ,1 ,true, write_desired_grid_power}}, // Minimum Battery Power
-            {MAXIMUM_BATTERY_POWER ,SofarSolar_Register{0x118B ,2 ,3 ,3 ,1 ,true, write_desired_grid_power}}, // Maximum Battery Power
-            {ENERGY_STORAGE_MODE, SofarSolar_Register{0x1110, 1, 0, 0, 1, true, write_single_register}}, // Energy Storage Mode
-            {BATTERY_CONF_ID, SofarSolar_Register{0x1044, 1, 0, 0, 1, true, write_battery_conf}}, // Battery Conf ID
-            {BATTERY_CONF_ADDRESS, SofarSolar_Register{0x1045, 1, 0, 0, 1, true, write_battery_conf}}, // Battery Conf Address
-            {BATTERY_CONF_PROTOCOL, SofarSolar_Register{0x1046, 1, 0, 0, 1, true, write_battery_conf}}, // Battery Conf Protocol
-            {BATTERY_CONF_VOLTAGE_NOMINAL, SofarSolar_Register{0x1050, 1, 0, 0, 0.1, true, write_battery_conf}}, // Battery Conf Voltage Nominal
-            {BATTERY_CONF_VOLTAGE_OVER, SofarSolar_Register{0x1047, 1, 0, 0, 0.1, true, write_battery_conf}}, // Battery Conf Voltage Over
-            {BATTERY_CONF_VOLTAGE_CHARGE, SofarSolar_Register{0x1048, 1, 0, 0, 0.1, true, write_battery_conf}}, // Battery Conf Voltage Charge
-            {BATTERY_CONF_VOLTAGE_LACK,SofarSolar_Register{0x1049 ,1 ,0 ,0 ,0.1 ,true ,write_battery_conf}}, // Battery Conf Voltage Lack
-            {BATTERY_CONF_VOLTAGE_DISCHARGE_STOP, SofarSolar_Register{0x104A, 1, 0, 0, 0.1, true, write_battery_conf}}, // Battery Conf Voltage Discharge Stop
-            {BATTERY_CONF_CURRENT_CHARGE_LIMIT, SofarSolar_Register{0x104B, 1, 0, 0, 0.01, true, write_battery_conf}}, // Battery Conf Current Charge Limit
-            {BATTERY_CONF_CURRENT_DISCHARGE_LIMIT, SofarSolar_Register{0x104C, 1, 0, 0, 0.01, true, write_battery_conf}}, // Battery Conf Current Discharge Limit
-            {BATTERY_CONF_DEPTH_OF_DISCHARGE, SofarSolar_Register{0x104D, 1, 0, 0, 1, true, write_battery_conf}}, // Battery Conf Depth of Discharge
-            {BATTERY_CONF_END_OF_DISCHARGE, SofarSolar_Register{0x104E ,1 ,0 ,0 ,1 ,true ,write_battery_conf}}, // Battery Conf End of Discharge
-            {BATTERY_CONF_CAPACITY, SofarSolar_Register{0x104F ,1 ,0 ,0 ,10 ,true ,write_battery_conf}}, // Battery Conf Capacity
-            {BATTERY_CONF_CELL_TYPE, SofarSolar_Register{0x1051 ,1 ,0 ,0 ,1 ,true ,write_battery_conf}}, // Battery Conf Cell Type
-            {BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052 ,1 ,0 ,0 ,10 ,true ,write_battery_conf}}, // Battery Conf EPS Buffer
-            {BATTERY_CONF_CONTROL, SofarSolar_Register{0x1053 ,1 ,0 ,0 ,1 ,true ,write_battery_conf}}, // Battery Conf Control            {GRID_FREQUENCY, SofarSolar_Register{0x0486, 1, 0, 2, 0.01, false}}, // Grid Frequency
+            {DESIRED_GRID_POWER ,SofarSolar_Register{0x1187 ,2 ,3 ,3 ,1 ,true, DESIRED_GRID_POWER_WRITE}}, // Desired Grid Power
+            {MINIMUM_BATTERY_POWER ,SofarSolar_Register{0x1189 ,2 ,3 ,3 ,1 ,true, DESIRED_GRID_POWER_WRITE}}, // Minimum Battery Power
+            {MAXIMUM_BATTERY_POWER ,SofarSolar_Register{0x118B ,2 ,3 ,3 ,1 ,true, DESIRED_GRID_POWER_WRITE}}, // Maximum Battery Power
+            {ENERGY_STORAGE_MODE, SofarSolar_Register{0x1110, 1, 0, 0, 1, true, SINGLE_REGISTER_WRITE}}, // Energy Storage Mode
+            {BATTERY_CONF_ID, SofarSolar_Register{0x1044, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf ID
+            {BATTERY_CONF_ADDRESS, SofarSolar_Register{0x1045, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf Address
+            {BATTERY_CONF_PROTOCOL, SofarSolar_Register{0x1046, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf Protocol
+            {BATTERY_CONF_VOLTAGE_NOMINAL, SofarSolar_Register{0x1050, 1, 0, 0, 0.1, true, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Nominal
+            {BATTERY_CONF_VOLTAGE_OVER, SofarSolar_Register{0x1047, 1, 0, 0, 0.1, true, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Over
+            {BATTERY_CONF_VOLTAGE_CHARGE, SofarSolar_Register{0x1048, 1, 0, 0, 0.1, true, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Charge
+            {BATTERY_CONF_VOLTAGE_LACK,SofarSolar_Register{0x1049 ,1 ,0 ,0 ,0.1 ,true ,BATTERY_CONF_WRITE}}, // Battery Conf Voltage Lack
+            {BATTERY_CONF_VOLTAGE_DISCHARGE_STOP, SofarSolar_Register{0x104A, 1, 0, 0, 0.1, true, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Discharge Stop
+            {BATTERY_CONF_CURRENT_CHARGE_LIMIT, SofarSolar_Register{0x104B, 1, 0, 0, 0.01, true, BATTERY_CONF_WRITE}}, // Battery Conf Current Charge Limit
+            {BATTERY_CONF_CURRENT_DISCHARGE_LIMIT, SofarSolar_Register{0x104C, 1, 0, 0, 0.01, true, BATTERY_CONF_WRITE}}, // Battery Conf Current Discharge Limit
+            {BATTERY_CONF_DEPTH_OF_DISCHARGE, SofarSolar_Register{0x104D, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf Depth of Discharge
+            {BATTERY_CONF_END_OF_DISCHARGE, SofarSolar_Register{0x104E ,1 ,0 ,0 ,1 ,true ,BATTERY_CONF_WRITE}}, // Battery Conf End of Discharge
+            {BATTERY_CONF_CAPACITY, SofarSolar_Register{0x104F ,1 ,0 ,0 ,10 ,true ,BATTERY_CONF_WRITE}}, // Battery Conf Capacity
+            {BATTERY_CONF_CELL_TYPE, SofarSolar_Register{0x1051 ,1 ,0 ,0 ,1 ,true ,BATTERY_CONF_WRITE}}, // Battery Conf Cell Type
+            {BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052 ,1 ,0 ,0 ,10 ,true ,BATTERY_CONF_WRITE}}, // Battery Conf EPS Buffer
+            {BATTERY_CONF_CONTROL, SofarSolar_Register{0x1053 ,1 ,0 ,0 ,1 ,true ,BATTERY_CONF_WRITE}}, // Battery Conf Control            {GRID_FREQUENCY, SofarSolar_Register{0x0486, 1, 0, 2, 0.01, false}}, // Grid Frequency
             {GRID_VOLTAGE_PHASE_R, SofarSolar_Register{0x0580, 1, 0, 2, 0.1, false}}, // Grid Voltage Phase R
             {GRID_CURRENT_PHASE_R, SofarSolar_Register{0x0581, 1, 0, 2, 0.01, false}}, // Grid Current Phase R
             {GRID_POWER_PHASE_R, SofarSolar_Register{0x0582, 1, 0, 2, 10, false}}, // Grid Power Phase R
@@ -178,7 +178,26 @@ namespace esphome {
                             if (value.uint64_value != registers_G3[register_tasks.top().register_index].default_value.uint64_value) { // Use default value if set
                                 current_write = registers_G3[register_tasks.top().register_index]; // Set the flag to indicate that a write operation is in progress
                                 time_begin_modbus_operation = millis();
-                                registers_G3[register_tasks.top().register_index].write_funktion(registers_G3[register_tasks.top().register_index].start_address, registers_G3[register_tasks.top().register_index].quantity, registers_G3[register_tasks.top().register_index].default_value); // Call the write function if the value is not equal to the default value
+                                switch (registers_G3[register_tasks.top().register_index].write_funktion) {
+                                    case DESIRED_GRID_POWER_WRITE:
+                                        ESP_LOGD(TAG, "Writing desired grid power: %d W", value.int32_value);
+                                        registers_G3[register_tasks.top().register_index].write_value.int32_value = value.int32_value;
+                                        write_desired_grid_power(register_tasks.top());
+                                        break;
+                                    case BATTERY_CONF_WRITE:
+                                        ESP_LOGD(TAG, "Writing battery configuration");
+                                        registers_G3[register_tasks.top().register_index].write_value.uint16_value = value.uint16_value;
+                                        write_battery_conf(register_tasks.top());
+                                        break;
+                                    case SINGLE_REGISTER_WRITE:
+                                        ESP_LOGD(TAG, "Writing single register: %04X", registers_G3[register_tasks.top().register_index].start_address);
+                                        registers_G3[register_tasks.top().register_index].write_value.uint64_value = value.uint64_value;
+                                        write_single_register(register_tasks.top());
+                                        break;
+                                    default:
+                                        ESP_LOGE(TAG, "Unknown write function: %d", registers_G3[register_tasks.top().register_index].write_funktion);
+                                        break;
+                                }
                             }
                         }
                         update_sensor(register_tasks.top().register_index, value);
