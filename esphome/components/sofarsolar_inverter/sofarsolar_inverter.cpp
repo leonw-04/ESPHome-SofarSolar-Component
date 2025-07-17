@@ -245,6 +245,7 @@ namespace esphome {
 
         bool SofarSolar_Inverter::check_for_response() {
             // Check if there is a response available in the UART buffer
+            this->peek(); // Peek to check if there is data available
             if (this->available() < 5) {
                 return false; // Not enough bytes for a valid response
             }
