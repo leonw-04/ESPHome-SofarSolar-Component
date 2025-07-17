@@ -233,7 +233,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received for zero export write");
                 } else {
                     current_writing = false;
-                    if (write_response(current_write_task.register_ptr)) {
+                    if (write_response(current_write_task)) {
                         ESP_LOGD(TAG, "Write successful");
                     } else {
                         ESP_LOGE(TAG, "Invalid response for write");
@@ -290,11 +290,11 @@ namespace esphome {
                     return false; // Invalid response
         }
 
-        bool SofarSolar_Inverter::write_response(SofarSolar_Register &register_info) {
+        bool SofarSolar_Inverter::write_response(register_write_task &task) {
             // Read the response from the UART buffer
             std::vector<uint8_t> response;
             response.clear();
-            while (this->available() > 0 && response.size()) {
+            while (this->available() > 0 && task.register_ptr->size()) {
                 uint8_t byte = this->read();
                 response.push_back(byte);
             }
@@ -309,8 +309,8 @@ namespace esphome {
                 response.clear(); // Clear the response on invalid function code
                 return false; // Invalid function code
             }
-            if (registers_G3[register_info.register_index].start_address != response.data()[2] << 8 | response.data()[3] && registers_G3[register_info.register_index].quantity != response.data()[4]) {
-                ESP_LOGE(TAG, "Invalid response size: expected %04X, got %02X%02X", registers_G3[register_info.register_index].start_address, response.data()[2], response.data()[3]);
+            if (task.register_ptr->start_address != response.data()[2] << 8 | response.data()[3] && task.register_ptr->quantity != response.data()[4]) {
+                ESP_LOGE(TAG, "Invalid response size: expected %04X, got %02X%02X", task.register_ptr->start_address, response.data()[2], response.data()[3]);
                 return false; // Invalid response size
             }
             return true; // Valid write response
