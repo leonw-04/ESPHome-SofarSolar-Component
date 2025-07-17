@@ -170,52 +170,52 @@ namespace esphome {
                 }
                 std::vector<uint8_t> response;
                 if (check_for_response()) {
+                    register_read_task task = register_tasks.pop()
                     current_reading = false;
-                    if (read_response(response, *register_tasks.top().register_ptr)) {
-                        if (extract_data_from_response(response, register_tasks.top())) {
-                            ESP_LOGD(TAG, "Read successful for register %04X: Value: %s", register_tasks.top().register_ptr->start_address, vector_to_string(response).c_str());
-                            update_sensor(register_tasks.top());
+                    if (read_response(response, *task.register_ptr)) {
+                        if (extract_data_from_response(response, task)) {
+                            ESP_LOGD(TAG, "Read successful for register %04X: Value: %s", task.register_ptr->start_address, vector_to_string(response).c_str());
+                            update_sensor(task);
                         } else {
-                            ESP_LOGE(TAG, "Failed to extract data from response for register %04X", register_tasks.top().register_ptr->start_address);
+                            ESP_LOGE(TAG, "Failed to extract data from response for register %04X", task.register_ptr->start_address);
                         }
-                        if (register_tasks.top().register_ptr->is_default_value_set) {
-                            if (register_tasks.top().read_value.uint64_value != register_tasks.top().register_ptr->default_value.uint64_value) { // Use default value if set
+                        if (task.register_ptr->is_default_value_set) {
+                            if (task.read_value.uint64_value != task.register_ptr->default_value.uint64_value) { // Use default value if set
                                 time_begin_modbus_operation = millis();
-                                switch (register_tasks.top().register_ptr->write_funktion) {
+                                switch (task.register_ptr->write_funktion) {
                                     case DESIRED_GRID_POWER_WRITE:
                                         ESP_LOGD(TAG, "Writing desired grid power: %d W", value.int32_value);
-                                        register_tasks.top().register_ptr->write_value.int32_value = value.int32_value;
+                                        task.register_ptr->write_value.int32_value = value.int32_value;
                                         register_write_task write_task;
-                                        write_task.register_ptr = register_tasks.top().register_ptr;
+                                        write_task.register_ptr = task.register_ptr;
                                         this->write_desired_grid_power(write_task);
                                         current_writing = true; // Set the flag to indicate that a write is in progress
                                         current_write_task = write_task; // Set the current write task
                                         break;
                                     case BATTERY_CONF_WRITE:
                                         ESP_LOGD(TAG, "Writing battery configuration");
-                                        register_tasks.top().register_ptr->write_value.uint16_value = value.uint16_value;
-                                        write_task.register_ptr = register_tasks.top().register_ptr;
+                                        task.register_ptr->write_value.uint16_value = value.uint16_value;
+                                        write_task.register_ptr = task.register_ptr;
                                         this->write_battery_conf(write_task);
                                         current_writing = true; // Set the flag to indicate that a write is in progress
                                         current_write_task = write_task; // Set the current write task
                                         break;
                                     case SINGLE_REGISTER_WRITE:
-                                        ESP_LOGD(TAG, "Writing single register: %04X", register_tasks.top().register_ptr->start_address);
-                                        register_tasks.top().register_ptr->write_value.uint64_value = value.uint64_value;
-                                        write_task.register_ptr = register_tasks.top().register_ptr;
+                                        ESP_LOGD(TAG, "Writing single register: %04X", task.register_ptr->start_address);
+                                        task.register_ptr->write_value.uint64_value = value.uint64_value;
+                                        write_task.register_ptr = task.register_ptr;
                                         this->write_single_register(write_task);
                                         current_writing = true; // Set the flag to indicate that a write is in progress
                                         current_write_task = write_task; // Set the current write task
                                         break;
                                     default:
-                                        ESP_LOGE(TAG, "Unknown write function: %d", register_tasks.top().register_ptr->write_funktion);
+                                        ESP_LOGE(TAG, "Unknown write function: %d", task.register_ptr->write_funktion);
                                         break;
                                 }
                             }
                         }
                     } else {
-                        register_tasks.top().register_ptr->is_queued = false; // Mark the register as not queued anymore
-                        register_tasks.pop(); // Remove the task from the queue
+                        task.register_ptr->is_queued = false; // Mark the register as not queued anymore
                         ESP_LOGE(TAG, "Invalid response");
                     }
                 } else {
@@ -281,11 +281,14 @@ namespace esphome {
             switch (response.data()[2]) {
                 case 2:
                     task.read_value.uint16_t = ((response.data()[3] << 8) | response.data()[4]); // 2 bytes for start address
+                    break;
                 case 4:
                     task.read_value.uint32_t = ((response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]); // 4 bytes for start address
+                    break;
                 case 8:
                     task.read_value.uint64_t = ((response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
                            (response.data()[7] << 24) | (response.data()[8] << 16) | (response.data()[9] << 8) | response.data()[10]); // 8 bytes for start address
+                    break;
                 default:
                     ESP_LOGE(TAG, "Invalid response size for extracting value");
                     return false; // Invalid response size
