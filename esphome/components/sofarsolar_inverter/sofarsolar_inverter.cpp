@@ -284,7 +284,7 @@ namespace esphome {
                 case 4:
                     return (response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]; // 4 bytes for start address
                 case 8:
-                    return (uint64_t) (response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
+                    return (response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
                            (response.data()[7] << 24) | (response.data()[8] << 16) | (response.data()[9] << 8) | response.data()[10]; // 8 bytes for start address
                 default:
                     ESP_LOGE(TAG, "Invalid response size for extracting value");
@@ -838,6 +838,10 @@ namespace esphome {
         void SofarSolar_Inverter::set_desired_grid_power_sensor(sensor::Sensor *desired_grid_power_sensor) { registers_G3[DESIRED_GRID_POWER].sensor = desired_grid_power_sensor; desired_grid_power_sensor_ = desired_grid_power_sensor; }
         void SofarSolar_Inverter::set_minimum_battery_power_sensor(sensor::Sensor *minimum_battery_power_sensor) { registers_G3[MINIMUM_BATTERY_POWER].sensor = minimum_battery_power_sensor; minimum_battery_power_sensor_ = minimum_battery_power_sensor; }
         void SofarSolar_Inverter::set_maximum_battery_power_sensor(sensor::Sensor *maximum_battery_power_sensor) { registers_G3[MAXIMUM_BATTERY_POWER].sensor = maximum_battery_power_sensor; maximum_battery_power_sensor_ = maximum_battery_power_sensor; }
+        void SofarSolar_Inverter::set_energy_storage_mode_sensor(sensor::Sensor *energy_storage_mode_sensor) { registers_G3[ENERGY_STORAGE_MODE].sensor = energy_storage_mode_sensor; energy_storage_mode_sensor_ = energy_storage_mode_sensor; }
+        void SofarSolar_Inverter::set_battery_conf_id_sensor(sensor::Sensor *battery_conf_id_sensor) { registers_G3[BATTERY_CONF_ID].sensor = battery_conf_id_sensor; battery_conf_id_sensor_ = battery_conf_id_sensor; }
+        void SofarSolar_Inverter::set_battery_conf_address_sensor(sensor::Sensor *battery_conf_address_sensor) { registers_G3[BATTERY_CONF_ADDRESS].sensor = battery_conf_address_sensor; battery_conf_address_sensor_ = battery_conf_address_sensor; }
+        void SofarSolar_Inverter::set_battery_conf_protocol_sensor(sensor::Sensor *battery_conf_protocol_sensor) { registers_G3[BATTERY_CONF_PROTOCOL].sensor = battery_conf_protocol_sensor; battery_conf_protocol_sensor_ = battery_conf_protocol_sensor; }
         void SofarSolar_Inverter::set_battery_conf_voltage_over_sensor(sensor::Sensor *battery_conf_voltage_over_sensor) { registers_G3[BATTERY_CONF_VOLTAGE_OVER].sensor = battery_conf_voltage_over_sensor; battery_conf_voltage_over_sensor_ = battery_conf_voltage_over_sensor; }
         void SofarSolar_Inverter::set_battery_conf_voltage_charge_sensor(sensor::Sensor *battery_conf_voltage_charge_sensor) { registers_G3[BATTERY_CONF_VOLTAGE_CHARGE].sensor = battery_conf_voltage_charge_sensor; battery_conf_voltage_charge_sensor_ = battery_conf_voltage_charge_sensor; }
         void SofarSolar_Inverter::set_battery_conf_voltage_lack_sensor(sensor::Sensor *battery_conf_voltage_lack_sensor) { registers_G3[BATTERY_CONF_VOLTAGE_LACK].sensor = battery_conf_voltage_lack_sensor; battery_conf_voltage_lack_sensor_ = battery_conf_voltage_lack_sensor; }
