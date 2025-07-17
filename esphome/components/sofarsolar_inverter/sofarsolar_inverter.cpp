@@ -107,7 +107,7 @@ namespace esphome {
         int time_last_loop = 0;
         bool current_reading = false; // Pointer to the current reading task
         bool current_writing = false; // Pointer to the current writing task
-        register_write_task &current_write_task = *new register_write_task(); // Pointer to the current writing task
+        register_write_task *current_write_task = nullptr; // Pointer to the current writing task
         bool current_zero_export_write = false; // Pointer to the current reading task
         uint64_t time_begin_modbus_operation = 0;
         uint64_t zero_export_last_update = 0;
@@ -130,12 +130,10 @@ namespace esphome {
                 register_write_task data;
                 data.register_ptr = &registers_G3[DESIRED_GRID_POWER];
                 current_writing = true; // Set the flag to indicate that a zero export write is in progress
-                current_write_task = data; // Set the flag to indicate that a zero export write is in progress
+                current_write_task = &data; // Set the flag to indicate that a zero export write is in progress
                 time_begin_modbus_operation = millis();
                 this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
                 this->write_desired_grid_power(data); // Write the new desired grid power, minimum battery power, and maximum battery power
-                ESP_LOGW(TAG, "Number of registers written: %d", data.number_of_registers);
-                ESP_LOGW(TAG, "Number of registers written: %d", current_write_task.number_of_registers);
             }
             ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
             for (int i = 0; i < sizeof(registers_G3) / sizeof(registers_G3[0]); i++) {
@@ -222,7 +220,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "No response received");
                 }
             } else if (current_writing) {
-                if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
+                if (millis() - time_begin_modbus_operation > 500 || current_write_task == nullptr) { // Timeout after 500 ms
                     ESP_LOGE(TAG, "Timeout while waiting for write response");
                     current_writing = false;
                     return;
@@ -232,7 +230,7 @@ namespace esphome {
                     ESP_LOGV(TAG, "No response received write");
                 } else {
                     current_writing = false;
-                    if (write_response(current_write_task)) {
+                    if (write_response(&current_write_task)) {
                         ESP_LOGD(TAG, "Write successful");
                     } else {
                         ESP_LOGE(TAG, "Invalid response for write");
