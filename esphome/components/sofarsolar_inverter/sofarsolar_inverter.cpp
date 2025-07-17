@@ -381,9 +381,9 @@ namespace esphome {
             } else {
                 new_maximum_battery_power = registers_G3[MAXIMUM_BATTERY_POWER].sensor->state;
             }
-            ESP_LOGD(TAG, "Writing desired grid power: %d W", registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
-            ESP_LOGD(TAG, "Writing minimum battery power: %d W", registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value);
-            ESP_LOGD(TAG, "Writing maximum battery power: %d W", registers_G3[MAXIMUM_BATTERY_POWER].write_value.int32_value);
+            ESP_LOGD(TAG, "Writing desired grid power: %d W", new_desired_grid_power);
+            ESP_LOGD(TAG, "Writing minimum battery power: %d W", new_minimum_battery_power);
+            ESP_LOGD(TAG, "Writing maximum battery power: %d W", new_maximum_battery_power);
             std::vector<uint8_t> data;
             data.push_back(static_cast<uint8_t>(new_desired_grid_power >> 24));
             data.push_back(static_cast<uint8_t>(new_desired_grid_power >> 16));
