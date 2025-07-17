@@ -121,7 +121,7 @@ namespace esphome {
             bool check_for_response();
             bool read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info);
             uint64_t extract_data_from_response(std::vector<uint8_t> &response);
-            bool write_response(SofarSolar_Register &register_info);
+            bool write_response(register_write_length &task);
             bool check_for_error_code(std::vector<uint8_t> &response);
 
 			void write_desired_grid_power(register_write_task &task);

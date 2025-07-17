@@ -394,6 +394,7 @@ namespace esphome {
 
         void SofarSolar_Inverter::write_battery_conf(register_write_task &task) {
             // Write the battery configuration
+            std::vector<uint8_t> data;
             ESP_LOGD(TAG, "Writing battery configuration");
             uint16_t new_battery_conf_id;
             if (registers_G3[BATTERY_CONF_ID].enforce_default_value && registers_G3[BATTERY_CONF_ID].is_default_value_set) {
