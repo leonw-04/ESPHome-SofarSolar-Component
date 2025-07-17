@@ -393,7 +393,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 16));
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 8));
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power & 0xFF));
-            task.number_of_registers = 0x03; // Number of registers to write
+            task.number_of_registers = data.size() >> 1; // Number of registers to write
             send_write_modbus_registers(registers_G3[DESIRED_GRID_POWER].start_address, task.number_of_registers, data);
         }
 
@@ -553,7 +553,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
             data.push_back(static_cast<uint8_t>(0x01 >> 8));
             data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
-            task.number_of_registers = 0x16; // Number of registers to write
+            task.number_of_registers = data.size() >> 1; // Number of registers to write
             send_write_modbus_registers(registers_G3[BATTERY_CONF_ID].start_address, task.number_of_registers, data);
         }
 
@@ -633,7 +633,7 @@ namespace esphome {
                     ESP_LOGE(TAG, "Unknown register type for writing: %d", task.register_ptr->type);
                     return; // Exit if the register type is unknown
             }
-            task.number_of_registers = 0x1; // Number of registers to write
+            task.number_of_registers = data.size() >> 1; // Number of registers to write
             send_write_modbus_registers(task.register_ptr->start_address, task.number_of_registers, data);
         }
 
