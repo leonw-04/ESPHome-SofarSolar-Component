@@ -177,6 +177,7 @@ namespace esphome {
                     register_read_task task = register_tasks.top(); // Get the current task
                     register_tasks.pop();
                     current_reading = false;
+					task.register_ptr->is_queued = false; // Mark the register as not queued anymore
                     if (read_response(response, *task.register_ptr)) {
                         if (extract_data_from_response(response, task)) {
                             ESP_LOGD(TAG, "Read successful for register %04X: Value: %s", task.register_ptr->start_address, vector_to_string(response).c_str());
@@ -223,7 +224,6 @@ namespace esphome {
                             }
                         }
                     } else {
-                        task.register_ptr->is_queued = false; // Mark the register as not queued anymore
                         ESP_LOGE(TAG, "Invalid response");
                     }
                 } else {
