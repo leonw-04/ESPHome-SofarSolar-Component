@@ -1012,7 +1012,7 @@ namespace esphome {
         void SofarSolar_Inverter::set_off_grid_voltage_phase_t_sensor_update_interval(uint16_t off_grid_voltage_phase_t_sensor_update_interval) { off_grid_voltage_phase_t_sensor_update_interval_ = off_grid_voltage_phase_t_sensor_update_interval; }
         void SofarSolar_Inverter::set_off_grid_current_phase_t_sensor_update_interval(uint16_t off_grid_current_phase_t_sensor_update_interval) { off_grid_current_phase_t_sensor_update_interval_ = off_grid_current_phase_t_sensor_update_interval; }
         void SofarSolar_Inverter::set_off_grid_power_phase_t_sensor_update_interval(uint16_t off_grid_power_phase_t_sensor_update_interval) { off_grid_power_phase_t_sensor_update_interval_ = off_grid_power_phase_t_sensor_update_interval; }
-		void SofarSolar_Inverter::set_battery_active_sensor_control_update_interval(uint16_t battery_active_control_sensor_update_interval) { battery_active_control_sensor_update_interval_ = battery_active_control_sensor_update_interval; }
+		void SofarSolar_Inverter::set_battery_active_control_sensor_update_interval(uint16_t battery_active_control_sensor_update_interval) { battery_active_control_sensor_update_interval_ = battery_active_control_sensor_update_interval; }
 		void SofarSolar_Inverter::set_battery_active_oneshot_sensor_update_interval(uint16_t battery_active_oneshot_sensor_update_interval) { battery_active_oneshot_sensor_update_interval_ = battery_active_oneshot_sensor_update_interval; }
 
 
