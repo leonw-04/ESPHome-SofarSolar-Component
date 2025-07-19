@@ -120,6 +120,8 @@ namespace esphome {
             registers_G3[BATTERY_ACTIVE_CONTROL].write_set_value = true;
             registers_G3[BATTERY_ACTIVE_ONESHOT].write_value.uint16_value = 1;
             registers_G3[BATTERY_ACTIVE_ONESHOT].write_set_value = true;
+			register_write_task data;
+            data.register_ptr = &registers_G3[BATTERY_ACTIVE_CONTROL];
             this->write_battery_active(data); // Write the new desired grid power, minimum battery power, and maximum battery power
             current_writing = true; // Set the flag to indicate that a zero export write is in progress
             current_write_task = data; // Set the flag to indicate that a zero export write is in progress
