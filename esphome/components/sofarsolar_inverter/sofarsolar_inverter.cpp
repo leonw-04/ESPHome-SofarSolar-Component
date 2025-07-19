@@ -25,8 +25,7 @@ namespace esphome {
 			bool writeable;
 			uint8_t write_funktion = 0; // Function pointer for writing to the register
             SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0.0f), writeable(false), write_funktion(0) {}
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, sensor::Sensor *sensor, uint16_t update_interval, SofarSolar_RegisterValue default_value, bool is_default_value_set, bool enforce_default_value, bool writeable, uint8_t write_funktion) :
-				start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), sensor(sensor), update_interval(update_interval), default_value(default_value), is_default_value_set(is_default_value_set), enforce_default_value(enforce_default_value), writeable(writeable), write_funktion(write_funktion) {}
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, sensor::Sensor *sensor, uint16_t update_interval, SofarSolar_RegisterValue default_value, bool is_default_value_set, bool enforce_default_value, bool writeable, uint8_t write_funktion) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), sensor(sensor), update_interval(update_interval), default_value(default_value), is_default_value_set(is_default_value_set), enforce_default_value(enforce_default_value), writeable(writeable), write_funktion(write_funktion) {}
         };
 
 		struct register_read_task {
@@ -117,17 +116,17 @@ namespace esphome {
 				{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, 0, 0, 1, battery_active_oneshot_sensor_, battery_active_oneshot_sensor_update_interval_, {}, false, false, false, BATTERY_ACTIVE_WRITE}} // Battery Active Oneshot
         	};
 
-			//ESP_LOGCONFIG(TAG, "Setting up Sofar Solar Inverter");
-            //registers_G3[BATTERY_ACTIVE_CONTROL].write_value.uint16_value = 0;
-            //registers_G3[BATTERY_ACTIVE_CONTROL].write_set_value = true;
-            //registers_G3[BATTERY_ACTIVE_ONESHOT].write_value.uint16_value = 1;
-            //registers_G3[BATTERY_ACTIVE_ONESHOT].write_set_value = true;
-            //time_begin_modbus_operation = millis();
-			//register_write_task data;
-            //data.register_ptr = &registers_G3[BATTERY_ACTIVE_CONTROL];
-            //this->write_battery_active(data); // Write the battery active control register
-            //current_writing = true; // Set the flag to indicate that a write is in progress
-            //current_write_task = data; // Set the flag to indicate that a write is in progress
+			ESP_LOGCONFIG(TAG, "Setting up Sofar Solar Inverter");
+            registers_G3[BATTERY_ACTIVE_CONTROL].write_value.uint16_value = 0;
+            registers_G3[BATTERY_ACTIVE_CONTROL].write_set_value = true;
+            registers_G3[BATTERY_ACTIVE_ONESHOT].write_value.uint16_value = 1;
+            registers_G3[BATTERY_ACTIVE_ONESHOT].write_set_value = true;
+            time_begin_modbus_operation = millis();
+			register_write_task data;
+            data.register_ptr = &registers_G3[BATTERY_ACTIVE_CONTROL];
+            this->write_battery_active(data); // Write the battery active control register
+            current_writing = true; // Set the flag to indicate that a write is in progress
+            current_write_task = data; // Set the flag to indicate that a write is in progress
         }
 
         void SofarSolar_Inverter::loop() {
