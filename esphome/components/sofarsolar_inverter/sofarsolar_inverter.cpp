@@ -81,7 +81,7 @@ namespace esphome {
             {BATTERY_CONF_CELL_TYPE, SofarSolar_Register{0x1051 ,1 ,0 ,0 ,1 ,true, BATTERY_CONF_WRITE}}, // Battery Conf Cell Type
             {BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052 ,1 ,0 ,0 ,10 ,true, BATTERY_CONF_WRITE}}, // Battery Conf EPS Buffer
             {BATTERY_CONF_CONTROL, SofarSolar_Register{0x1053 ,1 ,0 ,0 ,1 ,true, BATTERY_CONF_WRITE}}, // Battery Conf Control
-            //{GRID_FREQUENCY, SofarSolar_Register{0x0484, 1, 0, 2, 0.01, false, 0}}, // Grid Frequency
+            {GRID_FREQUENCY, SofarSolar_Register{0x0484, 1, 0, 2, 0.01, false, 0}}, // Grid Frequency
             {GRID_VOLTAGE_PHASE_R, SofarSolar_Register{0x0580, 1, 0, 2, 0.1, false, 0}}, // Grid Voltage Phase R
             {GRID_CURRENT_PHASE_R, SofarSolar_Register{0x0581, 1, 0, 2, 0.01, false ,0}}, // Grid Current Phase R
             {GRID_POWER_PHASE_R, SofarSolar_Register{0x0582, 1, 0, 2, 10, false, 0}}, // Grid Power Phase R
@@ -99,7 +99,7 @@ namespace esphome {
             {OFF_GRID_VOLTAGE_PHASE_S, SofarSolar_Register{0x05AC ,1 ,0 ,2 ,0.1 ,false, 0}}, // Off Grid Voltage Phase S
             {OFF_GRID_CURRENT_PHASE_S, SofarSolar_Register{0x05AD ,1 ,0 ,2 ,0.01 ,false, 0}}, // Off Grid Current Phase S
             {OFF_GRID_POWER_PHASE_S, SofarSolar_Register{0x05AE ,1 ,0 ,2 ,10 ,false, 0}}, // Off Grid Power Phase S
-            {OFF_GRID_VOLTAGE_PHASE_T, SofarSolar_Register{0x05B8 ,1 ,0 ,2 ,0.1 ,false, 0}}, // Off Grid Voltage Phase T
+            //{OFF_GRID_VOLTAGE_PHASE_T, SofarSolar_Register{0x05B8 ,1 ,0 ,2 ,0.1 ,false, 0}}, // Off Grid Voltage Phase T
             //{OFF_GRID_CURRENT_PHASE_T, SofarSolar_Register{0x05B9, 1, 0, 2, 0.01, false, 0}}, // Off Grid Current Phase T
             //{OFF_GRID_POWER_PHASE_T, SofarSolar_Register{0x05BA, 1, 0, 2, 10, false, 0}}, // Off Grid Power Phase T
 			{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, 0, 0, 1, true, BATTERY_ACTIVE_WRITE}}, // Battery Activ Control
