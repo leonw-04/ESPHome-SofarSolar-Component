@@ -93,6 +93,8 @@ CONF_OFF_GRID_POWER_PHASE_S = "off_grid_power_phase_s"
 CONF_OFF_GRID_VOLTAGE_PHASE_T = "off_grid_voltage_phase_t"
 CONF_OFF_GRID_CURRENT_PHASE_T = "off_grid_current_phase_t"
 CONF_OFF_GRID_POWER_PHASE_T = "off_grid_power_phase_t"
+CONF_BATTERY_ACTIVE_CONTROL = "battery_active_control"
+CONF_BATTERY_ACTIVE_ONESHOT = "battery_active_oneshot"
 UPDATE_INTERVAL = "update_interval"
 DEFAULT_VALUE = "default_value"
 ENFORCE_DEFAULT_VALUE = "enforce_default_value"
@@ -729,6 +731,26 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_ACTIVE_CONTROL: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_EMPTY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_ACTIVE_ONESHOT: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_EMPTY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
         }
     ),
 }
