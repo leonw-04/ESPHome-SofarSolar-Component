@@ -66,9 +66,9 @@ namespace esphome {
         	    {PV_VOLTAGE_1 ,SofarSolar_Register{0x0584 ,1 ,0 ,2 ,0.1 ,pv_voltage_1_sensor_ ,pv_voltage_1_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Voltage 1
     	        {PV_CURRENT_1 ,SofarSolar_Register{0x0585 ,1 ,0 ,2 ,0.01,pv_current_1_sensor_ ,pv_current_1_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Current 1
 	            {PV_POWER_1 ,SofarSolar_Register{0x0586 ,1 ,0 ,2 ,10 ,pv_power_1_sensor_ ,pv_power_1_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Power 1
-            	{PV_VOLTAGE_2 ,SofarSolar_Register{0x0588 ,1 ,0 ,2 ,0.1 ,pv_voltage_2_sensor_ ,pv_voltage_2_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Voltage 2
-        	    {PV_CURRENT_2 ,SofarSolar_Register{0x0589 ,1 ,0 ,2 ,0.01,pv_current_2_sensor_ ,pv_current_2_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Current 2
-    	        {PV_POWER_2, SofarSolar_Register{0x058A, 1, 0, 2, 10, pv_power_2_sensor_, pv_power_2_sensor_update_interval_, {}, false, false, false, 0}}, // PV Power 2
+            	{PV_VOLTAGE_2 ,SofarSolar_Register{0x0587 ,1 ,0 ,2 ,0.1 ,pv_voltage_2_sensor_ ,pv_voltage_2_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Voltage 2
+        	    {PV_CURRENT_2 ,SofarSolar_Register{0x0588 ,1 ,0 ,2 ,0.01,pv_current_2_sensor_ ,pv_current_2_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Current 2
+    	        {PV_POWER_2, SofarSolar_Register{0x0589, 1, 0, 2, 10, pv_power_2_sensor_, pv_power_2_sensor_update_interval_, {}, false, false, false, 0}}, // PV Power 2
 	            {PV_POWER_TOTAL, SofarSolar_Register{0x05C4, 1, 0, 3, 100, pv_power_total_sensor_, pv_power_total_sensor_update_interval_, {}, false, false, false, 0}}, // PV Power Total
             	{BATTERY_POWER_TOTAL, SofarSolar_Register{0x0667, 1, 1, 3, 100, battery_power_total_sensor_, battery_power_total_sensor_update_interval_, {}, false, false, false, 0}}, // Battery Power Total
         	    {BATTERY_STATE_OF_CHARGE_TOTAL, SofarSolar_Register{0x0668, 1, 0, 1, 1, battery_state_of_charge_total_sensor_, battery_state_of_charge_total_sensor_update_interval_, {}, false, false, false, 0}}, // Battery State of Charge Total
