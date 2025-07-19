@@ -25,7 +25,8 @@ namespace esphome {
 			bool writeable;
 			uint8_t write_funktion = 0; // Function pointer for writing to the register
             SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0.0f), writeable(false), write_funktion(0) {}
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, sensor::Sensor *sensor, uint16_t update_interval, SofarSolar_RegisterValue default_value, bool is_default_value_set, bool enforce_default_value, bool writeable, uint8_t write_funktion) : start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), sensor(sensor), update_interval(update_interval), default_value(default_value), is_default_value_set(is_default_value_set), enforce_default_value(enforce_default_value), writeable(writeable), write_funktion(write_funktion) {}
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, sensor::Sensor *sensor, uint16_t update_interval, SofarSolar_RegisterValue default_value, bool is_default_value_set, bool enforce_default_value, bool writeable, uint8_t write_funktion) :
+				start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), sensor(sensor), update_interval(update_interval), default_value(default_value), is_default_value_set(is_default_value_set), enforce_default_value(enforce_default_value), writeable(writeable), write_funktion(write_funktion) {}
         };
 
 		struct register_read_task {
@@ -948,7 +949,8 @@ namespace esphome {
         void SofarSolar_Inverter::set_off_grid_voltage_phase_t_sensor(sensor::Sensor *off_grid_voltage_phase_t_sensor) { off_grid_voltage_phase_t_sensor_ = off_grid_voltage_phase_t_sensor; }
         void SofarSolar_Inverter::set_off_grid_current_phase_t_sensor(sensor::Sensor *off_grid_current_phase_t_sensor) { off_grid_current_phase_t_sensor_ = off_grid_current_phase_t_sensor; }
         void SofarSolar_Inverter::set_off_grid_power_phase_t_sensor(sensor::Sensor *off_grid_power_phase_t_sensor) { off_grid_power_phase_t_sensor_ = off_grid_power_phase_t_sensor; }
-
+		void SofarSolar_Inverter::set_battery_active_sensor(sensor::Sensor *battery_active_sensor) { battery_active_sensor_ = battery_active_sensor; }
+		void SofarSolar_Inverter::set_battery_active_oneshot_sensor(sensor::Sensor *battery_active_oneshot_sensor) { battery_active_oneshot_sensor_ = battery_active_oneshot_sensor; }
         // Set update intervals for sensors
 
         void SofarSolar_Inverter::set_pv_generation_today_sensor_update_interval(uint16_t pv_generation_today_sensor_update_interval) { pv_generation_today_sensor_update_interval_ = pv_generation_today_sensor_update_interval; }
@@ -1010,6 +1012,9 @@ namespace esphome {
         void SofarSolar_Inverter::set_off_grid_voltage_phase_t_sensor_update_interval(uint16_t off_grid_voltage_phase_t_sensor_update_interval) { off_grid_voltage_phase_t_sensor_update_interval_ = off_grid_voltage_phase_t_sensor_update_interval; }
         void SofarSolar_Inverter::set_off_grid_current_phase_t_sensor_update_interval(uint16_t off_grid_current_phase_t_sensor_update_interval) { off_grid_current_phase_t_sensor_update_interval_ = off_grid_current_phase_t_sensor_update_interval; }
         void SofarSolar_Inverter::set_off_grid_power_phase_t_sensor_update_interval(uint16_t off_grid_power_phase_t_sensor_update_interval) { off_grid_power_phase_t_sensor_update_interval_ = off_grid_power_phase_t_sensor_update_interval; }
+		void SofarSolar_Inverter::set_battery_active_sensor_update_interval(uint16_t battery_active_sensor_update_interval) { battery_active_sensor_update_interval_ = battery_active_sensor_update_interval; }
+		void SofarSolar_Inverter::set_battery_active_oneshot_sensor_update_interval(uint16_t battery_active_oneshot_sensor_update_interval) { battery_active_oneshot_sensor_update_interval_ = battery_active_oneshot_sensor_update_interval; }
+
 
         void SofarSolar_Inverter::set_desired_grid_power_sensor_default_value(int64_t default_value) { desired_grid_power_sensor_default_value_.int64_value = default_value; desired_grid_power_sensor_default_value_set_ = true; }
 		void SofarSolar_Inverter::set_minimum_battery_power_sensor_default_value(int64_t default_value) { minimum_battery_power_sensor_default_value_.int64_value = default_value; minimum_battery_power_sensor_default_value_set_ = true; }

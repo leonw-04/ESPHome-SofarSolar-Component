@@ -199,6 +199,8 @@ namespace esphome {
 			void set_off_grid_voltage_phase_t_sensor(sensor::Sensor *off_grid_voltage_phase_t_sensor);
 			void set_off_grid_current_phase_t_sensor(sensor::Sensor *off_grid_current_phase_t_sensor);
 			void set_off_grid_power_phase_t_sensor(sensor::Sensor *off_grid_power_phase_t_sensor);
+			void set_battery_active_control_sensor(sensor::Sensor *battery_active_control_sensor);
+			void set_battery_active_oneshot_sensor(sensor::Sensor *battery_active_oneshot_sensor);
 
             // Set update intervals for sensors
             void set_pv_generation_today_sensor_update_interval(uint16_t pv_generation_today_sensor_update_interval);
@@ -260,6 +262,8 @@ namespace esphome {
 			void set_off_grid_voltage_phase_t_sensor_update_interval(uint16_t off_grid_voltage_phase_t_sensor_update_interval);
 			void set_off_grid_current_phase_t_sensor_update_interval(uint16_t off_grid_current_phase_t_sensor_update_interval);
 			void set_off_grid_power_phase_t_sensor_update_interval(uint16_t off_grid_power_phase_t_sensor_update_interval);
+			void set_battery_active_control_sensor_update_interval(uint16_t battery_active_control_sensor_update_interval);
+			void set_battery_active_oneshot_sensor_update_interval(uint16_t battery_active_oneshot_sensor_update_interval);
 
 			void set_desired_grid_power_sensor_default_value(int64_t default_value);
 			void set_minimum_battery_power_sensor_default_value(int64_t default_value);
@@ -365,6 +369,8 @@ namespace esphome {
             sensor::Sensor *off_grid_voltage_phase_t_sensor_{nullptr};
             sensor::Sensor *off_grid_current_phase_t_sensor_{nullptr};
             sensor::Sensor *off_grid_power_phase_t_sensor_{nullptr};
+			sensor::Sensor *battery_active_control_sensor_{nullptr};
+			sensor::Sensor *battery_active_oneshot_sensor_{nullptr};
 
             uint16_t pv_generation_today_sensor_update_interval_;
             uint16_t pv_generation_total_sensor_update_interval_;
@@ -425,6 +431,8 @@ namespace esphome {
             uint16_t off_grid_voltage_phase_t_sensor_update_interval_;
             uint16_t off_grid_current_phase_t_sensor_update_interval_;
             uint16_t off_grid_power_phase_t_sensor_update_interval_;
+			uint16_t battery_active_control_sensor_update_interval_;
+			uint16_t battery_active_oneshot_sensor_update_interval_;
 
 			SofarSolar_RegisterValue desired_grid_power_sensor_default_value_ = {};
 			SofarSolar_RegisterValue minimum_battery_power_sensor_default_value_ = {};
