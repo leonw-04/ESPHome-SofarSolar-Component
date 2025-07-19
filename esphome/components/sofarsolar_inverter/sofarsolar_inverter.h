@@ -128,6 +128,7 @@ namespace esphome {
 
 			void write_desired_grid_power(register_write_task &task);
 			void write_battery_conf(register_write_task &task);
+			void write_battery_active(register_write_task &task);
 			void write_single_register(register_write_task &task);
 
             void set_model(std::string model) { this->model_ = model;}

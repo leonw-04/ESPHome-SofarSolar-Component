@@ -65,6 +65,8 @@ namespace esphome {
             {MINIMUM_BATTERY_POWER ,SofarSolar_Register{0x1189 ,2 ,3 ,3 ,1 ,true, DESIRED_GRID_POWER_WRITE}}, // Minimum Battery Power
             {MAXIMUM_BATTERY_POWER ,SofarSolar_Register{0x118B ,2 ,3 ,3 ,1 ,true, DESIRED_GRID_POWER_WRITE}}, // Maximum Battery Power
             {ENERGY_STORAGE_MODE, SofarSolar_Register{0x1110, 1, 0, 0, 1, true, SINGLE_REGISTER_WRITE}}, // Energy Storage Mode
+			{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, 0, 0, 1, true, BATTERY_ACTIVE_WRITE}}, // Battery Activ Control
+			{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, 0, 0, 1, true, BATTERY_ACTIVE_WRITE}}, // Battery Activ Control
             {BATTERY_CONF_ID, SofarSolar_Register{0x1044, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf ID
             {BATTERY_CONF_ADDRESS, SofarSolar_Register{0x1045, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf Address
             {BATTERY_CONF_PROTOCOL, SofarSolar_Register{0x1046, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf Protocol
@@ -114,8 +116,13 @@ namespace esphome {
         std::priority_queue<register_read_task> register_tasks;
 
         void SofarSolar_Inverter::setup() {
-            // Code here should perform all component initialization,
-            //  whether hardware, memory, or otherwise
+            registers_G3[BATTERY_ACTIVE_CONTROL].write_value.uint16_value = 0;
+            registers_G3[BATTERY_ACTIVE_CONTROL].write_set_value = true;
+            registers_G3[BATTERY_ACTIVE_ONESHOT].write_value.uint16_value = 1;
+            registers_G3[BATTERY_ACTIVE_ONESHOT].write_set_value = true;
+            this->write_battery_active(data); // Write the new desired grid power, minimum battery power, and maximum battery power
+            current_writing = true; // Set the flag to indicate that a zero export write is in progress
+            current_write_task = data; // Set the flag to indicate that a zero export write is in progress
         }
 
         void SofarSolar_Inverter::loop() {
@@ -566,6 +573,34 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
             task.number_of_registers = (data.size() >> 1); // Number of registers to write
             send_write_modbus_registers(registers_G3[BATTERY_CONF_ID].start_address, task.number_of_registers, data);
+        }
+
+		void SofarSolar_Inverter::write_battery_active(register_write_task &task) {
+            // Write the battery active state
+            ESP_LOGD(TAG, "Writing battery active state");
+            std::vector<uint8_t> data;
+            uint16_t new_battery_active_control;
+            if (registers_G3[BATTERY_ACTIVE_CONTROL].enforce_default_value && registers_G3[BATTERY_ACTIVE_CONTROL].is_default_value_set) {
+                new_battery_active_control = registers_G3[BATTERY_ACTIVE_CONTROL].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_ACTIVE_CONTROL].write_set_value) {
+                new_battery_active_control = registers_G3[BATTERY_ACTIVE_CONTROL].write_value.uint16_value;
+            } else {
+                new_battery_active_control = registers_G3[BATTERY_ACTIVE_CONTROL].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+            uint16_t new_battery_active_oneshot;
+            if (registers_G3[BATTERY_ACTIVE_ONESHOT].enforce_default_value && registers_G3[BATTERY_ACTIVE_ONESHOT].is_default_value_set) {
+                new_battery_active_oneshot = registers_G3[BATTERY_ACTIVE_ONESHOT].default_value.uint16_value;
+            } else if (registers_G3[BATTERY_ACTIVE_ONESHOT].write_set_value) {
+                new_battery_active_oneshot = registers_G3[BATTERY_ACTIVE_ONESHOT].write_value.uint16_value;
+            } else {
+                new_battery_active_oneshot = registers_G3[BATTERY_ACTIVE_ONESHOT].sensor->state;
+            }
+            data.push_back(static_cast<uint8_t>(new_battery_active_oneshot >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_active_oneshot & 0xFF));
+            task.number_of_registers = (data.size() >> 1); // Number of registers to write
+            send_write_modbus_registers(registers_G3[BATTERY_ACTIVE_CONTROL].start_address, task.number_of_registers, data);
         }
 
         void SofarSolar_Inverter::write_single_register(register_write_task &task) {
