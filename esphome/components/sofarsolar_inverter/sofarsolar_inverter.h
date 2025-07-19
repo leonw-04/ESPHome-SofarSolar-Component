@@ -425,6 +425,66 @@ namespace esphome {
             int off_grid_voltage_phase_t_sensor_update_interval_;
             int off_grid_current_phase_t_sensor_update_interval_;
             int off_grid_power_phase_t_sensor_update_interval_;
+
+			SofarSolar_RegisterValue desired_grid_power_sensor_default_value_ = {};
+			SofarSolar_RegisterValue minimum_battery_power_sensor_default_value_ = {};
+			SofarSolar_RegisterValue maximum_battery_power_sensor_default_value_ = {};
+			SofarSolar_RegisterValue energy_storage_mode_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_id_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_address_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_protocol_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_voltage_nominal_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_voltage_over_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_voltage_charge_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_voltage_lack_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_voltage_discharge_stop_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_current_charge_limit_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_current_discharge_limit_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_depth_of_discharge_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_end_of_discharge_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_capacity_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_cell_type_sensor_default_value_ = {};
+			SofarSolar_RegisterValue battery_conf_eps_buffer_sensor_default_value_ = {};
+
+			bool desired_grid_power_sensor_default_value_set_{false};
+			bool minimum_battery_power_sensor_default_value_set_{false};
+            bool maximum_battery_power_sensor_default_value_set_{false};
+            bool energy_storage_mode_sensor_default_value_set_{false};
+            bool battery_conf_id_sensor_default_value_set_{false};
+            bool battery_conf_address_sensor_default_value_set_{false};
+            bool battery_conf_protocol_sensor_default_value_set_{false};
+            bool battery_conf_voltage_nominal_sensor_default_value_set_{false};
+            bool battery_conf_voltage_over_sensor_default_value_set_{false};
+            bool battery_conf_voltage_charge_sensor_default_value_set_{false};
+            bool battery_conf_voltage_lack_sensor_default_value_set_{false};
+            bool battery_conf_voltage_discharge_stop_sensor_default_value_set_{false};
+            bool battery_conf_current_charge_limit_sensor_default_value_set_{false};
+            bool battery_conf_current_discharge_limit_sensor_default_value_set_{false};
+            bool battery_conf_depth_of_discharge_sensor_default_value_set_{false};
+            bool battery_conf_end_of_discharge_sensor_default_value_set_{false};
+            bool battery_conf_capacity_sensor_default_value_set_{false};
+            bool battery_conf_cell_type_sensor_default_value_set_{false};
+            bool battery_conf_eps_buffer_sensor_default_value_set_{false};
+
+            bool desired_grid_power_sensor_enforce_default_value_{false};
+            bool minimum_battery_power_sensor_enforce_default_value_{false};
+            bool maximum_battery_power_sensor_enforce_default_value_{false};
+            bool energy_storage_mode_sensor_enforce_default_value_{false};
+            bool battery_conf_id_sensor_enforce_default_value_{false};
+            bool battery_conf_address_sensor_enforce_default_value_{false};
+            bool battery_conf_protocol_sensor_enforce_default_value_{false};
+            bool battery_conf_voltage_nominal_sensor_enforce_default_value_{false};
+            bool battery_conf_voltage_over_sensor_enforce_default_value_{false};
+            bool battery_conf_voltage_charge_sensor_enforce_default_value_{false};
+            bool battery_conf_voltage_lack_sensor_enforce_default_value_{false};
+            bool battery_conf_voltage_discharge_stop_sensor_enforce_default_value_{false};
+            bool battery_conf_current_charge_limit_sensor_enforce_default_value_{false};
+            bool battery_conf_current_discharge_limit_sensor_enforce_default_value_{false};
+            bool battery_conf_depth_of_discharge_sensor_enforce_default_value_{false};
+            bool battery_conf_end_of_discharge_sensor_enforce_default_value_{false};
+            bool battery_conf_capacity_sensor_enforce_default_value_{false};
+            bool battery_conf_cell_type_sensor_enforce_default_value_{false};
+            bool battery_conf_eps_buffer_sensor_enforce_default_value_{false};
 		};
     }
 }
