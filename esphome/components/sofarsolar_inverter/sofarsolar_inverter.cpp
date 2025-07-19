@@ -110,11 +110,11 @@ namespace esphome {
 				{OFF_GRID_VOLTAGE_PHASE_S,SofarSolar_Register{0x05AC ,1 ,0 ,2 ,0.1, off_grid_voltage_phase_s_sensor_, off_grid_voltage_phase_s_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Voltage Phase S
 				{OFF_GRID_CURRENT_PHASE_S,SofarSolar_Register{0x05AD, 1, 0, 2, 0.01, off_grid_current_phase_s_sensor_, off_grid_current_phase_s_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Current Phase S
 				{OFF_GRID_POWER_PHASE_S,SofarSolar_Register{0x05AE, 1, 0, 2, 10, off_grid_power_phase_s_sensor_, off_grid_power_phase_s_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Power Phase S
-				//{OFF_GRID_VOLTAGE_PHASE_T,SofarSolar_Register{0x05B8 ,1 ,0 ,2 ,0.1 ,off_grid_voltage_phase_t_sensor_ ,off_grid_voltage_phase_t_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Off Grid Voltage Phase T
-				//{OFF_GRID_CURRENT_PHASE_T,SofarSolar_Register{0x05B9, 1, 0, 2, 0.01, off_grid_current_phase_t_sensor_, off_grid_current_phase_t_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Current Phase T
-				//{OFF_GRID_POWER_PHASE_T,SofarSolar_Register{0x05BA, 1, 0, 2, 10, off_grid_power_phase_t_sensor_, off_grid_power_phase_t_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Power Phase T
-				{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, 0, 0, 1, battery_active_control_sensor_, battery_active_control_sensor_update_interval_, {}, false, false, false, BATTERY_ACTIVE_WRITE}}, // Battery Active Control
-				{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, 0, 0, 1, battery_active_oneshot_sensor_, battery_active_oneshot_sensor_update_interval_, {}, false, false, false, BATTERY_ACTIVE_WRITE}} // Battery Active Oneshot
+				{OFF_GRID_VOLTAGE_PHASE_T,SofarSolar_Register{0x05B8 ,1 ,0 ,2 ,0.1 ,off_grid_voltage_phase_t_sensor_ ,off_grid_voltage_phase_t_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Off Grid Voltage Phase T
+				{OFF_GRID_CURRENT_PHASE_T,SofarSolar_Register{0x05B9, 1, 0, 2, 0.01, off_grid_current_phase_t_sensor_, off_grid_current_phase_t_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Current Phase T
+				{OFF_GRID_POWER_PHASE_T,SofarSolar_Register{0x05BA, 1, 0, 2, 10, off_grid_power_phase_t_sensor_, off_grid_power_phase_t_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Power Phase T
+				//{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, 0, 0, 1, battery_active_control_sensor_, battery_active_control_sensor_update_interval_, {}, false, false, false, BATTERY_ACTIVE_WRITE}}, // Battery Active Control
+				//{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, 0, 0, 1, battery_active_oneshot_sensor_, battery_active_oneshot_sensor_update_interval_, {}, false, false, false, BATTERY_ACTIVE_WRITE}} // Battery Active Oneshot
         	};
 
 			//ESP_LOGCONFIG(TAG, "Setting up Sofar Solar Inverter");
