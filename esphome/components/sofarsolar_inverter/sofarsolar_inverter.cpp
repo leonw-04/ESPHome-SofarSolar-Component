@@ -65,8 +65,8 @@ namespace esphome {
             {MINIMUM_BATTERY_POWER ,SofarSolar_Register{0x1189 ,2 ,3 ,3 ,1 ,true, DESIRED_GRID_POWER_WRITE}}, // Minimum Battery Power
             {MAXIMUM_BATTERY_POWER ,SofarSolar_Register{0x118B ,2 ,3 ,3 ,1 ,true, DESIRED_GRID_POWER_WRITE}}, // Maximum Battery Power
             {ENERGY_STORAGE_MODE, SofarSolar_Register{0x1110, 1, 0, 0, 1, true, SINGLE_REGISTER_WRITE}}, // Energy Storage Mode
-			{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, 0, 0, 1, true, BATTERY_ACTIVE_WRITE}}, // Battery Activ Control
-			{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, 0, 0, 1, true, BATTERY_ACTIVE_WRITE}}, // Battery Activ Control
+			//{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, 0, 0, 1, true, BATTERY_ACTIVE_WRITE}}, // Battery Activ Control
+			//{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, 0, 0, 1, true, BATTERY_ACTIVE_WRITE}}, // Battery Activ Control
             {BATTERY_CONF_ID, SofarSolar_Register{0x1044, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf ID
             {BATTERY_CONF_ADDRESS, SofarSolar_Register{0x1045, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf Address
             {BATTERY_CONF_PROTOCOL, SofarSolar_Register{0x1046, 1, 0, 0, 1, true, BATTERY_CONF_WRITE}}, // Battery Conf Protocol
@@ -83,7 +83,7 @@ namespace esphome {
             {BATTERY_CONF_CELL_TYPE, SofarSolar_Register{0x1051 ,1 ,0 ,0 ,1 ,true, BATTERY_CONF_WRITE}}, // Battery Conf Cell Type
             {BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052 ,1 ,0 ,0 ,10 ,true, BATTERY_CONF_WRITE}}, // Battery Conf EPS Buffer
             {BATTERY_CONF_CONTROL, SofarSolar_Register{0x1053 ,1 ,0 ,0 ,1 ,true, BATTERY_CONF_WRITE}}, // Battery Conf Control
-            {GRID_FREQUENCY, SofarSolar_Register{0x0484, 1, 0, 2, 0.01, false, 0}}, // Grid Frequency
+            //{GRID_FREQUENCY, SofarSolar_Register{0x0484, 1, 0, 2, 0.01, false, 0}}, // Grid Frequency
             {GRID_VOLTAGE_PHASE_R, SofarSolar_Register{0x0580, 1, 0, 2, 0.1, false, 0}}, // Grid Voltage Phase R
             {GRID_CURRENT_PHASE_R, SofarSolar_Register{0x0581, 1, 0, 2, 0.01, false ,0}}, // Grid Current Phase R
             {GRID_POWER_PHASE_R, SofarSolar_Register{0x0582, 1, 0, 2, 10, false, 0}}, // Grid Power Phase R
