@@ -101,7 +101,7 @@ namespace esphome {
             {OFF_GRID_POWER_PHASE_S, SofarSolar_Register{0x05AE ,1 ,0 ,2 ,10 ,false, 0}}, // Off Grid Power Phase S
             //{OFF_GRID_VOLTAGE_PHASE_T, SofarSolar_Register{0x05B8 ,1 ,0 ,2 ,0.1 ,false, 0}}, // Off Grid Voltage Phase T
             //{OFF_GRID_CURRENT_PHASE_T, SofarSolar_Register{0x05B9, 1, 0, 2, 0.01, false, 0}}, // Off Grid Current Phase T
-            {OFF_GRID_POWER_PHASE_T, SofarSolar_Register{0x05BA, 1, 0, 2, 10, false, 0}}, // Off Grid Power Phase T
+            //{OFF_GRID_POWER_PHASE_T, SofarSolar_Register{0x05BA, 1, 0, 2, 10, false, 0}}, // Off Grid Power Phase T
 			{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, 0, 0, 1, true, BATTERY_ACTIVE_WRITE}}, // Battery Activ Control
 			{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, 0, 0, 1, true, BATTERY_ACTIVE_WRITE}} // Battery Activ Control
             };
