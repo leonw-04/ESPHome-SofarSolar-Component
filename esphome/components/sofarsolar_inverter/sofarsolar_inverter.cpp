@@ -133,6 +133,7 @@ namespace esphome {
         void SofarSolar_Inverter::loop() {
 			size_t free_heap = heap_caps_get_free_size(MALLOC_CAP_8BIT);
 			ESP_LOGD(TAG, "Free heap size: %zu bytes", free_heap);
+			ESP_LOGD(TAG, "mem", "Largest free block (8bit): %u", heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
             if (!current_reading && !current_writing && this->zero_export_ && millis() - zero_export_last_update > 1000) { // Update zero export every second
                 zero_export_last_update = millis();
                 ESP_LOGD(TAG, "Updating zero export status");
