@@ -25,7 +25,7 @@ namespace esphome {
 			bool writeable;
 			uint8_t write_funktion = 0; // Function pointer for writing to the register
             SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0.0f), writeable(false), write_funktion(0) {}
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, sensor::Sensor sensor, uint16_t update_interval, SofarSolar_RegisterValue default_value, bool is_default_value_set, bool enforce_default_value, bool writeable, uint8_t write_funktion) :
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, sensor::Sensor *sensor, uint16_t update_interval, SofarSolar_RegisterValue default_value, bool is_default_value_set, bool enforce_default_value, bool writeable, uint8_t write_funktion) :
 				start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), sensor(sensor), update_interval(update_interval), default_value(default_value), is_default_value_set(is_default_value_set), enforce_default_value(enforce_default_value), writeable(writeable), write_funktion(write_funktion) {}
         };
 
