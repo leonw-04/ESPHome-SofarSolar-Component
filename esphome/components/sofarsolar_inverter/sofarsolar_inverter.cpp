@@ -151,21 +151,14 @@ namespace esphome {
 
 		void SofarSolar_Inverter::on_modbus_data(const std::vector<uint8_t> &data) {
             ESP_LOGD(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
-			if (current_writing || current_reading) {
-                switch (data[1]) {
-					case 0x03: // Read Holding Registers
-						parse_read_response(data);
-						G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
-						current_reading = false; // Reset the flag for read operation
-						register_read_queue.pop(); // Remove the top task from the read queue
-						break;
-					case 0x10: // Write Multiple Registers
-						parse_write_response(data);
-						break;
-					default:
-						ESP_LOGE(TAG, "Unknown Modbus function code: %02X", data[1]);
-				}
-            } else {
+            if(current_reading) {
+				parse_read_response(data);
+				G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
+				current_reading = false; // Reset the flag for read operation
+				register_read_queue.pop(); // Remove the top task from the read queue
+			} else if (current_writing) {
+				parse_write_response(data);
+			} else {
 				ESP_LOGE(TAG, "Received Modbus data while not in a read or write operation");
 			}
         }
