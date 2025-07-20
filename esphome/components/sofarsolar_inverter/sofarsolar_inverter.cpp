@@ -7,18 +7,6 @@ namespace esphome {
     namespace sofarsolar_inverter {
         static const char *TAG = "sofarsolar_inverter.component";
 
-        struct SofarSolar_Register {
-            uint16_t start_address; // Start address of the register
-            uint16_t register_count; // Number of registers to read
-            uint8_t type; // Type of the register (e.g., uint16, int16, etc.)
-            uint8_t priority; // Priority of the register for reading
-            int8_t scale; // Scale factor for the register value
-			uint8_t write_function; // Function code for writing to the register
-            SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0) {}
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, int8_t scale, uint8_t write_function) :
-				start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), write_function(write_function) {}
-        };
-
 		struct SofarSolar_RegisterDynamic {
 			uint64_t last_update; // Last update time in milliseconds
 			uint16_t update_interval; // Update interval in milliseconds
