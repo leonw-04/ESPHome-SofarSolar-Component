@@ -230,6 +230,7 @@ namespace esphome {
             }
         }
 
+		void SofarSolar_Inverter::parse_write_response(const std::vector<uint8_t> &data) {};
 
             //if (response.data()[2] != response.size() - 5 && response.data()[2] != register_info.quantity * 2) {
             //    ESP_LOGE(TAG, "Invalid response size: expected %d, got %d", response.data()[2], response.size() - 5);
