@@ -13,9 +13,10 @@ namespace esphome {
             uint8_t type; // Type of the register (e.g., uint16, int16, etc.)
             uint8_t priority; // Priority of the register for reading
             int8_t scale; // Scale factor for the register value
+			uint8_t write_function; // Function code for writing to the register
             SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0) {}
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, modbus_controller::SensorValueType type, uint8_t priority, uint8_t scale :
-				start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale) {}
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, modbus_controller::SensorValueType type, uint8_t priority, uint8_t scale, uint8_t write_function) :
+				start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), write_function(write_function) {}
         };
 
 		struct SofarSolar_RegisterDynamic {
