@@ -129,6 +129,7 @@ namespace esphome {
 					continue; // Skip if the sensor pointer is null
 				}
                 if (millis() - dynamic_register.second.last_update >= dynamic_register.second.update_interval && !dynamic_register.second.is_queued) {
+					dynamic_register.second.last_update = millis(); // Update the last update time
                     register_read_task task;
 					task.register_key = dynamic_register.first; // Set the register key for the task
                     dynamic_register.second.is_queued = true; // Mark the register as queued
