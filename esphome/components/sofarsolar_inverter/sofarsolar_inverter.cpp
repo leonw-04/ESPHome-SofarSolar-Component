@@ -188,7 +188,7 @@ namespace esphome {
 		void SofarSolar_Inverter::parse_read_response(const std::vector<uint8_t> &data) {
             ESP_LOGVV(TAG, "Parsing read response: %s", vector_to_string(data).c_str());
             switch (G3_registers.at(register_read_queue.top().register_key).type) {
-                case U_WORD:
+                case U_WORD: {
                     if (data.size() != 3 + 2 && data[2] != 2) {
                         ESP_LOGE(TAG, "Invalid read response size for U_WORD: %d", data.size());
                         return;
@@ -196,7 +196,8 @@ namespace esphome {
                     uint16_t value = (data[3] << 8) | data[4];
                     G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(value);
                     break;
-				case S_WORD:
+				}
+				case S_WORD: {
                     if (data.size() != 3 + 2 && data[2] != 2) {
                         ESP_LOGE(TAG, "Invalid read response size for INT_WORD: %d", data.size());
                         return;
@@ -204,7 +205,8 @@ namespace esphome {
                     int16_t value = (data[3] << 8) | data[4];
                     G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(value);
                     break;
-				case U_DWORD:
+				}
+				case U_DWORD: {
                     if (data.size() != 3 + 4 && data[2] != 4) {
                         ESP_LOGE(TAG, "Invalid read response size for U_DWORD: %d", data.size());
                         return;
@@ -212,7 +214,8 @@ namespace esphome {
                     uint32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
                     G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(value);
                     break;
-				case S_DWORD:
+				}
+				case S_DWORD: {
                     if (data.size() != 3 + 4 && data[2] != 4) {
                         ESP_LOGE(TAG, "Invalid read response size for INT_DWORD: %d", data.size());
                         return;
@@ -220,6 +223,7 @@ namespace esphome {
                     int32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
                     G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(value);
                     break;
+				}
 				default:
                     ESP_LOGE(TAG, "Unsupported register type for read response: %d", G3_registers.at(register_read_queue.top().register_key).type);
                     return;
