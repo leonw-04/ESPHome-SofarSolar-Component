@@ -196,7 +196,7 @@ namespace esphome {
                         ESP_LOGE(TAG, "Invalid read response size for U_WORD: %d", data.size());
                         return;
                     }
-                    uint16_t value = (data[3] << 8) | data[4];
+                    uint16_t value = (data[0] << 8) | data[1];
                     G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale));
                     break;
 				}
@@ -205,7 +205,7 @@ namespace esphome {
                         ESP_LOGE(TAG, "Invalid read response size for S_WORD: %d", data.size());
                         return;
                     }
-                    int16_t value = (data[3] << 8) | data[4];
+                    int16_t value = (data[0] << 8) | data[1];
                     G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale));
                     break;
 				}
@@ -214,7 +214,7 @@ namespace esphome {
                         ESP_LOGE(TAG, "Invalid read response size for U_DWORD: %d", data.size());
                         return;
                     }
-                    uint32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
+                    uint32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
                     G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale));
                     break;
 				}
@@ -223,7 +223,7 @@ namespace esphome {
                         ESP_LOGE(TAG, "Invalid read response size for S_DWORD: %d", data.size());
                         return;
                     }
-                    int32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
+                    int32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
                     G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale));
                     break;
 				}
