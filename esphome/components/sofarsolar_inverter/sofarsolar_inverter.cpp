@@ -187,7 +187,7 @@ namespace esphome {
 
 		void SofarSolar_Inverter::parse_read_response(const std::vector<uint8_t> &data) {
             ESP_LOGVV(TAG, "Parsing read response: %s", vector_to_string(data).c_str());
-            switch (G3_register.at(register_read_queue.top().register_key).type) {
+            switch (G3_registers.at(register_read_queue.top().register_key).type) {
                 case U_WORD:
                     if (data.size() != 3 + 2 && data[2] != 2) {
                         ESP_LOGE(TAG, "Invalid read response size for U_WORD: %d", data.size());
