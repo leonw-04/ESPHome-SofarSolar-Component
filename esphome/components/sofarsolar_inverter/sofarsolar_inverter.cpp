@@ -8,7 +8,7 @@ namespace esphome {
         static const char *TAG = "sofarsolar_inverter.component";
 
 		struct SofarSolar_RegisterDynamic {
-			uint64_t last_update; // Last update time in milliseconds
+			uint32_t last_update; // Last update time in milliseconds
 			uint16_t update_interval; // Update interval in milliseconds
 			sensor::Sensor *sensor; // Pointer to the sensor associated with the register
             SofarSolar_RegisterValue default_value; // Value of the register
