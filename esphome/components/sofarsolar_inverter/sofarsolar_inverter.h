@@ -176,7 +176,7 @@ namespace esphome {
         class SofarSolar_Inverter : public modbus::ModbusDevice, public Component {
         public:
 
-            std::map<uint8_t, SofarSolar_RegisterTime> G3_dynamic;
+            std::map<uint8_t, SofarSolar_RegisterDynamic> G3_dynamic;
 
             SofarSolar_Inverter();
 
