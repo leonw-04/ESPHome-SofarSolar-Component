@@ -74,10 +74,10 @@
 #define BATTERY_CONF_WRITE 3
 #define BATTERY_ACTIVE_WRITE 4
 
-#define U_WORD 0x01
-#define U_DWORD 0x02
-#define S_WORD 0x03
-#define S_DWORD 0x04
+#define U_WORD 1
+#define U_DWORD 2
+#define S_WORD 3
+#define S_DWORD 4
 
 namespace esphome {
     namespace sofarsolar_inverter {
