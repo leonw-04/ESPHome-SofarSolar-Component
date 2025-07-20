@@ -193,7 +193,7 @@ namespace esphome {
 			void parse_write_response(const std::vector<uint8_t> &data);
 
         	void read_modbus_register(uint16_t start_address, uint16_t register_count);
-			void write_modbus_register(uint16_t start_address, uint16_t value, uint8_t type, uint8_t write_function);
+			void write_modbus_register(uint16_t start_address, uint16_t register_count, const std::vector<uint8_t> &data);
 
             std::string vector_to_string(const std::vector<uint8_t> &data) {
                 std::string result;
