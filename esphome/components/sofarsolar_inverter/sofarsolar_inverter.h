@@ -3,7 +3,7 @@
 #include "vector"
 #include "map"
 #include "esphome/components/sensor/sensor.h"
-#include "esphome/components/uart/uart.h"
+#include "esphome/components/modbus/modbus.h"
 #include "esphome/core/component.h"
 
 #define PV_GENERATION_TODAY 1
@@ -68,7 +68,7 @@
 #define BATTERY_ACTIVE_CONTROL 60
 #define BATTERY_ACTIVE_ONESHOT 61
 
-
+#define NONE 0
 #define SINGLE_REGISTER_WRITE 1
 #define DESIRED_GRID_POWER_WRITE 2
 #define BATTERY_CONF_WRITE 3
@@ -94,11 +94,74 @@ namespace esphome {
 
         struct register_write_task;
 
+		static const G3_registers = {
+			{PV_GENERATION_TODAY, SofarSolar_Register{0x0684, 2, U_DWORD, 1, -2, NONE}}, // PV Generation Today
+            {PV_GENERATION_TOTAL, SofarSolar_Register{0x0686, 2, U_DWORD, 0, -1, NONE}}, // PV Generation Total
+            {LOAD_CONSUMPTION_TODAY, SofarSolar_Register{0x0688, 2, U_DWORD, 1, -2, NONE}}, // Load Consumption Today
+    		{LOAD_CONSUMPTION_TOTAL, SofarSolar_Register{0x068A, 2, U_DWORD, 0, -1, NONE}}, // Load Consumption Total
+            {BATTERY_CHARGE_TODAY, SofarSolar_Register{0x0694, 2, U_DWORD, 1, -2, NONE}}, // Battery Charge Today
+            {BATTERY_CHARGE_TOTAL, SofarSolar_Register{0x0696, 2, U_DWORD, 0, -1, NONE}}, // Battery Charge Total
+            {BATTERY_DISCHARGE_TODAY, SofarSolar_Register{0x0698, 2, U_DWORD, 1, -2, NONE}}, // Battery Discharge Today
+            {BATTERY_DISCHARGE_TOTAL, SofarSolar_Register{0x069A, 2, U_DWORD, 0, -1, NONE}}, // Battery Discharge Total
+            {TOTAL_ACTIVE_POWER_INVERTER,SofarSolar_Register{0x0485, 1, S_WORD, 3, 1, NONE}}, // Total Active Power Inverter
+            {PV_VOLTAGE_1 ,SofarSolar_Register{0x0584, 1, U_WORD, 2, -1, NONE}}, // PV Voltage 1
+            {PV_CURRENT_1 ,SofarSolar_Register{0x0585, 1, U_WORD, 2, -2, NONE}}, // PV Current 1
+            {PV_POWER_1 ,SofarSolar_Register{0x0586, 1, U_WORD, 2, 1, NONE}}, // PV Power 1
+            {PV_VOLTAGE_2 ,SofarSolar_Register{0x0587, 1, U_WORD, 2, -1, NONE}}, // PV Voltage 2
+            {PV_CURRENT_2 ,SofarSolar_Register{0x0588, 1, U_WORD, 2, -2, NONE}}, // PV Current 2
+            {PV_POWER_2, SofarSolar_Register{0x0589, 1, U_WORD, 2, 1, NONE}}, // PV Power 2
+            {PV_POWER_TOTAL, SofarSolar_Register{0x05C4, 1, U_WORD, 3, 2, NONE}}, // PV Power Total
+            {BATTERY_POWER_TOTAL, SofarSolar_Register{0x0667, 1, S_WORD, 3, 2, NONE}}, // Battery Power Total
+            {BATTERY_STATE_OF_CHARGE_TOTAL, SofarSolar_Register{0x0668, 1, U_WORD, 1, 0, NONE}}, // Battery State of Charge Total
+            {DESIRED_GRID_POWER, SofarSolar_Register{0x1187, 2, S_DWORD, 3, 0, DESIRED_GRID_POWER_WRITE}}, // Desired Grid Power
+			{MINIMUM_BATTERY_POWER, SofarSolar_Register{0x1189, 2, S_DWORD, 3, 0, DESIRED_GRID_POWER_WRITE}}, // Minimum Battery Power
+			{MAXIMUM_BATTERY_POWER, SofarSolar_Register{0x118B, 2, S_DWORD, 3, 0, DESIRED_GRID_POWER_WRITE}}, // Maximum Battery Power
+			{ENERGY_STORAGE_MODE, SofarSolar_Register{0x1110, 1, U_WORD, 0, 0, SINGLE_REGISTER_WRITE}}, // Energy Storage Mode
+			{BATTERY_CONF_ID, SofarSolar_Register{0x1044, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf ID
+			{BATTERY_CONF_ADDRESS, SofarSolar_Register{0x1045, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Address
+			{BATTERY_CONF_PROTOCOL, SofarSolar_Register{0x1046, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Protocol
+			{BATTERY_CONF_VOLTAGE_NOMINAL, SofarSolar_Register{0x1050, 1, U_WORD, 0, -1, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Nominal
+			{BATTERY_CONF_VOLTAGE_OVER, SofarSolar_Register{0x1047, 1, U_WORD, 0, -1, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Over
+			{BATTERY_CONF_VOLTAGE_CHARGE, SofarSolar_Register{0x1048, 1, U_WORD, 0, -1, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Charge
+			{BATTERY_CONF_VOLTAGE_LACK,SofarSolar_Register{0x1049, 1, U_WORD, 0, -1, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Lack
+			{BATTERY_CONF_VOLTAGE_DISCHARGE_STOP,SofarSolar_Register{0x104A, 1, U_WORD, 0, -1, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Discharge Stop
+			{BATTERY_CONF_CURRENT_CHARGE_LIMIT, SofarSolar_Register{0x104B, 1, U_WORD, 0, -2, BATTERY_CONF_WRITE}}, // Battery Conf Current Charge Limit
+			{BATTERY_CONF_CURRENT_DISCHARGE_LIMIT, SofarSolar_Register{0x104C, 1, U_WORD, 0, -2, BATTERY_CONF_WRITE}}, // Battery Conf Current Discharge Limit
+			{BATTERY_CONF_DEPTH_OF_DISCHARGE, SofarSolar_Register{0x104D, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Depth of Discharge
+			{BATTERY_CONF_END_OF_DISCHARGE,SofarSolar_Register{0x104E, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf End of Discharge
+			{BATTERY_CONF_CAPACITY,SofarSolar_Register{0x104F, 1, U_WORD, 0, 1, BATTERY_CONF_WRITE}}, // Battery Conf Capacity
+			{BATTERY_CONF_CELL_TYPE, SofarSolar_Register{0x1051, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Cell Type
+			{BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052, 1, U_WORD, 0, 1, BATTERY_CONF_WRITE}}, // Battery Conf EPS Buffer
+			{BATTERY_CONF_CONTROL,SofarSolar_Register{0x1053, 1 , U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Control
+			{GRID_FREQUENCY,SofarSolar_Register{0x0484, 1, U_WORD, 2, -2, NONE}}, // Grid Frequency
+			{GRID_VOLTAGE_PHASE_R,SofarSolar_Register{0x0580, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase R
+			{GRID_CURRENT_PHASE_R,SofarSolar_Register{0x0581, 1 ,U_WORD, 2, -2, NONE}}, // Grid Current Phase R
+			{GRID_POWER_PHASE_R,SofarSolar_Register{0x0582, 1, U_WORD, 2, 1, NONE}}, // Grid Power Phase R
+			{GRID_VOLTAGE_PHASE_S,SofarSolar_Register{0x058C, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase S
+			{GRID_CURRENT_PHASE_S,SofarSolar_Register{0x058D, 1, U_WORD, 2, -2, NONE}}, // Grid Current Phase S
+			{GRID_POWER_PHASE_S,SofarSolar_Register{0x058E, 1, U_WORD, 2, 1, NONE}}, // Grid Power Phase S
+			{GRID_VOLTAGE_PHASE_T,SofarSolar_Register{0x0598, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase T
+			{GRID_CURRENT_PHASE_T,SofarSolar_Register{0x0599, 1, U_WORD, 2, -2, NONE}}, // Grid Current Phase T
+			{GRID_POWER_PHASE_T,SofarSolar_Register{0x059A, 1, U_WORD, 2, 1, NONE}}, // Grid Power Phase T
+			{OFF_GRID_POWER_TOTAL,SofarSolar_Register{0x05A4, 1, U_WORD, 3, 2, NONE}}, // Off Grid Power Total
+			{OFF_GRID_FREQUENCY,SofarSolar_Register{0x05A5, 1, U_WORD, 2, -2, NONE}}, // Off Grid Frequency
+			{OFF_GRID_VOLTAGE_PHASE_R,SofarSolar_Register{0x05A6, 1, U_WORD, 2, -1, NONE}}, // Off Grid Voltage Phase R
+			{OFF_GRID_CURRENT_PHASE_R,SofarSolar_Register{0x05A7, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase R
+			{OFF_GRID_POWER_PHASE_R,SofarSolar_Register{0x05A8, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase R
+			{OFF_GRID_VOLTAGE_PHASE_S,SofarSolar_Register{0x05AC, 1, U_WORD, 2, -1, NONE}}, // Off Grid Voltage Phase S
+			{OFF_GRID_CURRENT_PHASE_S,SofarSolar_Register{0x05AD, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase S
+			{OFF_GRID_POWER_PHASE_S,SofarSolar_Register{0x05AE, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase S
+			{OFF_GRID_VOLTAGE_PHASE_T,SofarSolar_Register{0x05B8, 1, U_WORD, 2, -1, NONE}}, // Off Grid Voltage Phase T
+			{OFF_GRID_CURRENT_PHASE_T,SofarSolar_Register{0x05B9, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase T
+			{OFF_GRID_POWER_PHASE_T,SofarSolar_Register{0x05BA, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase T
+			{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}}, // Battery Active Control
+			{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}} // Battery Active Oneshot
+        };
 
-        class SofarSolar_Inverter : public uart::UARTDevice, public Component {
+        class SofarSolar_Inverter : public modbus_controller::ModbusController, public Component {
         public:
 
-            std::map<uint8_t, SofarSolar_Register> registers_G3;
+            std::map<uint8_t, SofarSolar_RegisterTime> G3_dynamic;
 
             SofarSolar_Inverter();
 
@@ -106,14 +169,17 @@ namespace esphome {
             void loop() override;
             void dump_config() override;
 
+			void on_modbus_data(const std::vector<uint8_t> &data) override;
+			void on_modbus_error(uint8_t function_code, uint8_t exception_code) override;
+
+			void on_read_response(ModbusRegisterType register_type, uint16_t start_address, const std::vector<uint8_t> &data);
+			void on_write_response(ModbusRegisterType register_type, uint16_t start_address, const std::vector<uint8_t> &data);
+
             void update_sensor(const register_read_task task);
             void send_modbus(std::vector<uint8_t> frame);
-            void calculate_crc(std::vector<uint8_t> &frame);
-            bool check_crc(std::vector<uint8_t> frame);
-            void send_read_modbus_registers(uint16_t start_address, uint16_t quantity);
+            void read_modbus_registers(uint16_t start_address, uint16_t quantity);
             bool receive_modbus_response(std::vector<uint8_t> &response, uint8_t response_length);
-            void send_write_modbus_registers(uint16_t start_address, uint16_t quantity, const std::vector<uint8_t> &data);
-            void empty_uart_buffer();
+            void write_modbus_registers(uint16_t start_address, uint16_t quantity, const std::vector<uint8_t> &data);
 
             std::string vector_to_string(const std::vector<uint8_t> &data) {
                 std::string result;
@@ -128,7 +194,6 @@ namespace esphome {
             bool read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info);
             bool extract_data_from_response(std::vector<uint8_t> &response, register_read_task &task);
             bool write_response(register_write_task &task);
-            bool check_for_error_code(std::vector<uint8_t> &response);
 
 			void write_desired_grid_power(register_write_task &task);
 			void write_battery_conf(register_write_task &task);
