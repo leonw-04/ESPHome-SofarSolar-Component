@@ -149,7 +149,7 @@ namespace esphome {
 			if (current_writing || current_reading) {
                 switch (data[1]) {
 					case 0x03: // Read Holding Registers
-						register_read_queue.top().is_queued = false; // Mark the register as not queued
+						G3_dynamic[register_read_queue.top().register_key].is_queued = false; // Mark the register as not queued
 						parse_read_response(data);
 						break;
 					case 0x10: // Write Multiple Registers
