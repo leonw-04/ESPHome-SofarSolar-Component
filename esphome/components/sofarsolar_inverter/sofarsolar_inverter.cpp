@@ -15,8 +15,7 @@ namespace esphome {
             bool default_value_set; // Flag to indicate if the default value is set
 			bool enforce_default_value; // Flag to indicate if the default value should be enforced
 			bool is_queued = false; // Flag to indicate if the register is queued for reading/writing
-			SofarSolar_RegisterDynamic(sensor::Sensor *sensor, uint16_t update_interval, SofarSolar_RegisterValue default_value = {}, bool default_value_set = false, bool enforce_default_value = false)
-                : last_update(0), update_interval(update_interval), sensor(sensor), default_value(default_value), default_value_set(default_value_set), enforce_default_value(enforce_default_value) {}
+			SofarSolar_RegisterDynamic() : sensor(nullptr), update_interval(0), last_update(0), default_value({}), default_value_set(false), enforce_default_value(false) {}
 		};
 
 		struct register_read_task {
@@ -36,67 +35,67 @@ namespace esphome {
 
         SofarSolar_Inverter::SofarSolar_Inverter() {
 			this->G3_dynamic = {
-				{PV_GENERATION_TODAY, SofarSolar_RegisterDynamic{pv_generation_today_sensor_, pv_generation_today_sensor_update_interval_, {}, false, false}}, // PV Generation Today
-        	    {PV_GENERATION_TOTAL, SofarSolar_RegisterDynamic{pv_generation_total_sensor_, pv_generation_total_sensor_update_interval_, {}, false, false}}, // PV Generation Total
-    	        {LOAD_CONSUMPTION_TODAY, SofarSolar_RegisterDynamic{load_consumption_today_sensor_, load_consumption_today_sensor_update_interval_, {}, false, false}}, // Load Consumption Today
-    			{LOAD_CONSUMPTION_TOTAL, SofarSolar_RegisterDynamic{load_consumption_total_sensor_, load_consumption_total_sensor_update_interval_, {}, false, false}}, // Load Consumption Total
-            	{BATTERY_CHARGE_TODAY, SofarSolar_RegisterDynamic{battery_charge_today_sensor_, battery_charge_today_sensor_update_interval_, {}, false, false}}, // Battery Charge Today
-        	    {BATTERY_CHARGE_TOTAL, SofarSolar_RegisterDynamic{battery_charge_total_sensor_, battery_charge_total_sensor_update_interval_, {}, false, false}}, // Battery Charge Total
-    	        {BATTERY_DISCHARGE_TODAY, SofarSolar_RegisterDynamic{battery_discharge_today_sensor_, battery_discharge_today_sensor_update_interval_, {}, false, false}}, // Battery Discharge Today
-	            {BATTERY_DISCHARGE_TOTAL, SofarSolar_RegisterDynamic{battery_discharge_total_sensor_ ,battery_discharge_total_sensor_update_interval_ ,{}, false ,false}}, // Battery Discharge Total
-            	{TOTAL_ACTIVE_POWER_INVERTER, SofarSolar_RegisterDynamic{total_active_power_inverter_sensor_ ,total_active_power_inverter_sensor_update_interval_ ,{}, false ,false}}, // Total Active Power Inverter
-        	    {PV_VOLTAGE_1, SofarSolar_RegisterDynamic{pv_voltage_1_sensor_ ,pv_voltage_1_sensor_update_interval_ ,{}, false ,false}}, // PV Voltage 1
-    	        {PV_CURRENT_1, SofarSolar_RegisterDynamic{pv_current_1_sensor_ ,pv_current_1_sensor_update_interval_ ,{}, false ,false}}, // PV Current 1
-	            {PV_POWER_1, SofarSolar_RegisterDynamic{pv_power_1_sensor_ ,pv_power_1_sensor_update_interval_ ,{}, false ,false}}, // PV Power 1
-            	{PV_VOLTAGE_2, SofarSolar_RegisterDynamic{pv_voltage_2_sensor_ ,pv_voltage_2_sensor_update_interval_ ,{}, false ,false}}, // PV Voltage 2
-        	    {PV_CURRENT_2, SofarSolar_RegisterDynamic{pv_current_2_sensor_ ,pv_current_2_sensor_update_interval_ ,{}, false ,false}}, // PV Current 2
-    	        {PV_POWER_2, SofarSolar_RegisterDynamic{pv_power_2_sensor_, pv_power_2_sensor_update_interval_, {}, false, false}}, // PV Power 2
-	            {PV_POWER_TOTAL, SofarSolar_RegisterDynamic{pv_power_total_sensor_, pv_power_total_sensor_update_interval_, {}, false, false}}, // PV Power Total
-            	{BATTERY_POWER_TOTAL, SofarSolar_RegisterDynamic{battery_power_total_sensor_, battery_power_total_sensor_update_interval_, {}, false, false}}, // Battery Power Total
-        	    {BATTERY_STATE_OF_CHARGE_TOTAL, SofarSolar_RegisterDynamic{battery_state_of_charge_total_sensor_, battery_state_of_charge_total_sensor_update_interval_, {}, false, false}}, // Battery State of Charge Total
-    	        {DESIRED_GRID_POWER, SofarSolar_RegisterDynamic{desired_grid_power_sensor_, desired_grid_power_sensor_update_interval_, desired_grid_power_sensor_default_value_, desired_grid_power_sensor_default_value_set_, desired_grid_power_sensor_enforce_default_value_}}, // Desired Grid Power
-				{MINIMUM_BATTERY_POWER, SofarSolar_RegisterDynamic{minimum_battery_power_sensor_, minimum_battery_power_sensor_update_interval_, minimum_battery_power_sensor_default_value_, minimum_battery_power_sensor_default_value_set_, minimum_battery_power_sensor_enforce_default_value_}}, // Minimum Battery Power
-				{MAXIMUM_BATTERY_POWER, SofarSolar_RegisterDynamic{maximum_battery_power_sensor_, maximum_battery_power_sensor_update_interval_, maximum_battery_power_sensor_default_value_, maximum_battery_power_sensor_default_value_set_, maximum_battery_power_sensor_enforce_default_value_}}, // Maximum Battery Power
-				{ENERGY_STORAGE_MODE, SofarSolar_RegisterDynamic{energy_storage_mode_sensor_, energy_storage_mode_sensor_update_interval_, energy_storage_mode_sensor_default_value_, energy_storage_mode_sensor_default_value_set_, energy_storage_mode_sensor_enforce_default_value_}}, // Energy Storage Mode
-				{BATTERY_CONF_ID, SofarSolar_RegisterDynamic{battery_conf_id_sensor_, battery_conf_id_sensor_update_interval_, battery_conf_id_sensor_default_value_, battery_conf_id_sensor_default_value_set_, battery_conf_id_sensor_enforce_default_value_}}, // Battery Conf ID
-				{BATTERY_CONF_ADDRESS, SofarSolar_RegisterDynamic{battery_conf_address_sensor_, battery_conf_address_sensor_update_interval_, battery_conf_address_sensor_default_value_, battery_conf_address_sensor_default_value_set_, battery_conf_address_sensor_enforce_default_value_}}, // Battery Conf Address
-				{BATTERY_CONF_PROTOCOL, SofarSolar_RegisterDynamic{battery_conf_protocol_sensor_, battery_conf_protocol_sensor_update_interval_, battery_conf_protocol_sensor_default_value_, battery_conf_protocol_sensor_default_value_set_, battery_conf_protocol_sensor_enforce_default_value_}}, // Battery Conf Protocol
-				{BATTERY_CONF_VOLTAGE_NOMINAL, SofarSolar_RegisterDynamic{battery_conf_voltage_nominal_sensor_, battery_conf_voltage_nominal_sensor_update_interval_, battery_conf_voltage_nominal_sensor_default_value_, battery_conf_voltage_nominal_sensor_default_value_set_, battery_conf_voltage_nominal_sensor_enforce_default_value_}}, // Battery Conf Voltage Nominal
-				{BATTERY_CONF_VOLTAGE_OVER, SofarSolar_RegisterDynamic{battery_conf_voltage_over_sensor_, battery_conf_voltage_over_sensor_update_interval_, battery_conf_voltage_over_sensor_default_value_, battery_conf_voltage_over_sensor_default_value_set_, battery_conf_voltage_over_sensor_enforce_default_value_}}, // Battery Conf Voltage Over
-				{BATTERY_CONF_VOLTAGE_CHARGE, SofarSolar_RegisterDynamic{battery_conf_voltage_charge_sensor_, battery_conf_voltage_charge_sensor_update_interval_, battery_conf_voltage_charge_sensor_default_value_, battery_conf_voltage_charge_sensor_default_value_set_, battery_conf_voltage_charge_sensor_enforce_default_value_}}, // Battery Conf Voltage Charge
-				{BATTERY_CONF_VOLTAGE_LACK, SofarSolar_RegisterDynamic{battery_conf_voltage_lack_sensor_ ,battery_conf_voltage_lack_sensor_update_interval_ , battery_conf_voltage_lack_sensor_default_value_, battery_conf_voltage_lack_sensor_default_value_set_ ,battery_conf_voltage_lack_sensor_enforce_default_value_}}, // Battery Conf Voltage Lack
-				{BATTERY_CONF_VOLTAGE_DISCHARGE_STOP, SofarSolar_RegisterDynamic{battery_conf_voltage_discharge_stop_sensor_ ,battery_conf_voltage_discharge_stop_sensor_update_interval_ , battery_conf_voltage_discharge_stop_sensor_default_value_, battery_conf_voltage_discharge_stop_sensor_default_value_set_ ,battery_conf_voltage_discharge_stop_sensor_enforce_default_value_}}, // Battery Conf Voltage Discharge Stop
-				{BATTERY_CONF_CURRENT_CHARGE_LIMIT, SofarSolar_RegisterDynamic{battery_conf_current_charge_limit_sensor_, battery_conf_current_charge_limit_sensor_update_interval_, battery_conf_current_charge_limit_sensor_default_value_, battery_conf_current_charge_limit_sensor_default_value_set_, battery_conf_current_charge_limit_sensor_enforce_default_value_}}, // Battery Conf Current Charge Limit
-				{BATTERY_CONF_CURRENT_DISCHARGE_LIMIT, SofarSolar_RegisterDynamic{battery_conf_current_discharge_limit_sensor_, battery_conf_current_discharge_limit_sensor_update_interval_, battery_conf_current_discharge_limit_sensor_default_value_, battery_conf_current_discharge_limit_sensor_default_value_set_, battery_conf_current_discharge_limit_sensor_enforce_default_value_}}, // Battery Conf Current Discharge Limit
-				{BATTERY_CONF_DEPTH_OF_DISCHARGE, SofarSolar_RegisterDynamic{battery_conf_depth_of_discharge_sensor_, battery_conf_depth_of_discharge_sensor_update_interval_, battery_conf_depth_of_discharge_sensor_default_value_, battery_conf_depth_of_discharge_sensor_default_value_set_, battery_conf_depth_of_discharge_sensor_enforce_default_value_}}, // Battery Conf Depth of Discharge
-				{BATTERY_CONF_END_OF_DISCHARGE, SofarSolar_RegisterDynamic{battery_conf_end_of_discharge_sensor_ ,battery_conf_end_of_discharge_sensor_update_interval_ , battery_conf_end_of_discharge_sensor_default_value_, battery_conf_end_of_discharge_sensor_default_value_set_ ,battery_conf_end_of_discharge_sensor_enforce_default_value_}}, // Battery Conf End of Discharge
-				{BATTERY_CONF_CAPACITY, SofarSolar_RegisterDynamic{battery_conf_capacity_sensor_ ,battery_conf_capacity_sensor_update_interval_, battery_conf_capacity_sensor_default_value_, battery_conf_capacity_sensor_default_value_set_ ,battery_conf_capacity_sensor_enforce_default_value_}}, // Battery Conf Capacity
-				{BATTERY_CONF_CELL_TYPE, SofarSolar_RegisterDynamic{battery_conf_cell_type_sensor_, battery_conf_cell_type_sensor_update_interval_, battery_conf_cell_type_sensor_default_value_, battery_conf_cell_type_sensor_default_value_set_, battery_conf_cell_type_sensor_enforce_default_value_}}, // Battery Conf Cell Type
-				{BATTERY_CONF_EPS_BUFFER, SofarSolar_RegisterDynamic{battery_conf_eps_buffer_sensor_, battery_conf_eps_buffer_sensor_update_interval_, battery_conf_eps_buffer_sensor_default_value_, battery_conf_eps_buffer_sensor_default_value_set_, battery_conf_eps_buffer_sensor_enforce_default_value_}}, // Battery Conf EPS Buffer
-				{BATTERY_CONF_CONTROL, SofarSolar_RegisterDynamic{battery_conf_control_sensor_ ,battery_conf_control_sensor_update_interval_ ,{}, false ,false}}, // Battery Conf Control
-				{GRID_FREQUENCY, SofarSolar_RegisterDynamic{grid_frequency_sensor_ ,grid_frequency_sensor_update_interval_ ,{}, false ,false}}, // Grid Frequency
-				{GRID_VOLTAGE_PHASE_R, SofarSolar_RegisterDynamic{grid_voltage_phase_r_sensor_ ,grid_voltage_phase_r_sensor_update_interval_ ,{}, false ,false}}, // Grid Voltage Phase R
-				{GRID_CURRENT_PHASE_R, SofarSolar_RegisterDynamic{grid_current_phase_r_sensor_, grid_current_phase_r_sensor_update_interval_, {}, false, false}}, // Grid Current Phase R
-				{GRID_POWER_PHASE_R, SofarSolar_RegisterDynamic{grid_power_phase_r_sensor_, grid_power_phase_r_sensor_update_interval_, {}, false, false}}, // Grid Power Phase R
-				{GRID_VOLTAGE_PHASE_S, SofarSolar_RegisterDynamic{grid_voltage_phase_s_sensor_, grid_voltage_phase_s_sensor_update_interval_, {}, false, false}}, // Grid Voltage Phase S
-				{GRID_CURRENT_PHASE_S, SofarSolar_RegisterDynamic{grid_current_phase_s_sensor_, grid_current_phase_s_sensor_update_interval_, {}, false, false}}, // Grid Current Phase S
-				{GRID_POWER_PHASE_S, SofarSolar_RegisterDynamic{grid_power_phase_s_sensor_, grid_power_phase_s_sensor_update_interval_, {}, false, false}}, // Grid Power Phase S
-				{GRID_VOLTAGE_PHASE_T, SofarSolar_RegisterDynamic{grid_voltage_phase_t_sensor_, grid_voltage_phase_t_sensor_update_interval_, {}, false, false}}, // Grid Voltage Phase T
-				{GRID_CURRENT_PHASE_T, SofarSolar_RegisterDynamic{grid_current_phase_t_sensor_, grid_current_phase_t_sensor_update_interval_, {}, false, false}}, // Grid Current Phase T
-				{GRID_POWER_PHASE_T, SofarSolar_RegisterDynamic{grid_power_phase_t_sensor_, grid_power_phase_t_sensor_update_interval_, {}, false, false}}, // Grid Power Phase T
-				{OFF_GRID_POWER_TOTAL, SofarSolar_RegisterDynamic{off_grid_power_total_sensor_ ,off_grid_power_total_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Power Total
-				{OFF_GRID_FREQUENCY, SofarSolar_RegisterDynamic{off_grid_frequency_sensor_, off_grid_frequency_sensor_update_interval_, {}, false, false}}, // Off Grid Frequency
-				{OFF_GRID_VOLTAGE_PHASE_R, SofarSolar_RegisterDynamic{off_grid_voltage_phase_r_sensor_ ,off_grid_voltage_phase_r_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Voltage Phase R
-				{OFF_GRID_CURRENT_PHASE_R, SofarSolar_RegisterDynamic{off_grid_current_phase_r_sensor_ ,off_grid_current_phase_r_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Current Phase R
-				{OFF_GRID_POWER_PHASE_R, SofarSolar_RegisterDynamic{off_grid_power_phase_r_sensor_ ,off_grid_power_phase_r_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Power Phase R
-				{OFF_GRID_VOLTAGE_PHASE_S, SofarSolar_RegisterDynamic{off_grid_voltage_phase_s_sensor_, off_grid_voltage_phase_s_sensor_update_interval_, {}, false, false}}, // Off Grid Voltage Phase S
-				{OFF_GRID_CURRENT_PHASE_S, SofarSolar_RegisterDynamic{off_grid_current_phase_s_sensor_, off_grid_current_phase_s_sensor_update_interval_, {}, false, false}}, // Off Grid Current Phase S
-				{OFF_GRID_POWER_PHASE_S, SofarSolar_RegisterDynamic{off_grid_power_phase_s_sensor_, off_grid_power_phase_s_sensor_update_interval_, {}, false, false}}, // Off Grid Power Phase S
-				{OFF_GRID_VOLTAGE_PHASE_T, SofarSolar_RegisterDynamic{off_grid_voltage_phase_t_sensor_ ,off_grid_voltage_phase_t_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Voltage Phase T
-				{OFF_GRID_CURRENT_PHASE_T, SofarSolar_RegisterDynamic{off_grid_current_phase_t_sensor_, off_grid_current_phase_t_sensor_update_interval_, {}, false, false}}, // Off Grid Current Phase T
-				{OFF_GRID_POWER_PHASE_T, SofarSolar_RegisterDynamic{off_grid_power_phase_t_sensor_, off_grid_power_phase_t_sensor_update_interval_, {}, false, false}}, // Off Grid Power Phase T
-				{BATTERY_ACTIVE_CONTROL, SofarSolar_RegisterDynamic{battery_active_control_sensor_, battery_active_control_sensor_update_interval_, {}, false, false}}, // Battery Active Control
-				{BATTERY_ACTIVE_ONESHOT, SofarSolar_RegisterDynamic{battery_active_oneshot_sensor_, battery_active_oneshot_sensor_update_interval_, {}, false, false}} // Battery Active Oneshot
+				{PV_GENERATION_TODAY, SofarSolar_RegisterDynamic{}}, // PV Generation Today
+        	    {PV_GENERATION_TOTAL, SofarSolar_RegisterDynamic{}}, // PV Generation Total
+    	        {LOAD_CONSUMPTION_TODAY, SofarSolar_RegisterDynamic{}}, // Load Consumption Today
+    			{LOAD_CONSUMPTION_TOTAL, SofarSolar_RegisterDynamic{}}, // Load Consumption Total
+            	{BATTERY_CHARGE_TODAY, SofarSolar_RegisterDynamic{}}, // Battery Charge Today
+        	    {BATTERY_CHARGE_TOTAL, SofarSolar_RegisterDynamic{}}, // Battery Charge Total
+    	        {BATTERY_DISCHARGE_TODAY, SofarSolar_RegisterDynamic{}}, // Battery Discharge Today
+	            {BATTERY_DISCHARGE_TOTAL, SofarSolar_RegisterDynamic{}}, // Battery Discharge Total
+            	{TOTAL_ACTIVE_POWER_INVERTER, SofarSolar_RegisterDynamic{}}, // Total Active Power Inverter
+        	    {PV_VOLTAGE_1, SofarSolar_RegisterDynamic{}}, // PV Voltage 1
+    	        {PV_CURRENT_1, SofarSolar_RegisterDynamic{}}, // PV Current 1
+	            {PV_POWER_1, SofarSolar_RegisterDynamic{}}, // PV Power 1
+            	{PV_VOLTAGE_2, SofarSolar_RegisterDynamic{}}, // PV Voltage 2
+        	    {PV_CURRENT_2, SofarSolar_RegisterDynamic{}}, // PV Current 2
+    	        {PV_POWER_2, SofarSolar_RegisterDynamic{}}, // PV Power 2
+	            {PV_POWER_TOTAL, SofarSolar_RegisterDynamic{}}, // PV Power Total
+            	{BATTERY_POWER_TOTAL, SofarSolar_RegisterDynamic{}}, // Battery Power Total
+        	    {BATTERY_STATE_OF_CHARGE_TOTAL, SofarSolar_RegisterDynamic{}}, // Battery State of Charge Total
+    	        {DESIRED_GRID_POWER, SofarSolar_RegisterDynamic{}}, // Desired Grid Power
+				{MINIMUM_BATTERY_POWER, SofarSolar_RegisterDynamic{}}, // Minimum Battery Power
+				{MAXIMUM_BATTERY_POWER, SofarSolar_RegisterDynamic{}}, // Maximum Battery Power
+				{ENERGY_STORAGE_MODE, SofarSolar_RegisterDynamic{}}, // Energy Storage Mode
+				{BATTERY_CONF_ID, SofarSolar_RegisterDynamic{}}, // Battery Conf ID
+				{BATTERY_CONF_ADDRESS, SofarSolar_RegisterDynamic{}}, // Battery Conf Address
+				{BATTERY_CONF_PROTOCOL, SofarSolar_RegisterDynamic{}}, // Battery Conf Protocol
+				{BATTERY_CONF_VOLTAGE_NOMINAL, SofarSolar_RegisterDynamic{}}, // Battery Conf Voltage Nominal
+				{BATTERY_CONF_VOLTAGE_OVER, SofarSolar_RegisterDynamic{}}, // Battery Conf Voltage Over
+				{BATTERY_CONF_VOLTAGE_CHARGE, SofarSolar_RegisterDynamic{}}, // Battery Conf Voltage Charge
+				{BATTERY_CONF_VOLTAGE_LACK, SofarSolar_RegisterDynamic{}}, // Battery Conf Voltage Lack
+				{BATTERY_CONF_VOLTAGE_DISCHARGE_STOP, SofarSolar_RegisterDynamic{}}, // Battery Conf Voltage Discharge Stop
+				{BATTERY_CONF_CURRENT_CHARGE_LIMIT, SofarSolar_RegisterDynamic{}}, // Battery Conf Current Charge Limit
+				{BATTERY_CONF_CURRENT_DISCHARGE_LIMIT, SofarSolar_RegisterDynamic{}}, // Battery Conf Current Discharge Limit
+				{BATTERY_CONF_DEPTH_OF_DISCHARGE, SofarSolar_RegisterDynamic{}}, // Battery Conf Depth of Discharge
+				{BATTERY_CONF_END_OF_DISCHARGE, SofarSolar_RegisterDynamic{}}, // Battery Conf End of Discharge
+				{BATTERY_CONF_CAPACITY, SofarSolar_RegisterDynamic{}}, // Battery Conf Capacity
+				{BATTERY_CONF_CELL_TYPE, SofarSolar_RegisterDynamic{}}, // Battery Conf Cell Type
+				{BATTERY_CONF_EPS_BUFFER, SofarSolar_RegisterDynamic{}}, // Battery Conf EPS Buffer
+				{BATTERY_CONF_CONTROL, SofarSolar_RegisterDynamic{}}, // Battery Conf Control
+				{GRID_FREQUENCY, SofarSolar_RegisterDynamic{}}, // Grid Frequency
+				{GRID_VOLTAGE_PHASE_R, SofarSolar_RegisterDynamic{}}, // Grid Voltage Phase R
+				{GRID_CURRENT_PHASE_R, SofarSolar_RegisterDynamic{}}, // Grid Current Phase R
+				{GRID_POWER_PHASE_R, SofarSolar_RegisterDynamic{}}, // Grid Power Phase R
+				{GRID_VOLTAGE_PHASE_S, SofarSolar_RegisterDynamic{}}, // Grid Voltage Phase S
+				{GRID_CURRENT_PHASE_S, SofarSolar_RegisterDynamic{}}, // Grid Current Phase S
+				{GRID_POWER_PHASE_S, SofarSolar_RegisterDynamic{}}, // Grid Power Phase S
+				{GRID_VOLTAGE_PHASE_T, SofarSolar_RegisterDynamic{}}, // Grid Voltage Phase T
+				{GRID_CURRENT_PHASE_T, SofarSolar_RegisterDynamic{}}, // Grid Current Phase T
+				{GRID_POWER_PHASE_T, SofarSolar_RegisterDynamic{}}, // Grid Power Phase T
+				{OFF_GRID_POWER_TOTAL, SofarSolar_RegisterDynamic{}}, // Off Grid Power Total
+				{OFF_GRID_FREQUENCY, SofarSolar_RegisterDynamic{}}, // Off Grid Frequency
+				{OFF_GRID_VOLTAGE_PHASE_R, SofarSolar_RegisterDynamic{}}, // Off Grid Voltage Phase R
+				{OFF_GRID_CURRENT_PHASE_R, SofarSolar_RegisterDynamic{}}, // Off Grid Current Phase R
+				{OFF_GRID_POWER_PHASE_R, SofarSolar_RegisterDynamic{}}, // Off Grid Power Phase R
+				{OFF_GRID_VOLTAGE_PHASE_S, SofarSolar_RegisterDynamic{}}, // Off Grid Voltage Phase S
+				{OFF_GRID_CURRENT_PHASE_S, SofarSolar_RegisterDynamic{}}, // Off Grid Current Phase S
+				{OFF_GRID_POWER_PHASE_S, SofarSolar_RegisterDynamic{}}, // Off Grid Power Phase S
+				{OFF_GRID_VOLTAGE_PHASE_T, SofarSolar_RegisterDynamic{}}, // Off Grid Voltage Phase T
+				{OFF_GRID_CURRENT_PHASE_T, SofarSolar_RegisterDynamic{}}, // Off Grid Current Phase T
+				{OFF_GRID_POWER_PHASE_T, SofarSolar_RegisterDynamic{}}, // Off Grid Power Phase T
+				{BATTERY_ACTIVE_CONTROL, SofarSolar_RegisterDynamic{}}, // Battery Active Control
+				{BATTERY_ACTIVE_ONESHOT, SofarSolar_RegisterDynamic{}} // Battery Active Oneshot
         	};
         }
 
@@ -283,170 +282,173 @@ namespace esphome {
             this->send_raw(data);
         }
 
-        void SofarSolar_Inverter::set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { pv_generation_today_sensor_ = pv_generation_today_sensor; }
-        void SofarSolar_Inverter::set_pv_generation_total_sensor(sensor::Sensor *pv_generation_total_sensor) { pv_generation_total_sensor_ = pv_generation_total_sensor; }
-        void SofarSolar_Inverter::set_load_consumption_today_sensor(sensor::Sensor *load_consumption_today_sensor) { load_consumption_today_sensor_ = load_consumption_today_sensor; }
-        void SofarSolar_Inverter::set_load_consumption_total_sensor(sensor::Sensor *load_consumption_total_sensor) { load_consumption_total_sensor_ = load_consumption_total_sensor; }
-        void SofarSolar_Inverter::set_battery_charge_today_sensor(sensor::Sensor *battery_charge_today_sensor) { battery_charge_today_sensor_ = battery_charge_today_sensor; }
-        void SofarSolar_Inverter::set_battery_charge_total_sensor(sensor::Sensor *battery_charge_total_sensor) { battery_charge_total_sensor_ = battery_charge_total_sensor; }
-        void SofarSolar_Inverter::set_battery_discharge_today_sensor(sensor::Sensor *battery_discharge_today_sensor) { battery_discharge_today_sensor_ = battery_discharge_today_sensor; }
-        void SofarSolar_Inverter::set_battery_discharge_total_sensor(sensor::Sensor *battery_discharge_total_sensor) { battery_discharge_total_sensor_ = battery_discharge_total_sensor; }
-        void SofarSolar_Inverter::set_total_active_power_inverter_sensor(sensor::Sensor *total_active_power_inverter_sensor) { total_active_power_inverter_sensor_ = total_active_power_inverter_sensor; }
-        void SofarSolar_Inverter::set_pv_voltage_1_sensor(sensor::Sensor *pv_voltage_1_sensor) { pv_voltage_1_sensor_ = pv_voltage_1_sensor; }
-        void SofarSolar_Inverter::set_pv_current_1_sensor(sensor::Sensor *pv_current_1_sensor) { pv_current_1_sensor_ = pv_current_1_sensor; }
-        void SofarSolar_Inverter::set_pv_power_1_sensor(sensor::Sensor *pv_power_1_sensor) { pv_power_1_sensor_ = pv_power_1_sensor; }
-        void SofarSolar_Inverter::set_pv_voltage_2_sensor(sensor::Sensor *pv_voltage_2_sensor) { pv_voltage_2_sensor_ = pv_voltage_2_sensor; }
-        void SofarSolar_Inverter::set_pv_current_2_sensor(sensor::Sensor *pv_current_2_sensor) { pv_current_2_sensor_ = pv_current_2_sensor; }
-        void SofarSolar_Inverter::set_pv_power_2_sensor(sensor::Sensor *pv_power_2_sensor) { pv_power_2_sensor_ = pv_power_2_sensor; }
-        void SofarSolar_Inverter::set_pv_power_total_sensor(sensor::Sensor *pv_power_total_sensor) { pv_power_total_sensor_ = pv_power_total_sensor; }
-        void SofarSolar_Inverter::set_battery_power_total_sensor(sensor::Sensor *battery_power_total_sensor) { battery_power_total_sensor_ = battery_power_total_sensor; }
-        void SofarSolar_Inverter::set_battery_state_of_charge_total_sensor(sensor::Sensor *battery_state_of_charge_total_sensor) { battery_state_of_charge_total_sensor_ = battery_state_of_charge_total_sensor; }
-        void SofarSolar_Inverter::set_desired_grid_power_sensor(sensor::Sensor *desired_grid_power_sensor) { desired_grid_power_sensor_ = desired_grid_power_sensor; }
-        void SofarSolar_Inverter::set_minimum_battery_power_sensor(sensor::Sensor *minimum_battery_power_sensor) { minimum_battery_power_sensor_ = minimum_battery_power_sensor; }
-        void SofarSolar_Inverter::set_maximum_battery_power_sensor(sensor::Sensor *maximum_battery_power_sensor) { maximum_battery_power_sensor_ = maximum_battery_power_sensor; }
-        void SofarSolar_Inverter::set_energy_storage_mode_sensor(sensor::Sensor *energy_storage_mode_sensor) { energy_storage_mode_sensor_ = energy_storage_mode_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_id_sensor(sensor::Sensor *battery_conf_id_sensor) {battery_conf_id_sensor_ = battery_conf_id_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_address_sensor(sensor::Sensor *battery_conf_address_sensor) { battery_conf_address_sensor_ = battery_conf_address_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_protocol_sensor(sensor::Sensor *battery_conf_protocol_sensor) { battery_conf_protocol_sensor_ = battery_conf_protocol_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_over_sensor(sensor::Sensor *battery_conf_voltage_over_sensor) { battery_conf_voltage_over_sensor_ = battery_conf_voltage_over_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_charge_sensor(sensor::Sensor *battery_conf_voltage_charge_sensor) { battery_conf_voltage_charge_sensor_ = battery_conf_voltage_charge_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_lack_sensor(sensor::Sensor *battery_conf_voltage_lack_sensor) { battery_conf_voltage_lack_sensor_ = battery_conf_voltage_lack_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_discharge_stop_sensor(sensor::Sensor *battery_conf_voltage_discharge_stop_sensor) { battery_conf_voltage_discharge_stop_sensor_ = battery_conf_voltage_discharge_stop_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_current_charge_limit_sensor(sensor::Sensor *battery_conf_current_charge_limit_sensor) { battery_conf_current_charge_limit_sensor_ = battery_conf_current_charge_limit_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_current_discharge_limit_sensor(sensor::Sensor *battery_conf_current_discharge_limit_sensor) { battery_conf_current_discharge_limit_sensor_ = battery_conf_current_discharge_limit_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_depth_of_discharge_sensor(sensor::Sensor *battery_conf_depth_of_discharge_sensor) { battery_conf_depth_of_discharge_sensor_ = battery_conf_depth_of_discharge_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_end_of_discharge_sensor(sensor::Sensor *battery_conf_end_of_discharge_sensor) { battery_conf_end_of_discharge_sensor_ = battery_conf_end_of_discharge_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_capacity_sensor(sensor::Sensor *battery_conf_capacity_sensor) { battery_conf_capacity_sensor_ = battery_conf_capacity_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_nominal_sensor(sensor::Sensor *battery_conf_voltage_nominal_sensor) { battery_conf_voltage_nominal_sensor_ = battery_conf_voltage_nominal_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_cell_type_sensor(sensor::Sensor *battery_conf_cell_type_sensor) { battery_conf_cell_type_sensor_ = battery_conf_cell_type_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor(sensor::Sensor *battery_conf_eps_buffer_sensor) { battery_conf_eps_buffer_sensor_ = battery_conf_eps_buffer_sensor; }
-        void SofarSolar_Inverter::set_battery_conf_control_sensor(sensor::Sensor *battery_conf_control_sensor) { battery_conf_control_sensor_ = battery_conf_control_sensor; }
-        void SofarSolar_Inverter::set_grid_frequency_sensor(sensor::Sensor *grid_frequency_sensor) { grid_frequency_sensor_ = grid_frequency_sensor; }
-        void SofarSolar_Inverter::set_grid_voltage_phase_r_sensor(sensor::Sensor *grid_voltage_phase_r_sensor) { grid_voltage_phase_r_sensor_ = grid_voltage_phase_r_sensor; }
-        void SofarSolar_Inverter::set_grid_current_phase_r_sensor(sensor::Sensor *grid_current_phase_r_sensor) { grid_current_phase_r_sensor_ = grid_current_phase_r_sensor; }
-        void SofarSolar_Inverter::set_grid_power_phase_r_sensor(sensor::Sensor *grid_power_phase_r_sensor) { grid_power_phase_r_sensor_ = grid_power_phase_r_sensor; }
-        void SofarSolar_Inverter::set_grid_voltage_phase_s_sensor(sensor::Sensor *grid_voltage_phase_s_sensor) { grid_voltage_phase_s_sensor_ = grid_voltage_phase_s_sensor; }
-        void SofarSolar_Inverter::set_grid_current_phase_s_sensor(sensor::Sensor *grid_current_phase_s_sensor) { grid_current_phase_s_sensor_ = grid_current_phase_s_sensor; }
-        void SofarSolar_Inverter::set_grid_power_phase_s_sensor(sensor::Sensor *grid_power_phase_s_sensor) { grid_power_phase_s_sensor_ = grid_power_phase_s_sensor; }
-        void SofarSolar_Inverter::set_grid_voltage_phase_t_sensor(sensor::Sensor *grid_voltage_phase_t_sensor) { grid_voltage_phase_t_sensor_ = grid_voltage_phase_t_sensor; }
-        void SofarSolar_Inverter::set_grid_current_phase_t_sensor(sensor::Sensor *grid_current_phase_t_sensor) { grid_current_phase_t_sensor_ = grid_current_phase_t_sensor; }
-        void SofarSolar_Inverter::set_grid_power_phase_t_sensor(sensor::Sensor *grid_power_phase_t_sensor) { grid_power_phase_t_sensor_ = grid_power_phase_t_sensor; }
-        void SofarSolar_Inverter::set_off_grid_power_total_sensor(sensor::Sensor *off_grid_power_total_sensor) { off_grid_power_total_sensor_ = off_grid_power_total_sensor; }
-        void SofarSolar_Inverter::set_off_grid_frequency_sensor(sensor::Sensor *off_grid_frequency_sensor) { off_grid_frequency_sensor_ = off_grid_frequency_sensor; }
-        void SofarSolar_Inverter::set_off_grid_voltage_phase_r_sensor(sensor::Sensor *off_grid_voltage_phase_r_sensor) { off_grid_voltage_phase_r_sensor_ = off_grid_voltage_phase_r_sensor; }
-        void SofarSolar_Inverter::set_off_grid_current_phase_r_sensor(sensor::Sensor *off_grid_current_phase_r_sensor) { off_grid_current_phase_r_sensor_ = off_grid_current_phase_r_sensor; }
-        void SofarSolar_Inverter::set_off_grid_power_phase_r_sensor(sensor::Sensor *off_grid_power_phase_r_sensor) { off_grid_power_phase_r_sensor_ = off_grid_power_phase_r_sensor; }
-        void SofarSolar_Inverter::set_off_grid_voltage_phase_s_sensor(sensor::Sensor *off_grid_voltage_phase_s_sensor) { off_grid_voltage_phase_s_sensor_ = off_grid_voltage_phase_s_sensor; }
-        void SofarSolar_Inverter::set_off_grid_current_phase_s_sensor(sensor::Sensor *off_grid_current_phase_s_sensor) { off_grid_current_phase_s_sensor_ = off_grid_current_phase_s_sensor; }
-        void SofarSolar_Inverter::set_off_grid_power_phase_s_sensor(sensor::Sensor *off_grid_power_phase_s_sensor) { off_grid_power_phase_s_sensor_ = off_grid_power_phase_s_sensor; }
-        void SofarSolar_Inverter::set_off_grid_voltage_phase_t_sensor(sensor::Sensor *off_grid_voltage_phase_t_sensor) { off_grid_voltage_phase_t_sensor_ = off_grid_voltage_phase_t_sensor; }
-        void SofarSolar_Inverter::set_off_grid_current_phase_t_sensor(sensor::Sensor *off_grid_current_phase_t_sensor) { off_grid_current_phase_t_sensor_ = off_grid_current_phase_t_sensor; }
-        void SofarSolar_Inverter::set_off_grid_power_phase_t_sensor(sensor::Sensor *off_grid_power_phase_t_sensor) { off_grid_power_phase_t_sensor_ = off_grid_power_phase_t_sensor; }
-		void SofarSolar_Inverter::set_battery_active_control_sensor(sensor::Sensor *battery_active_control_sensor) { battery_active_control_sensor_ = battery_active_control_sensor; }
-		void SofarSolar_Inverter::set_battery_active_oneshot_sensor(sensor::Sensor *battery_active_oneshot_sensor) { battery_active_oneshot_sensor_ = battery_active_oneshot_sensor; }
-        // Set update intervals for sensors
-
-        void SofarSolar_Inverter::set_pv_generation_today_sensor_update_interval(uint16_t pv_generation_today_sensor_update_interval) { pv_generation_today_sensor_update_interval_ = pv_generation_today_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_pv_generation_total_sensor_update_interval(uint16_t pv_generation_total_sensor_update_interval) { pv_generation_total_sensor_update_interval_ = pv_generation_total_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_load_consumption_today_sensor_update_interval(uint16_t load_consumption_today_sensor_update_interval) { load_consumption_today_sensor_update_interval_ = load_consumption_today_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_load_consumption_total_sensor_update_interval(uint16_t load_consumption_total_sensor_update_interval) { load_consumption_total_sensor_update_interval_ = load_consumption_total_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_charge_today_sensor_update_interval(uint16_t battery_charge_today_sensor_update_interval) { battery_charge_today_sensor_update_interval_ = battery_charge_today_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_charge_total_sensor_update_interval(uint16_t battery_charge_total_sensor_update_interval) { battery_charge_total_sensor_update_interval_ = battery_charge_total_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_discharge_today_sensor_update_interval(uint16_t battery_discharge_today_sensor_update_interval) { battery_discharge_today_sensor_update_interval_ = battery_discharge_today_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_discharge_total_sensor_update_interval(uint16_t battery_discharge_total_sensor_update_interval) { battery_discharge_total_sensor_update_interval_ = battery_discharge_total_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_total_active_power_inverter_sensor_update_interval(uint16_t total_active_power_inverter_sensor_update_interval) { total_active_power_inverter_sensor_update_interval_ = total_active_power_inverter_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_pv_voltage_1_sensor_update_interval(uint16_t pv_voltage_1_sensor_update_interval) { pv_voltage_1_sensor_update_interval_ = pv_voltage_1_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_pv_current_1_sensor_update_interval(uint16_t pv_current_1_sensor_update_interval) { pv_current_1_sensor_update_interval_ = pv_current_1_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_pv_power_1_sensor_update_interval(uint16_t pv_power_1_sensor_update_interval) { pv_power_1_sensor_update_interval_ = pv_power_1_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_pv_voltage_2_sensor_update_interval(uint16_t pv_voltage_2_sensor_update_interval) { pv_voltage_2_sensor_update_interval_ = pv_voltage_2_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_pv_current_2_sensor_update_interval(uint16_t pv_current_2_sensor_update_interval) { pv_current_2_sensor_update_interval_ = pv_current_2_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_pv_power_2_sensor_update_interval(uint16_t pv_power_2_sensor_update_interval) { pv_power_2_sensor_update_interval_ = pv_power_2_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_pv_power_total_sensor_update_interval(uint16_t pv_power_total_sensor_update_interval) { pv_power_total_sensor_update_interval_ = pv_power_total_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_power_total_sensor_update_interval(uint16_t battery_power_total_sensor_update_interval) { battery_power_total_sensor_update_interval_ = battery_power_total_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_state_of_charge_total_sensor_update_interval(uint16_t battery_state_of_charge_total_sensor_update_interval) { battery_state_of_charge_total_sensor_update_interval_ = battery_state_of_charge_total_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_desired_grid_power_sensor_update_interval(uint16_t desired_grid_power_sensor_update_interval) { desired_grid_power_sensor_update_interval_ = desired_grid_power_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_minimum_battery_power_sensor_update_interval(uint16_t minimum_battery_power_sensor_update_interval) { minimum_battery_power_sensor_update_interval_ = minimum_battery_power_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_maximum_battery_power_sensor_update_interval(uint16_t maximum_battery_power_sensor_update_interval) { maximum_battery_power_sensor_update_interval_ = maximum_battery_power_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_energy_storage_mode_sensor_update_interval(uint16_t energy_storage_mode_sensor_update_interval) { energy_storage_mode_sensor_update_interval_ = energy_storage_mode_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_id_sensor_update_interval(uint16_t battery_conf_id_sensor_update_interval) { battery_conf_id_sensor_update_interval_ = battery_conf_id_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_address_sensor_update_interval(uint16_t battery_conf_address_sensor_update_interval) { battery_conf_address_sensor_update_interval_ = battery_conf_address_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_protocol_sensor_update_interval(uint16_t battery_conf_protocol_sensor_update_interval) { battery_conf_protocol_sensor_update_interval_ = battery_conf_protocol_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_nominal_sensor_update_interval(uint16_t battery_conf_voltage_nominal_sensor_update_interval) { battery_conf_voltage_nominal_sensor_update_interval_ = battery_conf_voltage_nominal_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_over_sensor_update_interval(uint16_t battery_conf_voltage_over_sensor_update_interval) { battery_conf_voltage_over_sensor_update_interval_ = battery_conf_voltage_over_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_charge_sensor_update_interval(uint16_t battery_conf_voltage_charge_sensor_update_interval) { battery_conf_voltage_charge_sensor_update_interval_ = battery_conf_voltage_charge_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_lack_sensor_update_interval(uint16_t battery_conf_voltage_lack_sensor_update_interval) { battery_conf_voltage_lack_sensor_update_interval_ = battery_conf_voltage_lack_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_voltage_discharge_stop_sensor_update_interval(uint16_t battery_conf_voltage_discharge_stop_sensor_update_interval) { battery_conf_voltage_discharge_stop_sensor_update_interval_ = battery_conf_voltage_discharge_stop_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_current_charge_limit_sensor_update_interval(uint16_t battery_conf_current_charge_limit_sensor_update_interval) { battery_conf_current_charge_limit_sensor_update_interval_ = battery_conf_current_charge_limit_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_current_discharge_limit_sensor_update_interval(uint16_t battery_conf_current_discharge_limit_sensor_update_interval) { battery_conf_current_discharge_limit_sensor_update_interval_ = battery_conf_current_discharge_limit_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_depth_of_discharge_sensor_update_interval(uint16_t battery_conf_depth_of_discharge_sensor_update_interval) { battery_conf_depth_of_discharge_sensor_update_interval_ = battery_conf_depth_of_discharge_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_end_of_discharge_sensor_update_interval(uint16_t battery_conf_end_of_discharge_sensor_update_interval) { battery_conf_end_of_discharge_sensor_update_interval_ = battery_conf_end_of_discharge_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_capacity_sensor_update_interval(uint16_t battery_conf_capacity_sensor_update_interval) { battery_conf_capacity_sensor_update_interval_ = battery_conf_capacity_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_cell_type_sensor_update_interval(uint16_t battery_conf_cell_type_sensor_update_interval) { battery_conf_cell_type_sensor_update_interval_ = battery_conf_cell_type_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_update_interval(uint16_t battery_conf_eps_buffer_sensor_update_interval) { battery_conf_eps_buffer_sensor_update_interval_ = battery_conf_eps_buffer_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_battery_conf_control_sensor_update_interval(uint16_t battery_conf_control_sensor_update_interval) { battery_conf_control_sensor_update_interval_ = battery_conf_control_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_frequency_sensor_update_interval(uint16_t grid_frequency_sensor_update_interval) { grid_frequency_sensor_update_interval_ = grid_frequency_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_voltage_phase_r_sensor_update_interval(uint16_t grid_voltage_phase_r_sensor_update_interval) { grid_voltage_phase_r_sensor_update_interval_ = grid_voltage_phase_r_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_current_phase_r_sensor_update_interval(uint16_t grid_current_phase_r_sensor_update_interval) { grid_current_phase_r_sensor_update_interval_ = grid_current_phase_r_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_power_phase_r_sensor_update_interval(uint16_t grid_power_phase_r_sensor_update_interval) { grid_power_phase_r_sensor_update_interval_ = grid_power_phase_r_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_voltage_phase_s_sensor_update_interval(uint16_t grid_voltage_phase_s_sensor_update_interval) { grid_voltage_phase_s_sensor_update_interval_ = grid_voltage_phase_s_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_current_phase_s_sensor_update_interval(uint16_t grid_current_phase_s_sensor_update_interval) { grid_current_phase_s_sensor_update_interval_ = grid_current_phase_s_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_power_phase_s_sensor_update_interval(uint16_t grid_power_phase_s_sensor_update_interval) { grid_power_phase_s_sensor_update_interval_ = grid_power_phase_s_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_voltage_phase_t_sensor_update_interval(uint16_t grid_voltage_phase_t_sensor_update_interval) { grid_voltage_phase_t_sensor_update_interval_ = grid_voltage_phase_t_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_current_phase_t_sensor_update_interval(uint16_t grid_current_phase_t_sensor_update_interval) { grid_current_phase_t_sensor_update_interval_ = grid_current_phase_t_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_grid_power_phase_t_sensor_update_interval(uint16_t grid_power_phase_t_sensor_update_interval) { grid_power_phase_t_sensor_update_interval_ = grid_power_phase_t_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_power_total_sensor_update_interval(uint16_t off_grid_power_total_sensor_update_interval) { off_grid_power_total_sensor_update_interval_ = off_grid_power_total_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_frequency_sensor_update_interval(uint16_t off_grid_frequency_sensor_update_interval) { off_grid_frequency_sensor_update_interval_ = off_grid_frequency_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_voltage_phase_r_sensor_update_interval(uint16_t off_grid_voltage_phase_r_sensor_update_interval) { off_grid_voltage_phase_r_sensor_update_interval_ = off_grid_voltage_phase_r_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_current_phase_r_sensor_update_interval(uint16_t off_grid_current_phase_r_sensor_update_interval) { off_grid_current_phase_r_sensor_update_interval_ = off_grid_current_phase_r_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_power_phase_r_sensor_update_interval(uint16_t off_grid_power_phase_r_sensor_update_interval) { off_grid_power_phase_r_sensor_update_interval_ = off_grid_power_phase_r_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_voltage_phase_s_sensor_update_interval(uint16_t off_grid_voltage_phase_s_sensor_update_interval) { off_grid_voltage_phase_s_sensor_update_interval_ = off_grid_voltage_phase_s_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_current_phase_s_sensor_update_interval(uint16_t off_grid_current_phase_s_sensor_update_interval) { off_grid_current_phase_s_sensor_update_interval_ = off_grid_current_phase_s_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_power_phase_s_sensor_update_interval(uint16_t off_grid_power_phase_s_sensor_update_interval) { off_grid_power_phase_s_sensor_update_interval_ = off_grid_power_phase_s_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_voltage_phase_t_sensor_update_interval(uint16_t off_grid_voltage_phase_t_sensor_update_interval) { off_grid_voltage_phase_t_sensor_update_interval_ = off_grid_voltage_phase_t_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_current_phase_t_sensor_update_interval(uint16_t off_grid_current_phase_t_sensor_update_interval) { off_grid_current_phase_t_sensor_update_interval_ = off_grid_current_phase_t_sensor_update_interval * 1000; }
-        void SofarSolar_Inverter::set_off_grid_power_phase_t_sensor_update_interval(uint16_t off_grid_power_phase_t_sensor_update_interval) { off_grid_power_phase_t_sensor_update_interval_ = off_grid_power_phase_t_sensor_update_interval * 1000; }
-		void SofarSolar_Inverter::set_battery_active_control_sensor_update_interval(uint16_t battery_active_control_sensor_update_interval) { battery_active_control_sensor_update_interval_ = battery_active_control_sensor_update_interval * 1000; }
-		void SofarSolar_Inverter::set_battery_active_oneshot_sensor_update_interval(uint16_t battery_active_oneshot_sensor_update_interval) { battery_active_oneshot_sensor_update_interval_ = battery_active_oneshot_sensor_update_interval * 1000; }
+        void SofarSolar_Inverter::set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { G3_dynamic.at(PV_GENERATION_TODAY).sensor = pv_generation_today_sensor; }
+		void SofarSolar_Inverter::set_pv_generation_total_sensor(sensor::Sensor *pv_generation_total_sensor) { G3_dynamic.at(PV_GENERATION_TOTAL).sensor = pv_generation_total_sensor; }
+		void SofarSolar_Inverter::set_load_consumption_today_sensor(sensor::Sensor *load_consumption_today_sensor) { G3_dynamic.at(LOAD_CONSUMPTION_TODAY).sensor = load_consumption_today_sensor; }
+		void SofarSolar_Inverter::set_load_consumption_total_sensor(sensor::Sensor *load_consumption_total_sensor) { G3_dynamic.at(LOAD_CONSUMPTION_TOTAL).sensor = load_consumption_total_sensor; }
+		void SofarSolar_Inverter::set_battery_charge_today_sensor(sensor::Sensor *battery_charge_today_sensor) { G3_dynamic.at(BATTERY_CHARGE_TODAY).sensor = battery_charge_today_sensor; }
+		void SofarSolar_Inverter::set_battery_charge_total_sensor(sensor::Sensor *battery_charge_total_sensor) { G3_dynamic.at(BATTERY_CHARGE_TOTAL).sensor = battery_charge_total_sensor; }
+		void SofarSolar_Inverter::set_battery_discharge_today_sensor(sensor::Sensor *battery_discharge_today_sensor) { G3_dynamic.at(BATTERY_DISCHARGE_TODAY).sensor = battery_discharge_today_sensor; }
+		void SofarSolar_Inverter::set_battery_discharge_total_sensor(sensor::Sensor *battery_discharge_total_sensor) { G3_dynamic.at(BATTERY_DISCHARGE_TOTAL).sensor = battery_discharge_total_sensor; }
+		void SofarSolar_Inverter::set_total_active_power_inverter_sensor(sensor::Sensor *total_active_power_inverter_sensor) { G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor = total_active_power_inverter_sensor; }
+		void SofarSolar_Inverter::set_pv_voltage_1_sensor(sensor::Sensor *pv_voltage_1_sensor) { G3_dynamic.at(PV_VOLTAGE_1).sensor = pv_voltage_1_sensor; }
+		void SofarSolar_Inverter::set_pv_current_1_sensor(sensor::Sensor *pv_current_1_sensor) { G3_dynamic.at(PV_CURRENT_1).sensor = pv_current_1_sensor; }
+		void SofarSolar_Inverter::set_pv_power_1_sensor(sensor::Sensor *pv_power_1_sensor) { G3_dynamic.at(PV_POWER_1).sensor = pv_power_1_sensor; }
+		void SofarSolar_Inverter::set_pv_voltage_2_sensor(sensor::Sensor *pv_voltage_2_sensor) { G3_dynamic.at(PV_VOLTAGE_2).sensor = pv_voltage_2_sensor; }
+		void SofarSolar_Inverter::set_pv_current_2_sensor(sensor::Sensor *pv_current_2_sensor) { G3_dynamic.at(PV_CURRENT_2).sensor = pv_current_2_sensor; }
+		void SofarSolar_Inverter::set_pv_power_2_sensor(sensor::Sensor *pv_power_2_sensor) { G3_dynamic.at(PV_POWER_2).sensor = pv_power_2_sensor; }
+		void SofarSolar_Inverter::set_pv_power_total_sensor(sensor::Sensor *pv_power_total_sensor) { G3_dynamic.at(PV_POWER_TOTAL).sensor = pv_power_total_sensor; }
+		void SofarSolar_Inverter::set_battery_power_total_sensor(sensor::Sensor *battery_power_total_sensor) { G3_dynamic.at(BATTERY_POWER_TOTAL).sensor = battery_power_total_sensor; }
+		void SofarSolar_Inverter::set_battery_state_of_charge_total_sensor(sensor::Sensor *battery_state_of_charge_total_sensor) { G3_dynamic.at(BATTERY_STATE_OF_CHARGE_TOTAL).sensor = battery_state_of_charge_total_sensor; }
+		void SofarSolar_Inverter::set_desired_grid_power_sensor(sensor::Sensor *desired_grid_power_sensor) { G3_dynamic.at(DESIRED_GRID_POWER).sensor = desired_grid_power_sensor; }
+		void SofarSolar_Inverter::set_minimum_battery_power_sensor(sensor::Sensor *minimum_battery_power_sensor) { G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor = minimum_battery_power_sensor; }
+		void SofarSolar_Inverter::set_maximum_battery_power_sensor(sensor::Sensor *maximum_battery_power_sensor) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor = maximum_battery_power_sensor; }
+		void SofarSolar_Inverter::set_energy_storage_mode_sensor(sensor::Sensor *energy_storage_mode_sensor) { G3_dynamic.at(ENERGY_STORAGE_MODE).sensor = energy_storage_mode_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_id_sensor(sensor::Sensor *battery_conf_id_sensor) { G3_dynamic.at(BATTERY_CONF_ID).sensor = battery_conf_id_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_address_sensor(sensor::Sensor *battery_conf_address_sensor) { G3_dynamic.at(BATTERY_CONF_ADDRESS).sensor = battery_conf_address_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_protocol_sensor(sensor::Sensor *battery_conf_protocol_sensor) { G3_dynamic.at(BATTERY_CONF_PROTOCOL).sensor = battery_conf_protocol_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_nominal_sensor(sensor::Sensor *battery_conf_voltage_nominal_sensor) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).sensor = battery_conf_voltage_nominal_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_over_sensor(sensor::Sensor *battery_conf_voltage_over_sensor) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).sensor = battery_conf_voltage_over_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_charge_sensor(sensor::Sensor *battery_conf_voltage_charge_sensor) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).sensor = battery_conf_voltage_charge_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_lack_sensor(sensor::Sensor *battery_conf_voltage_lack_sensor) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).sensor = battery_conf_voltage_lack_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_discharge_stop_sensor(sensor::Sensor *battery_conf_voltage_discharge_stop_sensor) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).sensor = battery_conf_voltage_discharge_stop_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_current_charge_limit_sensor(sensor::Sensor *battery_conf_current_charge_limit_sensor) { G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).sensor = battery_conf_current_charge_limit_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_current_discharge_limit_sensor(sensor::Sensor *battery_conf_current_discharge_limit_sensor) { G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).sensor = battery_conf_current_discharge_limit_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_depth_of_discharge_sensor(sensor::Sensor *battery_conf_depth_of_discharge_sensor) { G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).sensor = battery_conf_depth_of_discharge_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_end_of_discharge_sensor(sensor::Sensor *battery_conf_end_of_discharge_sensor) { G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).sensor = battery_conf_end_of_discharge_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_capacity_sensor(sensor::Sensor *battery_conf_capacity_sensor) { G3_dynamic.at(BATTERY_CONF_CAPACITY).sensor = battery_conf_capacity_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_cell_type_sensor(sensor::Sensor *battery_conf_cell_type_sensor) { G3_dynamic.at(BATTERY_CONF_CELL_TYPE).sensor = battery_conf_cell_type_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor(sensor::Sensor *battery_conf_eps_buffer_sensor) { G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).sensor = battery_conf_eps_buffer_sensor; }
+		void SofarSolar_Inverter::set_battery_conf_control_sensor(sensor::Sensor *battery_conf_control_sensor) { G3_dynamic.at(BATTERY_CONF_CONTROL).sensor = battery_conf_control_sensor; }
+		void SofarSolar_Inverter::set_grid_frequency_sensor(sensor::Sensor *grid_frequency_sensor) { G3_dynamic.at(GRID_FREQUENCY).sensor = grid_frequency_sensor; }
+		void SofarSolar_Inverter::set_grid_voltage_phase_r_sensor(sensor::Sensor *grid_voltage_phase_r_sensor) { G3_dynamic.at(GRID_VOLTAGE_PHASE_R).sensor = grid_voltage_phase_r_sensor; }
+		void SofarSolar_Inverter::set_grid_current_phase_r_sensor(sensor::Sensor *grid_current_phase_r_sensor) { G3_dynamic.at(GRID_CURRENT_PHASE_R).sensor = grid_current_phase_r_sensor; }
+		void SofarSolar_Inverter::set_grid_power_phase_r_sensor(sensor::Sensor *grid_power_phase_r_sensor) { G3_dynamic.at(GRID_POWER_PHASE_R).sensor = grid_power_phase_r_sensor; }
+		void SofarSolar_Inverter::set_grid_voltage_phase_s_sensor(sensor::Sensor *grid_voltage_phase_s_sensor) { G3_dynamic.at(GRID_VOLTAGE_PHASE_S).sensor = grid_voltage_phase_s_sensor; }
+		void SofarSolar_Inverter::set_grid_current_phase_s_sensor(sensor::Sensor *grid_current_phase_s_sensor) { G3_dynamic.at(GRID_CURRENT_PHASE_S).sensor = grid_current_phase_s_sensor; }
+		void SofarSolar_Inverter::set_grid_power_phase_s_sensor(sensor::Sensor *grid_power_phase_s_sensor) { G3_dynamic.at(GRID_POWER_PHASE_S).sensor = grid_power_phase_s_sensor; }
+		void SofarSolar_Inverter::set_grid_voltage_phase_t_sensor(sensor::Sensor *grid_voltage_phase_t_sensor) { G3_dynamic.at(GRID_VOLTAGE_PHASE_T).sensor = grid_voltage_phase_t_sensor; }
+		void SofarSolar_Inverter::set_grid_current_phase_t_sensor(sensor::Sensor *grid_current_phase_t_sensor) { G3_dynamic.at(GRID_CURRENT_PHASE_T).sensor = grid_current_phase_t_sensor; }
+		void SofarSolar_Inverter::set_grid_power_phase_t_sensor(sensor::Sensor *grid_power_phase_t_sensor) { G3_dynamic.at(GRID_POWER_PHASE_T).sensor = grid_power_phase_t_sensor; }
+		void SofarSolar_Inverter::set_off_grid_power_total_sensor(sensor::Sensor *off_grid_power_total_sensor) { G3_dynamic.at(OFF_GRID_POWER_TOTAL).sensor = off_grid_power_total_sensor; }
+		void SofarSolar_Inverter::set_off_grid_frequency_sensor(sensor::Sensor *off_grid_frequency_sensor) { G3_dynamic.at(OFF_GRID_FREQUENCY).sensor = off_grid_frequency_sensor; }
+		void SofarSolar_Inverter::set_off_grid_voltage_phase_r_sensor(sensor::Sensor *off_grid_voltage_phase_r_sensor) { G3_dynamic.at(OFF_GRID_VOLTAGE_PHASE_R).sensor = off_grid_voltage_phase_r_sensor; }
+		void SofarSolar_Inverter::set_off_grid_current_phase_r_sensor(sensor::Sensor *off_grid_current_phase_r_sensor) { G3_dynamic.at(OFF_GRID_CURRENT_PHASE_R).sensor = off_grid_current_phase_r_sensor; }
+		void SofarSolar_Inverter::set_off_grid_power_phase_r_sensor(sensor::Sensor *off_grid_power_phase_r_sensor) { G3_dynamic.at(OFF_GRID_POWER_PHASE_R).sensor = off_grid_power_phase_r_sensor; }
+		void SofarSolar_Inverter::set_off_grid_voltage_phase_s_sensor(sensor::Sensor *off_grid_voltage_phase_s_sensor) { G3_dynamic.at(OFF_GRID_VOLTAGE_PHASE_S).sensor = off_grid_voltage_phase_s_sensor; }
+		void SofarSolar_Inverter::set_off_grid_current_phase_s_sensor(sensor::Sensor *off_grid_current_phase_s_sensor) { G3_dynamic.at(OFF_GRID_CURRENT_PHASE_S).sensor = off_grid_current_phase_s_sensor; }
+		void SofarSolar_Inverter::set_off_grid_power_phase_s_sensor(sensor::Sensor *off_grid_power_phase_s_sensor) { G3_dynamic.at(OFF_GRID_POWER_PHASE_S).sensor = off_grid_power_phase_s_sensor; }
+		void SofarSolar_Inverter::set_off_grid_voltage_phase_t_sensor(sensor::Sensor *off_grid_voltage_phase_t_sensor) { G3_dynamic.at(OFF_GRID_VOLTAGE_PHASE_T).sensor = off_grid_voltage_phase_t_sensor; }
+		void SofarSolar_Inverter::set_off_grid_current_phase_t_sensor(sensor::Sensor *off_grid_current_phase_t_sensor) { G3_dynamic.at(OFF_GRID_CURRENT_PHASE_T).sensor = off_grid_current_phase_t_sensor; }
+		void SofarSolar_Inverter::set_off_grid_power_phase_t_sensor(sensor::Sensor *off_grid_power_phase_t_sensor) { G3_dynamic.at(OFF_GRID_POWER_PHASE_T).sensor = off_grid_power_phase_t_sensor; }
+		void SofarSolar_Inverter::set_battery_active_control_sensor(sensor::Sensor *battery_active_control_sensor) { G3_dynamic.at(BATTERY_ACTIVE_CONTROL).sensor = battery_active_control_sensor; }
+		void SofarSolar_Inverter::set_battery_active_oneshot_sensor(sensor::Sensor *battery_active_oneshot_sensor) { G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).sensor = battery_active_oneshot_sensor; }
 
 
-        void SofarSolar_Inverter::set_desired_grid_power_sensor_default_value(int64_t default_value) { desired_grid_power_sensor_default_value_.int64_value = default_value; desired_grid_power_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_minimum_battery_power_sensor_default_value(int64_t default_value) { minimum_battery_power_sensor_default_value_.int64_value = default_value; minimum_battery_power_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_maximum_battery_power_sensor_default_value(int64_t default_value) { maximum_battery_power_sensor_default_value_.int64_value = default_value; maximum_battery_power_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_energy_storage_mode_sensor_default_value(int64_t default_value) { energy_storage_mode_sensor_default_value_.int64_value = default_value; energy_storage_mode_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_id_sensor_default_value(int64_t default_value) { battery_conf_id_sensor_default_value_.int64_value = default_value; battery_conf_id_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_address_sensor_default_value(int64_t default_value) { battery_conf_address_sensor_default_value_.int64_value = default_value; battery_conf_address_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_protocol_sensor_default_value(int64_t default_value) { battery_conf_protocol_sensor_default_value_.int64_value = default_value; battery_conf_protocol_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_nominal_sensor_default_value(float default_value) { battery_conf_voltage_nominal_sensor_default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); battery_conf_voltage_nominal_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_over_sensor_default_value(float default_value) { battery_conf_voltage_over_sensor_default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); battery_conf_voltage_over_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_charge_sensor_default_value(float default_value) { battery_conf_voltage_charge_sensor_default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); battery_conf_voltage_charge_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_lack_sensor_default_value(float default_value) { battery_conf_voltage_lack_sensor_default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); battery_conf_voltage_lack_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_discharge_stop_sensor_default_value(float default_value) { battery_conf_voltage_discharge_stop_sensor_default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); battery_conf_voltage_discharge_stop_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_current_charge_limit_sensor_default_value(float default_value) { battery_conf_current_charge_limit_sensor_default_value_.int64_value = static_cast<int64_t>(default_value * 0.01); battery_conf_current_charge_limit_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_current_discharge_limit_sensor_default_value(float default_value) { battery_conf_current_discharge_limit_sensor_default_value_.int64_value = static_cast<int64_t>(default_value * 0.01); battery_conf_current_discharge_limit_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_depth_of_discharge_sensor_default_value(int64_t default_value) { battery_conf_depth_of_discharge_sensor_default_value_.int64_value = default_value; battery_conf_depth_of_discharge_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_end_of_discharge_sensor_default_value(int64_t default_value) { battery_conf_end_of_discharge_sensor_default_value_.int64_value = default_value; battery_conf_end_of_discharge_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_capacity_sensor_default_value(int64_t default_value) { battery_conf_capacity_sensor_default_value_.int64_value = default_value; battery_conf_capacity_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_cell_type_sensor_default_value(int64_t default_value) { battery_conf_cell_type_sensor_default_value_.int64_value = default_value; battery_conf_cell_type_sensor_default_value_set_ = true; }
-		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value) { battery_conf_eps_buffer_sensor_default_value_.int64_value = default_value; battery_conf_eps_buffer_sensor_default_value_set_ = true; }
+       // Set update intervals for sensors
 
-		void SofarSolar_Inverter::set_desired_grid_power_sensor_enforce_default_value(bool enforce_default_value) { desired_grid_power_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_minimum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { minimum_battery_power_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_maximum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { maximum_battery_power_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_energy_storage_mode_sensor_enforce_default_value(bool enforce_default_value) { energy_storage_mode_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_id_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_id_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_address_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_address_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_protocol_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_protocol_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_nominal_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_voltage_nominal_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_over_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_voltage_over_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_charge_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_voltage_charge_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_lack_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_voltage_lack_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_voltage_discharge_stop_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_voltage_discharge_stop_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_current_charge_limit_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_current_charge_limit_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_current_discharge_limit_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_current_discharge_limit_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_depth_of_discharge_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_depth_of_discharge_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_end_of_discharge_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_end_of_discharge_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_capacity_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_capacity_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_cell_type_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_cell_type_sensor_enforce_default_value_ = enforce_default_value; }
-		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value) { battery_conf_eps_buffer_sensor_enforce_default_value_ = enforce_default_value;  }
-    }
+        void SofarSolar_Inverter::set_pv_generation_today_sensor_update_interval(uint16_t pv_generation_today_sensor_update_interval) { G3_dynamic.at(PV_GENERATION_TODAY).update_interval = pv_generation_today_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pv_generation_total_sensor_update_interval(uint16_t pv_generation_total_sensor_update_interval) { G3_dynamic.at(PV_GENERATION_TOTAL).update_interval = pv_generation_total_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_load_consumption_today_sensor_update_interval(uint16_t load_consumption_today_sensor_update_interval) { G3_dynamic.at(LOAD_CONSUMPTION_TODAY).update_interval = load_consumption_today_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_load_consumption_total_sensor_update_interval(uint16_t load_consumption_total_sensor_update_interval) { G3_dynamic.at(LOAD_CONSUMPTION_TOTAL).update_interval = load_consumption_total_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_charge_today_sensor_update_interval(uint16_t battery_charge_today_sensor_update_interval) { G3_dynamic.at(BATTERY_CHARGE_TODAY).update_interval = battery_charge_today_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_charge_total_sensor_update_interval(uint16_t battery_charge_total_sensor_update_interval) { G3_dynamic.at(BATTERY_CHARGE_TOTAL).update_interval = battery_charge_total_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_discharge_today_sensor_update_interval(uint16_t battery_discharge_today_sensor_update_interval) { G3_dynamic.at(BATTERY_DISCHARGE_TODAY).update_interval = battery_discharge_today_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_discharge_total_sensor_update_interval(uint16_t battery_discharge_total_sensor_update_interval) { G3_dynamic.at(BATTERY_DISCHARGE_TOTAL).update_interval = battery_discharge_total_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_total_active_power_inverter_sensor_update_interval(uint16_t total_active_power_inverter_update_interval) { G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).update_interval = total_active_power_inverter_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pv_voltage_1_sensor_update_interval(uint16_t pv_voltage_1_sensor_update_interval) { G3_dynamic.at(PV_VOLTAGE_1).update_interval = pv_voltage_1_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pv_current_1_sensor_update_interval(uint16_t pv_current_1_sensor_update_interval) { G3_dynamic.at(PV_CURRENT_1).update_interval = pv_current_1_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pv_power_1_sensor_update_interval(uint16_t pv_power_1_sensor_update_interval) { G3_dynamic.at(PV_POWER_1).update_interval = pv_power_1_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pv_voltage_2_sensor_update_interval(uint16_t pv_voltage_2_sensor_update_interval) { G3_dynamic.at(PV_VOLTAGE_2).update_interval = pv_voltage_2_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pv_current_2_sensor_update_interval(uint16_t pv_current_2_sensor_update_interval) { G3_dynamic.at(PV_CURRENT_2).update_interval = pv_current_2_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pv_power_2_sensor_update_interval(uint16_t pv_power_2_sensor_update_interval) { G3_dynamic.at(PV_POWER_2).update_interval = pv_power_2_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pv_power_total_sensor_update_interval(uint16_t pv_power_total_sensor_update_interval) { G3_dynamic.at(PV_POWER_TOTAL).update_interval = pv_power_total_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_power_total_sensor_update_interval(uint16_t battery_power_total_sensor_update_interval) { G3_dynamic.at(BATTERY_POWER_TOTAL).update_interval = battery_power_total_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_state_of_charge_total_sensor_update_interval(uint16_t battery_state_of_charge_total_sensor_update_interval) { G3_dynamic.at(BATTERY_STATE_OF_CHARGE_TOTAL).update_interval = battery_state_of_charge_total_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_desired_grid_power_sensor_update_interval(uint16_t desired_grid_power_sensor_update_interval) { G3_dynamic.at(DESIRED_GRID_POWER).update_interval = desired_grid_power_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_minimum_battery_power_sensor_update_interval(uint16_t minimum_battery_power_sensor_update_interval) { G3_dynamic.at(MINIMUM_BATTERY_POWER).update_interval = minimum_battery_power_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_maximum_battery_power_sensor_update_interval(uint16_t maximum_battery_power_sensor_update_interval) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).update_interval = maximum_battery_power_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_energy_storage_mode_sensor_update_interval(uint16_t energy_storage_mode_sensor_update_interval) { G3_dynamic.at(ENERGY_STORAGE_MODE).update_interval = energy_storage_mode_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_id_sensor_update_interval(uint16_t battery_conf_id_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_ID).update_interval = battery_conf_id_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_address_sensor_update_interval(uint16_t battery_conf_address_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_ADDRESS).update_interval = battery_conf_address_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_protocol_sensor_update_interval(uint16_t battery_conf_protocol_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_PROTOCOL).update_interval = battery_conf_protocol_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_nominal_sensor_update_interval(uint16_t battery_conf_voltage_nominal_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).update_interval = battery_conf_voltage_nominal_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_over_sensor_update_interval(uint16_t battery_conf_voltage_over_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).update_interval = battery_conf_voltage_over_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_charge_sensor_update_interval(uint16_t battery_conf_voltage_charge_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).update_interval = battery_conf_voltage_charge_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_lack_sensor_update_interval(uint16_t battery_conf_voltage_lack_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).update_interval = battery_conf_voltage_lack_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_discharge_stop_sensor_update_interval(uint16_t battery_conf_voltage_discharge_stop_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).update_interval = battery_conf_voltage_discharge_stop_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_current_charge_limit_sensor_update_interval(uint16_t battery_conf_current_charge_limit_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).update_interval = battery_conf_current_charge_limit_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_current_discharge_limit_sensor_update_interval(uint16_t battery_conf_current_discharge_limit_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).update_interval = battery_conf_current_discharge_limit_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_depth_of_discharge_sensor_update_interval(uint16_t battery_conf_depth_of_discharge_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).update_interval = battery_conf_depth_of_discharge_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_end_of_discharge_sensor_update_interval(uint16_t battery_conf_end_of_discharge_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).update_interval = battery_conf_end_of_discharge_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_capacity_sensor_update_interval(uint16_t battery_conf_capacity_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_CAPACITY).update_interval = battery_conf_capacity_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_cell_type_sensor_update_interval(uint16_t battery_conf_cell_type_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_CELL_TYPE).update_interval = battery_conf_cell_type_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_update_interval(uint16_t battery_conf_eps_buffer_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).update_interval = battery_conf_eps_buffer_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_conf_control_sensor_update_interval(uint16_t battery_conf_control_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_CONTROL).update_interval = battery_conf_control_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_frequency_sensor_update_interval(uint16_t grid_frequency_sensor_update_interval) { G3_dynamic.at(GRID_FREQUENCY).update_interval = grid_frequency_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_voltage_phase_r_sensor_update_interval(uint16_t grid_voltage_phase_r_sensor_update_interval) { G3_dynamic.at(GRID_VOLTAGE_PHASE_R).update_interval = grid_voltage_phase_r_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_current_phase_r_sensor_update_interval(uint16_t grid_current_phase_r_sensor_update_interval) { G3_dynamic.at(GRID_CURRENT_PHASE_R).update_interval = grid_current_phase_r_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_power_phase_r_sensor_update_interval(uint16_t grid_power_phase_r_sensor_update_interval) { G3_dynamic.at(GRID_POWER_PHASE_R).update_interval = grid_power_phase_r_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_voltage_phase_s_sensor_update_interval(uint16_t grid_voltage_phase_s_sensor_update_interval) { G3_dynamic.at(GRID_VOLTAGE_PHASE_S).update_interval = grid_voltage_phase_s_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_current_phase_s_sensor_update_interval(uint16_t grid_current_phase_s_sensor_update_interval) { G3_dynamic.at(GRID_CURRENT_PHASE_S).update_interval = grid_current_phase_s_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_power_phase_s_sensor_update_interval(uint16_t grid_power_phase_s_sensor_update_interval) { G3_dynamic.at(GRID_POWER_PHASE_S).update_interval = grid_power_phase_s_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_voltage_phase_t_sensor_update_interval(uint16_t grid_voltage_phase_t_sensor_update_interval) { G3_dynamic.at(GRID_VOLTAGE_PHASE_T).update_interval = grid_voltage_phase_t_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_current_phase_t_sensor_update_interval(uint16_t grid_current_phase_t_sensor_update_interval) { G3_dynamic.at(GRID_CURRENT_PHASE_T).update_interval = grid_current_phase_t_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_grid_power_phase_t_sensor_update_interval(uint16_t grid_power_phase_t_sensor_update_interval) { G3_dynamic.at(GRID_POWER_PHASE_T).update_interval = grid_power_phase_t_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_power_total_sensor_update_interval(uint16_t off_grid_power_total_sensor_update_interval) { G3_dynamic.at(OFF_GRID_POWER_TOTAL).update_interval = off_grid_power_total_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_frequency_sensor_update_interval(uint16_t off_grid_frequency_sensor_update_interval) { G3_dynamic.at(OFF_GRID_FREQUENCY).update_interval = off_grid_frequency_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_voltage_phase_r_sensor_update_interval(uint16_t off_grid_voltage_phase_r_sensor_update_interval) { G3_dynamic.at(OFF_GRID_VOLTAGE_PHASE_R).update_interval = off_grid_voltage_phase_r_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_current_phase_r_sensor_update_interval(uint16_t off_grid_current_phase_r_sensor_update_interval) { G3_dynamic.at(OFF_GRID_CURRENT_PHASE_R).update_interval = off_grid_current_phase_r_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_power_phase_r_sensor_update_interval(uint16_t off_grid_power_phase_r_sensor_update_interval) { G3_dynamic.at(OFF_GRID_POWER_PHASE_R).update_interval = off_grid_power_phase_r_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_voltage_phase_s_sensor_update_interval(uint16_t off_grid_voltage_phase_s_sensor_update_interval) { G3_dynamic.at(OFF_GRID_VOLTAGE_PHASE_S).update_interval = off_grid_voltage_phase_s_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_current_phase_s_sensor_update_interval(uint16_t off_grid_current_phase_s_sensor_update_interval) { G3_dynamic.at(OFF_GRID_CURRENT_PHASE_S).update_interval = off_grid_current_phase_s_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_power_phase_s_sensor_update_interval(uint16_t off_grid_power_phase_s_sensor_update_interval) { G3_dynamic.at(OFF_GRID_POWER_PHASE_S).update_interval = off_grid_power_phase_s_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_voltage_phase_t_sensor_update_interval(uint16_t off_grid_voltage_phase_t_sensor_update_interval) { G3_dynamic.at(OFF_GRID_VOLTAGE_PHASE_T).update_interval = off_grid_voltage_phase_t_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_current_phase_t_sensor_update_interval(uint16_t off_grid_current_phase_t_sensor_update_interval) { G3_dynamic.at(OFF_GRID_CURRENT_PHASE_T).update_interval = off_grid_current_phase_t_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_off_grid_power_phase_t_sensor_update_interval(uint16_t off_grid_power_phase_t_sensor_update_interval) { G3_dynamic.at(OFF_GRID_POWER_PHASE_T).update_interval = off_grid_power_phase_t_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_active_control_sensor_update_interval(uint16_t battery_active_control_sensor_update_interval) { G3_dynamic.at(BATTERY_ACTIVE_CONTROL).update_interval = battery_active_control_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_battery_active_oneshot_sensor_update_interval(uint16_t battery_active_oneshot_sensor_update_interval) { G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).update_interval = battery_active_oneshot_sensor_update_interval * 1000; }
+
+
+        // Set default values for sensors
+
+		void SofarSolar_Inverter::set_desired_grid_power_sensor_default_value(int64_t default_value) { G3_dynamic.at(DESIRED_GRID_POWER).default_value_.int64_value = default_value; G3_dynamic.at(DESIRED_GRID_POWER).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_minimum_battery_power_sensor_default_value(int64_t default_value) { G3_dynamic.at(MINIMUM_BATTERY_POWER).default_value_.int64_value = default_value; G3_dynamic.at(MINIMUM_BATTERY_POWER).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_maximum_battery_power_sensor_default_value(int64_t default_value) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value_.int64_value = default_value; G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_energy_storage_mode_sensor_default_value(int64_t default_value) { G3_dynamic.at(ENERGY_STORAGE_MODE).default_value_.int64_value = default_value; G3_dynamic.at(ENERGY_STORAGE_MODE).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_id_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_ID).default_value_.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_ID).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_address_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_ADDRESS).default_value_.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_ADDRESS).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_protocol_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_PROTOCOL).default_value_.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_PROTOCOL).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_nominal_sensor_default_value(float default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_over_sensor_default_value(float default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_charge_sensor_default_value(float default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_lack_sensor_default_value(float default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_discharge_stop_sensor_default_value(float default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).default_value_.int64_value = static_cast<int64_t>(default_value * 0.1); G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_current_charge_limit_sensor_default_value(float default_value) { G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).default_value_.int64_value = static_cast<int64_t>(default_value * 0.01); G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_current_discharge_limit_sensor_default_value(float default_value) { G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).default_value_.int64_value = static_cast<int64_t>(default_value * 0.01); G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_depth_of_discharge_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).default_value_.int64_value = default_value); G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_end_of_discharge_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).default_value_.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_capacity_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_CAPACITY).default_value_.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_CAPACITY).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_cell_type_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value_.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value_set_ = true; }
+		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_set_ = true; }
+
+		void SofarSolar_Inverter::set_desired_grid_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(DESIRED_GRID_POWER).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_minimum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(MINIMUM_BATTERY_POWER).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_maximum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_energy_storage_mode_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(ENERGY_STORAGE_MODE).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_id_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_ID).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_address_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_ADDRESS).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_protocol_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_PROTOCOL).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_nominal_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_over_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_charge_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_lack_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_voltage_discharge_stop_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_current_charge_limit_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_current_discharge_limit_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_depth_of_discharge_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_end_of_discharge_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_capacity_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_CAPACITY).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_cell_type_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_CELL_TYPE).enforce_default_value_ = enforce_default_value; }
+		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value_ = enforce_default_value; }
 }
