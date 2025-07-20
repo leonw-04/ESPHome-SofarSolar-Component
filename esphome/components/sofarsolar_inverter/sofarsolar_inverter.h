@@ -192,11 +192,8 @@ namespace esphome {
 			void parse_read_response(const std::vector<uint8_t> &data);
 			void parse_write_response(const std::vector<uint8_t> &data);
 
-            void update_sensor(const register_read_task task);
-            void send_modbus(std::vector<uint8_t> frame);
-            void read_modbus_registers(uint16_t start_address, uint16_t quantity);
-            bool receive_modbus_response(std::vector<uint8_t> &response, uint8_t response_length);
-            void write_modbus_registers(uint16_t start_address, uint16_t quantity, const std::vector<uint8_t> &data);
+        	void read_modbus_registers(uint16_t start_address, uint16_t register_count);
+			void write_modbus_register(uint16_t start_address, uint16_t value, uint8_t type, uint8_t write_function);
 
             std::string vector_to_string(const std::vector<uint8_t> &data) {
                 std::string result;
@@ -207,10 +204,6 @@ namespace esphome {
                 }
                 return result;
             }
-            bool check_for_response();
-            bool read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info);
-            bool extract_data_from_response(std::vector<uint8_t> &response, register_read_task &task);
-            bool write_response(register_write_task &task);
 
 			void write_desired_grid_power(register_write_task &task);
 			void write_battery_conf(register_write_task &task);
