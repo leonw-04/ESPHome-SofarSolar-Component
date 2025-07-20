@@ -138,7 +138,7 @@ namespace esphome {
             }
 
 			if (!current_reading && !register_read_queue.empty()) {
-				read_modbus_registers(G3_registers[register_read_queue.top().register_key].start_address, G3_registers[register_read_queue.top().register_key].register_count);
+				read_modbus_registers(G3_registers.at(register_read_queue.top().register_key).start_address, G3_registers.at(register_read_queue.top().register_key).register_count);
 			}
         }
 
@@ -194,7 +194,7 @@ namespace esphome {
                         return;
                     }
                     uint16_t value = (data[3] << 8) | data[4];
-                    G3_registers[register_read_queue.top().register_key].sensor->publish_state(value);
+                    G3_registers.at(register_read_queue.top().register_key).sensor->publish_state(value);
                     break;
 				case S_WORD:
                     if (data.size() != 3 + 2 && data[2] != 2) {
@@ -202,7 +202,7 @@ namespace esphome {
                         return;
                     }
                     int16_t value = (data[3] << 8) | data[4];
-                    G3_registers[register_read_queue.top().register_key].sensor->publish_state(value);
+                    G3_registers.at(register_read_queue.top().register_key).sensor->publish_state(value);
                     break;
 				case U_DWORD:
                     if (data.size() != 3 + 4 && data[2] != 4) {
@@ -210,7 +210,7 @@ namespace esphome {
                         return;
                     }
                     uint32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
-                    G3_registers[register_read_queue.top().register_key].sensor->publish_state(value);
+                    G3_registers.at(register_read_queue.top().register_key).sensor->publish_state(value);
                     break;
 				case S_DWORD:
                     if (data.size() != 3 + 4 && data[2] != 4) {
@@ -218,10 +218,10 @@ namespace esphome {
                         return;
                     }
                     int32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
-                    G3_registers[register_read_queue.top().register_key].sensor->publish_state(value);
+                    G3_registers.at(register_read_queue.top().register_key).sensor->publish_state(value);
                     break;
 				default:
-                    ESP_LOGE(TAG, "Unsupported register type for read response: %d", G3_registers[register_read_queue.top().register_key].type);
+                    ESP_LOGE(TAG, "Unsupported register type for read response: %d", G3_registers.at(register_read_queue.top().register_key).type);
                     return;
             }
         }
