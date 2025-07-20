@@ -156,6 +156,20 @@ namespace esphome {
 
 		void SofarSolar_Inverter::on_modbus_data(const std::vector<uint8_t> &data) {
             ESP_LOGVV(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
+			if (current_writing || current_reading) {
+                switch (data[1]) {
+					case 0x03: // Read Holding Registers
+						parse_read_response(data);
+						break;
+					case 0x10: // Write Multiple Registers
+						parse_write_response(data);
+						break;
+					default:
+						ESP_LOGE(TAG, "Unknown Modbus function code: %02X", data[1]);
+				}
+            } else {
+				ESP_LOGE(TAG, "Received Modbus data while not in a read or write operation");
+			}
         }
 
         void SofarSolar_Inverter::on_modbus_error(uint8_t function_code, uint8_t exception_code) {
@@ -183,15 +197,46 @@ namespace esphome {
             }
         }
 
-		void SofarSolar_Inverter::on_read_response(ModbusRegisterType register_type, uint16_t start_address, const std::vector<uint8_t> &data) {
-            ESP_LOGVV(TAG, "Read response for register type %d at address %04X: %s", register_type, start_address, vector_to_string(data).c_str());
-            if (register_type != ModbusRegisterType::HOLDING) {
-				ESP_LOGE(TAG, "Invalid register type for read response: %d", register_type);
-                return; // Only handle holding registers
-			}
-		}
-
-		void SofarSolar_Inverter::on_write_response(ModbusRegisterType register_type, uint16_t start_address, const std::vector<uint8_t> &data) {};
+		void SofarSolar_Inverter::parse_read_response(const std::vector<uint8_t> &data) {
+            ESP_LOGVV(TAG, "Parsing read response: %s", vector_to_string(data).c_str());
+            switch (G3_register[register_read_queue.top().register_key].type) {
+                case U_WORD:
+                    if (data.size() != 3 + 2 && data[2] != 2) {
+                        ESP_LOGE(TAG, "Invalid read response size for U_WORD: %d", data.size());
+                        return;
+                    }
+                    uint16_t value = (data[3] << 8) | data[4];
+                    G3_registers[register_read_queue.top().register_key].sensor->publish_state(value);
+                    break;
+				case S_WORD:
+                    if (data.size() != 3 + 2 && data[2] != 2) {
+                        ESP_LOGE(TAG, "Invalid read response size for INT_WORD: %d", data.size());
+                        return;
+                    }
+                    int16_t value = (data[3] << 8) | data[4];
+                    G3_registers[register_read_queue.top().register_key].sensor->publish_state(value);
+                    break;
+				case U_DWORD:
+                    if (data.size() != 3 + 4 && data[2] != 4) {
+                        ESP_LOGE(TAG, "Invalid read response size for U_DWORD: %d", data.size());
+                        return;
+                    }
+                    uint32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
+                    G3_registers[register_read_queue.top().register_key].sensor->publish_state(value);
+                    break;
+				case S_DWORD:
+                    if (data.size() != 3 + 4 && data[2] != 4) {
+                        ESP_LOGE(TAG, "Invalid read response size for INT_DWORD: %d", data.size());
+                        return;
+                    }
+                    int32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
+                    G3_registers[register_read_queue.top().register_key].sensor->publish_state(value);
+                    break;
+				default:
+                    ESP_LOGE(TAG, "Unsupported register type for read response: %d", G3_registers[register_read_queue.top().register_key].type);
+                    return;
+            }
+        }
 
 
             //if (response.data()[2] != response.size() - 5 && response.data()[2] != register_info.quantity * 2) {

@@ -172,8 +172,8 @@ namespace esphome {
 			void on_modbus_data(const std::vector<uint8_t> &data) override;
 			void on_modbus_error(uint8_t function_code, uint8_t exception_code) override;
 
-			void on_read_response(ModbusRegisterType register_type, uint16_t start_address, const std::vector<uint8_t> &data);
-			void on_write_response(ModbusRegisterType register_type, uint16_t start_address, const std::vector<uint8_t> &data);
+			void parse_read_response(const std::vector<uint8_t> &data);
+			void parse_write_response(const std::vector<uint8_t> &data);
 
             void update_sensor(const register_read_task task);
             void send_modbus(std::vector<uint8_t> frame);
