@@ -269,7 +269,7 @@ namespace esphome {
         void SofarSolar_Inverter::read_modbus_registers(uint16_t start_address, uint16_t register_count) {
             // Create Modbus frame for reading registers
 			std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x03, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(register_count >> 8), static_cast<uint8_t>(register_count & 0xFF)};
-            this->send_raw(data);
+            this->send_raw(frame);
         }
 
         void SofarSolar_Inverter::write_modbus_registers(uint16_t start_address, uint16_t register_count, const std::vector<uint8_t> &data) {
@@ -277,34 +277,6 @@ namespace esphome {
             std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(register_count >> 8), static_cast<uint8_t>(register_count & 0xFF), static_cast<uint8_t>(data.size())};
             frame.insert(frame.end(), data.begin(), data.end());
             this->send_raw(data);
-        }
-
-        bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response, uint8_t response_length) {
-            // Read Modbus response from UART
-            if (this->peek() != -1 && this->available()) {
-                ESP_LOGV(TAG, "Data available in UART buffer");
-            } else {
-                ESP_LOGV(TAG, "No data available in UART buffer");
-                return false;
-            }
-            response.clear();
-            uint8_t buffer[response_length];
-            uint8_t i = 0;
-            while (this->available()) {
-                if (i >= response_length) {
-                    ESP_LOGE(TAG, "Received more bytes than expected: %d", i);
-                    empty_uart_buffer(); // Clear the buffer if too many bytes are received
-                    return true;
-                }
-                if (!this->read_byte(&buffer[i])) {
-                    ESP_LOGE(TAG, "Failed to read byte from UART");
-                    return false;
-                }
-                i++;
-            }
-            response.insert(response.end(), buffer, buffer + response_length);
-            ESP_LOGD(TAG, "Received Modbus response: %s", vector_to_string(response).c_str());
-            return true;
         }
 
         void SofarSolar_Inverter::set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { pv_generation_today_sensor_ = pv_generation_today_sensor; }
