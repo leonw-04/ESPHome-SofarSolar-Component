@@ -197,7 +197,7 @@ namespace esphome {
                         return;
                     }
                     uint16_t value = (data[3] << 8) | data[4];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * (10**G3_registers.at(register_read_queue.top().register_key).scale));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale));
                     break;
 				}
 				case S_WORD: {
@@ -206,7 +206,7 @@ namespace esphome {
                         return;
                     }
                     int16_t value = (data[3] << 8) | data[4];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * (10**G3_registers.at(register_read_queue.top().register_key).scale));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale));
                     break;
 				}
 				case U_DWORD: {
@@ -215,7 +215,7 @@ namespace esphome {
                         return;
                     }
                     uint32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * (10**G3_registers.at(register_read_queue.top().register_key).scale));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale));
                     break;
 				}
 				case S_DWORD: {
@@ -224,7 +224,7 @@ namespace esphome {
                         return;
                     }
                     int32_t value = (data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * (10**G3_registers.at(register_read_queue.top().register_key).scale));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale));
                     break;
 				}
 				default:
