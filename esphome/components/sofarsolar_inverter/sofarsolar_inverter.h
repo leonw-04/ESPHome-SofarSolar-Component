@@ -3,7 +3,7 @@
 #include "vector"
 #include "map"
 #include "esphome/components/sensor/sensor.h"
-#include "esphome/components/modbus_controller/modbus_controller.h"
+#include "esphome/components/modbus/modbus.h"
 #include "esphome/core/component.h"
 
 #define PV_GENERATION_TODAY 1
