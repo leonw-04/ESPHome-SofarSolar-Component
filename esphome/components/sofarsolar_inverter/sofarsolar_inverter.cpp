@@ -10,7 +10,7 @@ namespace esphome {
         struct SofarSolar_Register {
             uint16_t start_address; // Start address of the register
             uint16_t register_count; // Number of registers to read
-            modbus_controller::SensorValueType type; // Type of the register (e.g., uint16, int16, etc.)
+            uint8_t type; // Type of the register (e.g., uint16, int16, etc.)
             uint8_t priority; // Priority of the register for reading
             int8_t scale; // Scale factor for the register value
             SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0) {}
