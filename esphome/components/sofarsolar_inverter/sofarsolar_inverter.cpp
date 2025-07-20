@@ -9,40 +9,106 @@ namespace esphome {
 
         struct SofarSolar_Register {
             uint16_t start_address; // Start address of the register
-            uint16_t quantity; // Number of registers to read
-            uint8_t type; // Type of the register (0: uint16_t, 1: int16_t, 2: uint32_t, 3: int32_t, 4: float16, 5: float32)
+            uint16_t register_count; // Number of registers to read
+            modbus_controller::SensorValueType type; // Type of the register (e.g., uint16, int16, etc.)
             uint8_t priority; // Priority of the register for reading
-            float scale; // Scale factor for the register value
-            uint16_t update_interval = 0; // Update interval in seconds for the register
-            uint64_t timer = 0; // Timer in seconds for reading the register
-            SofarSolar_RegisterValue write_value; // Current value of the register
-			SofarSolar_RegisterValue default_value; // Default value of the register
-            bool write_set_value = false; // Flag to indicate if the register has a write value
-		    bool is_default_value_set = false; // Flag to check if default value is set
-			bool enforce_default_value = false; // Flag to enforce default value
-            sensor::Sensor *sensor = nullptr; // Pointer to the sensor to update
-            bool is_queued = false; // Flag to indicate if the register is queued for reading
-			bool writeable;
-			uint8_t write_funktion = 0; // Function pointer for writing to the register
-            SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0.0f), writeable(false), write_funktion(0) {}
-            SofarSolar_Register(uint16_t start_address, uint16_t quantity, uint8_t type, uint8_t priority, float scale, sensor::Sensor *sensor, uint16_t update_interval, SofarSolar_RegisterValue default_value, bool is_default_value_set, bool enforce_default_value, bool writeable, uint8_t write_funktion) :
-				start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale), sensor(sensor), update_interval(update_interval), default_value(default_value), is_default_value_set(is_default_value_set), enforce_default_value(enforce_default_value), writeable(writeable), write_funktion(write_funktion) {}
+            int8_t scale; // Scale factor for the register value
+            SofarSolar_Register() : start_address(0), quantity(0), type(0), priority(0), scale(0) {}
+            SofarSolar_Register(uint16_t start_address, uint16_t quantity, modbus_controller::SensorValueType type, uint8_t priority, uint8_t scale :
+				start_address(start_address), quantity(quantity), type(type), priority(priority), scale(scale) {}
         };
 
+		struct SofarSolar_RegisterDynamic {
+			uint64_t last_update; // Last update time in milliseconds
+			uint16_t update_interval; // Update interval in milliseconds
+			sensor::Sensor *sensor_ptr; // Pointer to the sensor associated with the register
+            SofarSolar_RegisterValue default_value; // Value of the register
+            bool default_value_set; // Flag to indicate if the default value is set
+			bool enforce_default_value; // Flag to indicate if the default value should be enforced
+			bool is_queued = false; // Flag to indicate if the register is queued for reading/writing
+			SofarSolar_RegisterDynamic(sensor::Sensor *sensor_ptr, uint16_t update_interval, SofarSolar_RegisterValue default_value = {}, bool default_value_set = false, bool enforce_default_value = false)
+                : last_update(0), update_interval(update_interval), sensor_ptr(sensor_ptr), default_value(default_value), default_value_set(default_value_set), enforce_default_value(enforce_default_value) {}
+		};
+
 		struct register_read_task {
-			SofarSolar_Register *register_ptr; // Pointer to the register to read
-		    SofarSolar_RegisterValue read_value; // Value to read
+			uint8_t register_key; // Pointer to the register to read
             bool operator<(const register_read_task &other) const {
-                return this->register_ptr->priority > other.register_ptr->priority;
+                return G3_registers[this->register_key].priority > G3_registers[other.register_key].priority;
             }
 		};
 
         struct register_write_task {
-			SofarSolar_Register *register_ptr; // Pointer to the register to read
-            uint8_t number_of_registers; // Length of the data to write
+			uint8_t first_register_key; // Pointer to the register to write
+			uint8_t number_of_registers; // Number of registers to write
+            bool operator<(const register_read_task &other) const {
+                return G3_registers[this->register_key].priority > G3_registers[other.register_key].priority;
+            }
         };
 
         SofarSolar_Inverter::SofarSolar_Inverter() {
+			this->G3_dynamic = {
+				{PV_GENERATION_TODAY, SofarSolar_RegisterDynamic{pv_generation_today_sensor_, pv_generation_today_sensor_update_interval_, {}, false, false}}, // PV Generation Today
+        	    {PV_GENERATION_TOTAL, SofarSolar_RegisterDynamic{pv_generation_total_sensor_, pv_generation_total_sensor_update_interval_, {}, false, false}}, // PV Generation Total
+    	        {LOAD_CONSUMPTION_TODAY, SofarSolar_RegisterDynamic{load_consumption_today_sensor_, load_consumption_today_sensor_update_interval_, {}, false, false}}, // Load Consumption Today
+    			{LOAD_CONSUMPTION_TOTAL, SofarSolar_RegisterDynamic{load_consumption_total_sensor_, load_consumption_total_sensor_update_interval_, {}, false, false}}, // Load Consumption Total
+            	{BATTERY_CHARGE_TODAY, SofarSolar_RegisterDynamic{battery_charge_today_sensor_, battery_charge_today_sensor_update_interval_, {}, false, false}}, // Battery Charge Today
+        	    {BATTERY_CHARGE_TOTAL, SofarSolar_RegisterDynamic{battery_charge_total_sensor_, battery_charge_total_sensor_update_interval_, {}, false, false}}, // Battery Charge Total
+    	        {BATTERY_DISCHARGE_TODAY, SofarSolar_RegisterDynamic{battery_discharge_today_sensor_, battery_discharge_today_sensor_update_interval_, {}, false, false}}, // Battery Discharge Today
+	            {BATTERY_DISCHARGE_TOTAL, SofarSolar_RegisterDynamic{battery_discharge_total_sensor_ ,battery_discharge_total_sensor_update_interval_ ,{}, false ,false}}, // Battery Discharge Total
+            	{TOTAL_ACTIVE_POWER_INVERTER,SofarSolar_RegisterDynamic{total_active_power_inverter_sensor_ ,total_active_power_inverter_sensor_update_interval_ ,{}, false ,false}}, // Total Active Power Inverter
+        	    {PV_VOLTAGE_1 ,SofarSolar_RegisterDynamic{pv_voltage_1_sensor_ ,pv_voltage_1_sensor_update_interval_ ,{}, false ,false}}, // PV Voltage 1
+    	        {PV_CURRENT_1 ,SofarSolar_RegisterDynamic{pv_current_1_sensor_ ,pv_current_1_sensor_update_interval_ ,{}, false ,false}}, // PV Current 1
+	            {PV_POWER_1 ,SofarSolar_RegisterDynamic{pv_power_1_sensor_ ,pv_power_1_sensor_update_interval_ ,{}, false ,false}}, // PV Power 1
+            	{PV_VOLTAGE_2 ,SofarSolar_RegisterDynamic{pv_voltage_2_sensor_ ,pv_voltage_2_sensor_update_interval_ ,{}, false ,false}}, // PV Voltage 2
+        	    {PV_CURRENT_2 ,SofarSolar_RegisterDynamic{pv_current_2_sensor_ ,pv_current_2_sensor_update_interval_ ,{}, false ,false}}, // PV Current 2
+    	        {PV_POWER_2, SofarSolar_RegisterDynamic{pv_power_2_sensor_, pv_power_2_sensor_update_interval_, {}, false, false}}, // PV Power 2
+	            {PV_POWER_TOTAL, SofarSolar_RegisterDynamic{pv_power_total_sensor_, pv_power_total_sensor_update_interval_, {}, false, false}}, // PV Power Total
+            	{BATTERY_POWER_TOTAL, SofarSolar_RegisterDynamic{battery_power_total_sensor_, battery_power_total_sensor_update_interval_, {}, false, false}}, // Battery Power Total
+        	    {BATTERY_STATE_OF_CHARGE_TOTAL, SofarSolar_RegisterDynamic{battery_state_of_charge_total_sensor_, battery_state_of_charge_total_sensor_update_interval_, {}, false, false}}, // Battery State of Charge Total
+    	        {DESIRED_GRID_POWER, SofarSolar_RegisterDynamic{desired_grid_power_sensor_, desired_grid_power_sensor_update_interval_, desired_grid_power_sensor_default_value_, desired_grid_power_sensor_default_value_set_, desired_grid_power_sensor_enforce_default_value_}}, // Desired Grid Power
+				{MINIMUM_BATTERY_POWER, SofarSolar_RegisterDynamic{minimum_battery_power_sensor_, minimum_battery_power_sensor_update_interval_, minimum_battery_power_sensor_default_value_, minimum_battery_power_sensor_default_value_set_, minimum_battery_power_sensor_enforce_default_value_}}, // Minimum Battery Power
+				{MAXIMUM_BATTERY_POWER, SofarSolar_RegisterDynamic{maximum_battery_power_sensor_, maximum_battery_power_sensor_update_interval_, maximum_battery_power_sensor_default_value_, maximum_battery_power_sensor_default_value_set_, maximum_battery_power_sensor_enforce_default_value_}}, // Maximum Battery Power
+				{ENERGY_STORAGE_MODE, SofarSolar_RegisterDynamic{energy_storage_mode_sensor_, energy_storage_mode_sensor_update_interval_, energy_storage_mode_sensor_default_value_, energy_storage_mode_sensor_default_value_set_, energy_storage_mode_sensor_enforce_default_value_}}, // Energy Storage Mode
+				{BATTERY_CONF_ID, SofarSolar_RegisterDynamic{battery_conf_id_sensor_, battery_conf_id_sensor_update_interval_, battery_conf_id_sensor_default_value_, battery_conf_id_sensor_default_value_set_, battery_conf_id_sensor_enforce_default_value_}}, // Battery Conf ID
+				{BATTERY_CONF_ADDRESS, SofarSolar_RegisterDynamic{battery_conf_address_sensor_, battery_conf_address_sensor_update_interval_, battery_conf_address_sensor_default_value_, battery_conf_address_sensor_default_value_set_, battery_conf_address_sensor_enforce_default_value_}}, // Battery Conf Address
+				{BATTERY_CONF_PROTOCOL, SofarSolar_RegisterDynamic{battery_conf_protocol_sensor_, battery_conf_protocol_sensor_update_interval_, battery_conf_protocol_sensor_default_value_, battery_conf_protocol_sensor_default_value_set_, battery_conf_protocol_sensor_enforce_default_value_}}, // Battery Conf Protocol
+				{BATTERY_CONF_VOLTAGE_NOMINAL, SofarSolar_RegisterDynamic{battery_conf_voltage_nominal_sensor_, battery_conf_voltage_nominal_sensor_update_interval_, battery_conf_voltage_nominal_sensor_default_value_, battery_conf_voltage_nominal_sensor_default_value_set_, battery_conf_voltage_nominal_sensor_enforce_default_value_}}, // Battery Conf Voltage Nominal
+				{BATTERY_CONF_VOLTAGE_OVER, SofarSolar_RegisterDynamic{battery_conf_voltage_over_sensor_, battery_conf_voltage_over_sensor_update_interval_, battery_conf_voltage_over_sensor_default_value_, battery_conf_voltage_over_sensor_default_value_set_, battery_conf_voltage_over_sensor_enforce_default_value_}}, // Battery Conf Voltage Over
+				{BATTERY_CONF_VOLTAGE_CHARGE, SofarSolar_RegisterDynamic{battery_conf_voltage_charge_sensor_, battery_conf_voltage_charge_sensor_update_interval_, battery_conf_voltage_charge_sensor_default_value_, battery_conf_voltage_charge_sensor_default_value_set_, battery_conf_voltage_charge_sensor_enforce_default_value_}}, // Battery Conf Voltage Charge
+				{BATTERY_CONF_VOLTAGE_LACK,SofarSolar_RegisterDynamic{battery_conf_voltage_lack_sensor_ ,battery_conf_voltage_lack_sensor_update_interval_ , battery_conf_voltage_lack_sensor_default_value_, battery_conf_voltage_lack_sensor_default_value_set_ ,battery_conf_voltage_lack_sensor_enforce_default_value_}}, // Battery Conf Voltage Lack
+				{BATTERY_CONF_VOLTAGE_DISCHARGE_STOP,SofarSolar_RegisterDynamic{battery_conf_voltage_discharge_stop_sensor_ ,battery_conf_voltage_discharge_stop_sensor_update_interval_ , battery_conf_voltage_discharge_stop_sensor_default_value_, battery_conf_voltage_discharge_stop_sensor_default_value_set_ ,battery_conf_voltage_discharge_stop_sensor_enforce_default_value_}}, // Battery Conf Voltage Discharge Stop
+				{BATTERY_CONF_CURRENT_CHARGE_LIMIT, SofarSolar_RegisterDynamic{battery_conf_current_charge_limit_sensor_, battery_conf_current_charge_limit_sensor_update_interval_, battery_conf_current_charge_limit_sensor_default_value_, battery_conf_current_charge_limit_sensor_default_value_set_, battery_conf_current_charge_limit_sensor_enforce_default_value_}}, // Battery Conf Current Charge Limit
+				{BATTERY_CONF_CURRENT_DISCHARGE_LIMIT, SofarSolar_RegisterDynamic{battery_conf_current_discharge_limit_sensor_, battery_conf_current_discharge_limit_sensor_update_interval_, battery_conf_current_discharge_limit_sensor_default_value_, battery_conf_current_discharge_limit_sensor_default_value_set_, battery_conf_current_discharge_limit_sensor_enforce_default_value_}}, // Battery Conf Current Discharge Limit
+				{BATTERY_CONF_DEPTH_OF_DISCHARGE, SofarSolar_RegisterDynamic{battery_conf_depth_of_discharge_sensor_, battery_conf_depth_of_discharge_sensor_update_interval_, battery_conf_depth_of_discharge_sensor_default_value_, battery_conf_depth_of_discharge_sensor_default_value_set_, battery_conf_depth_of_discharge_sensor_enforce_default_value_}}, // Battery Conf Depth of Discharge
+				{BATTERY_CONF_END_OF_DISCHARGE,SofarSolar_RegisterDynamic{battery_conf_end_of_discharge_sensor_ ,battery_conf_end_of_discharge_sensor_update_interval_ , battery_conf_end_of_discharge_sensor_default_value_, battery_conf_end_of_discharge_sensor_default_value_set_ ,battery_conf_end_of_discharge_sensor_enforce_default_value_}}, // Battery Conf End of Discharge
+				{BATTERY_CONF_CAPACITY,SofarSolar_RegisterDynamic{battery_conf_capacity_sensor_ ,battery_conf_capacity_sensor_update_interval_, battery_conf_capacity_sensor_default_value_, battery_conf_capacity_sensor_default_value_set_ ,battery_conf_capacity_sensor_enforce_default_value_}}, // Battery Conf Capacity
+				{BATTERY_CONF_CELL_TYPE, SofarSolar_RegisterDynamic{battery_conf_cell_type_sensor_, battery_conf_cell_type_sensor_update_interval_, battery_conf_cell_type_sensor_default_value_, battery_conf_cell_type_sensor_default_value_set_, battery_conf_cell_type_sensor_enforce_default_value_}}, // Battery Conf Cell Type
+				{BATTERY_CONF_EPS_BUFFER, SofarSolar_RegisterDynamic{battery_conf_eps_buffer_sensor_, battery_conf_eps_buffer_sensor_update_interval_, battery_conf_eps_buffer_sensor_default_value_, battery_conf_eps_buffer_sensor_default_value_set_, battery_conf_eps_buffer_sensor_enforce_default_value_}}, // Battery Conf EPS Buffer
+				{BATTERY_CONF_CONTROL,SofarSolar_RegisterDynamic{battery_conf_control_sensor_ ,battery_conf_control_sensor_update_interval_ ,{}, false ,false}}, // Battery Conf Control
+				{GRID_FREQUENCY,SofarSolar_RegisterDynamic{grid_frequency_sensor_ ,grid_frequency_sensor_update_interval_ ,{}, false ,false}}, // Grid Frequency
+				{GRID_VOLTAGE_PHASE_R,SofarSolar_RegisterDynamic{grid_voltage_phase_r_sensor_ ,grid_voltage_phase_r_sensor_update_interval_ ,{}, false ,false}}, // Grid Voltage Phase R
+				{GRID_CURRENT_PHASE_R,SofarSolar_RegisterDynamic{grid_current_phase_r_sensor_, grid_current_phase_r_sensor_update_interval_, {}, false, false}}, // Grid Current Phase R
+				{GRID_POWER_PHASE_R,SofarSolar_RegisterDynamic{grid_power_phase_r_sensor_, grid_power_phase_r_sensor_update_interval_, {}, false, false}}, // Grid Power Phase R
+				{GRID_VOLTAGE_PHASE_S,SofarSolar_RegisterDynamic{grid_voltage_phase_s_sensor_, grid_voltage_phase_s_sensor_update_interval_, {}, false, false}}, // Grid Voltage Phase S
+				{GRID_CURRENT_PHASE_S,SofarSolar_RegisterDynamic{grid_current_phase_s_sensor_, grid_current_phase_s_sensor_update_interval_, {}, false, false}}, // Grid Current Phase S
+				{GRID_POWER_PHASE_S,SofarSolar_RegisterDynamic{grid_power_phase_s_sensor_, grid_power_phase_s_sensor_update_interval_, {}, false, false}}, // Grid Power Phase S
+				{GRID_VOLTAGE_PHASE_T,SofarSolar_RegisterDynamic{grid_voltage_phase_t_sensor_, grid_voltage_phase_t_sensor_update_interval_, {}, false, false}}, // Grid Voltage Phase T
+				{GRID_CURRENT_PHASE_T,SofarSolar_RegisterDynamic{grid_current_phase_t_sensor_, grid_current_phase_t_sensor_update_interval_, {}, false, false}}, // Grid Current Phase T
+				{GRID_POWER_PHASE_T,SofarSolar_RegisterDynamic{grid_power_phase_t_sensor_, grid_power_phase_t_sensor_update_interval_, {}, false, false}}, // Grid Power Phase T
+				{OFF_GRID_POWER_TOTAL,SofarSolar_RegisterDynamic{off_grid_power_total_sensor_ ,off_grid_power_total_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Power Total
+				{OFF_GRID_FREQUENCY,SofarSolar_RegisterDynamic{off_grid_frequency_sensor_, off_grid_frequency_sensor_update_interval_, {}, false, false}}, // Off Grid Frequency
+				{OFF_GRID_VOLTAGE_PHASE_R,SofarSolar_RegisterDynamic{off_grid_voltage_phase_r_sensor_ ,off_grid_voltage_phase_r_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Voltage Phase R
+				{OFF_GRID_CURRENT_PHASE_R,SofarSolar_RegisterDynamic{off_grid_current_phase_r_sensor_ ,off_grid_current_phase_r_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Current Phase R
+				{OFF_GRID_POWER_PHASE_R,SofarSolar_RegisterDynamic{off_grid_power_phase_r_sensor_ ,off_grid_power_phase_r_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Power Phase R
+				{OFF_GRID_VOLTAGE_PHASE_S,SofarSolar_RegisterDynamic{off_grid_voltage_phase_s_sensor_, off_grid_voltage_phase_s_sensor_update_interval_, {}, false, false}}, // Off Grid Voltage Phase S
+				{OFF_GRID_CURRENT_PHASE_S,SofarSolar_RegisterDynamic{off_grid_current_phase_s_sensor_, off_grid_current_phase_s_sensor_update_interval_, {}, false, false}}, // Off Grid Current Phase S
+				{OFF_GRID_POWER_PHASE_S,SofarSolar_RegisterDynamic{off_grid_power_phase_s_sensor_, off_grid_power_phase_s_sensor_update_interval_, {}, false, false}}, // Off Grid Power Phase S
+				{OFF_GRID_VOLTAGE_PHASE_T,SofarSolar_RegisterDynamic{off_grid_voltage_phase_t_sensor_ ,off_grid_voltage_phase_t_sensor_update_interval_ ,{}, false ,false}}, // Off Grid Voltage Phase T
+				{OFF_GRID_CURRENT_PHASE_T,SofarSolar_RegisterDynamic{off_grid_current_phase_t_sensor_, off_grid_current_phase_t_sensor_update_interval_, {}, false, false}}, // Off Grid Current Phase T
+				{OFF_GRID_POWER_PHASE_T,SofarSolar_RegisterDynamic{off_grid_power_phase_t_sensor_, off_grid_power_phase_t_sensor_update_interval_, {}, false, false}}, // Off Grid Power Phase T
+				{BATTERY_ACTIVE_CONTROL, SofarSolar_RegisterDynamic{battery_active_control_sensor_, battery_active_control_sensor_update_interval_, {}, false, false}}, // Battery Active Control
+				{BATTERY_ACTIVE_ONESHOT, SofarSolar_RegisterDynamic{battery_active_oneshot_sensor_, battery_active_oneshot_sensor_update_interval_, {}, false, false}} // Battery Active Oneshot
+        	};
         }
 
         int time_last_loop = 0;
@@ -51,71 +117,10 @@ namespace esphome {
         register_write_task current_write_task; // Pointer to the current writing task
         uint64_t time_begin_modbus_operation = 0;
         uint64_t zero_export_last_update = 0;
-        std::priority_queue<register_read_task> register_tasks;
+        std::priority_queue<register_read_task> register_read_queue; // Priority queue for register read tasks
+        std::priority_queue<register_write_task> register_write_queue; // Priority queue for register write tasks
 
-        void SofarSolar_Inverter::setup() {this->registers_G3 = {
-				{PV_GENERATION_TODAY, SofarSolar_Register{0x0684, 2, 2, 1, 0.01, pv_generation_today_sensor_, pv_generation_today_sensor_update_interval_, {}, false, false, false, 0}}, // PV Generation Today
-        	    {PV_GENERATION_TOTAL, SofarSolar_Register{0x0686, 2, 2, 0, 0.1, pv_generation_total_sensor_, pv_generation_total_sensor_update_interval_, {}, false, false, false, 0}}, // PV Generation Total
-    	        {LOAD_CONSUMPTION_TODAY, SofarSolar_Register{0x0688, 2, 2, 1, 0.01, load_consumption_today_sensor_, load_consumption_today_sensor_update_interval_, {}, false, false, false, 0}}, // Load Consumption Today
-    			{LOAD_CONSUMPTION_TOTAL, SofarSolar_Register{0x068A, 2, 2, 0, 0.1, load_consumption_total_sensor_, load_consumption_total_sensor_update_interval_, {}, false, false, false, 0}}, // Load Consumption Total
-            	{BATTERY_CHARGE_TODAY, SofarSolar_Register{0x0694, 2, 2, 1, 0.01, battery_charge_today_sensor_, battery_charge_today_sensor_update_interval_, {}, false, false, false, 0}}, // Battery Charge Today
-        	    {BATTERY_CHARGE_TOTAL, SofarSolar_Register{0x0696, 2, 2, 0, 0.1, battery_charge_total_sensor_, battery_charge_total_sensor_update_interval_, {}, false, false, false, 0}}, // Battery Charge Total
-    	        {BATTERY_DISCHARGE_TODAY, SofarSolar_Register{0x0698, 2, 2, 1, 0.01, battery_discharge_today_sensor_, battery_discharge_today_sensor_update_interval_, {}, false, false, false, 0}}, // Battery Discharge Today
-	            {BATTERY_DISCHARGE_TOTAL, SofarSolar_Register{0x069A, 2, 2, 0 ,0.1 ,battery_discharge_total_sensor_ ,battery_discharge_total_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Battery Discharge Total
-            	{TOTAL_ACTIVE_POWER_INVERTER,SofarSolar_Register{0x0485 ,1 ,1 ,3 ,10 ,total_active_power_inverter_sensor_ ,total_active_power_inverter_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Total Active Power Inverter
-        	    {PV_VOLTAGE_1 ,SofarSolar_Register{0x0584 ,1 ,0 ,2 ,0.1 ,pv_voltage_1_sensor_ ,pv_voltage_1_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Voltage 1
-    	        {PV_CURRENT_1 ,SofarSolar_Register{0x0585 ,1 ,0 ,2 ,0.01,pv_current_1_sensor_ ,pv_current_1_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Current 1
-	            {PV_POWER_1 ,SofarSolar_Register{0x0586 ,1 ,0 ,2 ,10 ,pv_power_1_sensor_ ,pv_power_1_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Power 1
-            	{PV_VOLTAGE_2 ,SofarSolar_Register{0x0587 ,1 ,0 ,2 ,0.1 ,pv_voltage_2_sensor_ ,pv_voltage_2_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Voltage 2
-        	    {PV_CURRENT_2 ,SofarSolar_Register{0x0588 ,1 ,0 ,2 ,0.01,pv_current_2_sensor_ ,pv_current_2_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // PV Current 2
-    	        {PV_POWER_2, SofarSolar_Register{0x0589, 1, 0, 2, 10, pv_power_2_sensor_, pv_power_2_sensor_update_interval_, {}, false, false, false, 0}}, // PV Power 2
-	            {PV_POWER_TOTAL, SofarSolar_Register{0x05C4, 1, 0, 3, 100, pv_power_total_sensor_, pv_power_total_sensor_update_interval_, {}, false, false, false, 0}}, // PV Power Total
-            	{BATTERY_POWER_TOTAL, SofarSolar_Register{0x0667, 1, 1, 3, 100, battery_power_total_sensor_, battery_power_total_sensor_update_interval_, {}, false, false, false, 0}}, // Battery Power Total
-        	    {BATTERY_STATE_OF_CHARGE_TOTAL, SofarSolar_Register{0x0668, 1, 0, 1, 1, battery_state_of_charge_total_sensor_, battery_state_of_charge_total_sensor_update_interval_, {}, false, false, false, 0}}, // Battery State of Charge Total
-    	        {DESIRED_GRID_POWER, SofarSolar_Register{0x1187, 2, 3, 3, 1, desired_grid_power_sensor_, desired_grid_power_sensor_update_interval_, desired_grid_power_sensor_default_value_, desired_grid_power_sensor_default_value_set_, desired_grid_power_sensor_enforce_default_value_, true, DESIRED_GRID_POWER_WRITE}}, // Desired Grid Power
-				{MINIMUM_BATTERY_POWER, SofarSolar_Register{0x1189, 2, 3, 3, 1, minimum_battery_power_sensor_, minimum_battery_power_sensor_update_interval_, minimum_battery_power_sensor_default_value_, minimum_battery_power_sensor_default_value_set_, minimum_battery_power_sensor_enforce_default_value_, true, DESIRED_GRID_POWER_WRITE}}, // Minimum Battery Power
-				{MAXIMUM_BATTERY_POWER, SofarSolar_Register{0x118B, 2, 3, 3, 1, maximum_battery_power_sensor_, maximum_battery_power_sensor_update_interval_, maximum_battery_power_sensor_default_value_, maximum_battery_power_sensor_default_value_set_, maximum_battery_power_sensor_enforce_default_value_, true, DESIRED_GRID_POWER_WRITE}}, // Maximum Battery Power
-				{ENERGY_STORAGE_MODE, SofarSolar_Register{0x1110, 1, 0, 0, 1, energy_storage_mode_sensor_, energy_storage_mode_sensor_update_interval_, energy_storage_mode_sensor_default_value_, energy_storage_mode_sensor_default_value_set_, energy_storage_mode_sensor_enforce_default_value_, true, SINGLE_REGISTER_WRITE}}, // Energy Storage Mode
-				{BATTERY_CONF_ID, SofarSolar_Register{0x1044, 1, 0, 0, 1, battery_conf_id_sensor_, battery_conf_id_sensor_update_interval_, battery_conf_id_sensor_default_value_, battery_conf_id_sensor_default_value_set_, battery_conf_id_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf ID
-				{BATTERY_CONF_ADDRESS, SofarSolar_Register{0x1045, 1, 0, 0, 1, battery_conf_address_sensor_, battery_conf_address_sensor_update_interval_, battery_conf_address_sensor_default_value_, battery_conf_address_sensor_default_value_set_, battery_conf_address_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf Address
-				{BATTERY_CONF_PROTOCOL, SofarSolar_Register{0x1046, 1, 0, 0, 1, battery_conf_protocol_sensor_, battery_conf_protocol_sensor_update_interval_, battery_conf_protocol_sensor_default_value_, battery_conf_protocol_sensor_default_value_set_, battery_conf_protocol_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf Protocol
-				{BATTERY_CONF_VOLTAGE_NOMINAL, SofarSolar_Register{0x1050, 1, 0, 0, 0.1, battery_conf_voltage_nominal_sensor_, battery_conf_voltage_nominal_sensor_update_interval_, battery_conf_voltage_nominal_sensor_default_value_, battery_conf_voltage_nominal_sensor_default_value_set_, battery_conf_voltage_nominal_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Nominal
-				{BATTERY_CONF_VOLTAGE_OVER, SofarSolar_Register{0x1047, 1, 0, 0, 0.1, battery_conf_voltage_over_sensor_, battery_conf_voltage_over_sensor_update_interval_, battery_conf_voltage_over_sensor_default_value_, battery_conf_voltage_over_sensor_default_value_set_, battery_conf_voltage_over_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Over
-				{BATTERY_CONF_VOLTAGE_CHARGE, SofarSolar_Register{0x1048, 1, 0, 0, 0.1, battery_conf_voltage_charge_sensor_, battery_conf_voltage_charge_sensor_update_interval_, battery_conf_voltage_charge_sensor_default_value_, battery_conf_voltage_charge_sensor_default_value_set_, battery_conf_voltage_charge_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf Voltage Charge
-				{BATTERY_CONF_VOLTAGE_LACK,SofarSolar_Register{0x1049 ,1 ,0 ,0 ,0.1 ,battery_conf_voltage_lack_sensor_ ,battery_conf_voltage_lack_sensor_update_interval_ , battery_conf_voltage_lack_sensor_default_value_, battery_conf_voltage_lack_sensor_default_value_set_ ,battery_conf_voltage_lack_sensor_enforce_default_value_ ,true ,BATTERY_CONF_WRITE}}, // Battery Conf Voltage Lack
-				{BATTERY_CONF_VOLTAGE_DISCHARGE_STOP,SofarSolar_Register{0x104A ,1 ,0 ,0 ,0.1 ,battery_conf_voltage_discharge_stop_sensor_ ,battery_conf_voltage_discharge_stop_sensor_update_interval_ , battery_conf_voltage_discharge_stop_sensor_default_value_, battery_conf_voltage_discharge_stop_sensor_default_value_set_ ,battery_conf_voltage_discharge_stop_sensor_enforce_default_value_ ,true ,BATTERY_CONF_WRITE}}, // Battery Conf Voltage Discharge Stop
-				{BATTERY_CONF_CURRENT_CHARGE_LIMIT, SofarSolar_Register{0x104B, 1, 0, 0, 0.01, battery_conf_current_charge_limit_sensor_, battery_conf_current_charge_limit_sensor_update_interval_, battery_conf_current_charge_limit_sensor_default_value_, battery_conf_current_charge_limit_sensor_default_value_set_, battery_conf_current_charge_limit_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf Current Charge Limit
-				{BATTERY_CONF_CURRENT_DISCHARGE_LIMIT, SofarSolar_Register{0x104C, 1, 0, 0, 0.01, battery_conf_current_discharge_limit_sensor_, battery_conf_current_discharge_limit_sensor_update_interval_, battery_conf_current_discharge_limit_sensor_default_value_, battery_conf_current_discharge_limit_sensor_default_value_set_, battery_conf_current_discharge_limit_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf Current Discharge Limit
-				{BATTERY_CONF_DEPTH_OF_DISCHARGE, SofarSolar_Register{0x104D, 1, 0, 0, 1, battery_conf_depth_of_discharge_sensor_, battery_conf_depth_of_discharge_sensor_update_interval_, battery_conf_depth_of_discharge_sensor_default_value_, battery_conf_depth_of_discharge_sensor_default_value_set_, battery_conf_depth_of_discharge_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf Depth of Discharge
-				{BATTERY_CONF_END_OF_DISCHARGE,SofarSolar_Register{0x104E ,1 ,0 ,0 ,1 ,battery_conf_end_of_discharge_sensor_ ,battery_conf_end_of_discharge_sensor_update_interval_ , battery_conf_end_of_discharge_sensor_default_value_, battery_conf_end_of_discharge_sensor_default_value_set_ ,battery_conf_end_of_discharge_sensor_enforce_default_value_ ,true ,BATTERY_CONF_WRITE}}, // Battery Conf End of Discharge
-				{BATTERY_CONF_CAPACITY,SofarSolar_Register{0x104F ,1 ,0 ,0 ,10 ,battery_conf_capacity_sensor_ ,battery_conf_capacity_sensor_update_interval_, battery_conf_capacity_sensor_default_value_, battery_conf_capacity_sensor_default_value_set_ ,battery_conf_capacity_sensor_enforce_default_value_ ,true ,BATTERY_CONF_WRITE}}, // Battery Conf Capacity
-				{BATTERY_CONF_CELL_TYPE, SofarSolar_Register{0x1051, 1, 0, 0, 1, battery_conf_cell_type_sensor_, battery_conf_cell_type_sensor_update_interval_, battery_conf_cell_type_sensor_default_value_, battery_conf_cell_type_sensor_default_value_set_, battery_conf_cell_type_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf Cell Type
-				{BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052, 1, 0, 0, 10, battery_conf_eps_buffer_sensor_, battery_conf_eps_buffer_sensor_update_interval_, battery_conf_eps_buffer_sensor_default_value_, battery_conf_eps_buffer_sensor_default_value_set_, battery_conf_eps_buffer_sensor_enforce_default_value_, true, BATTERY_CONF_WRITE}}, // Battery Conf EPS Buffer
-				{BATTERY_CONF_CONTROL,SofarSolar_Register{0x1053 ,1 ,0 ,0 ,1 ,battery_conf_control_sensor_ ,battery_conf_control_sensor_update_interval_ ,{}, false ,false ,true ,BATTERY_CONF_WRITE}}, // Battery Conf Control
-				//{GRID_FREQUENCY,SofarSolar_Register{0x0484 ,1 ,0 ,2 ,0.01 ,grid_frequency_sensor_ ,grid_frequency_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Grid Frequency
-				//{GRID_VOLTAGE_PHASE_R,SofarSolar_Register{0x0580 ,1 ,0 ,2 ,0.1 ,grid_voltage_phase_r_sensor_ ,grid_voltage_phase_r_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Grid Voltage Phase R
-				//{GRID_CURRENT_PHASE_R,SofarSolar_Register{0x0581 ,1 ,0 ,2 ,0.01, grid_current_phase_r_sensor_, grid_current_phase_r_sensor_update_interval_, {}, false, false, false, 0}}, // Grid Current Phase R
-				//{GRID_POWER_PHASE_R,SofarSolar_Register{0x0582 ,1 ,0 ,2 ,10, grid_power_phase_r_sensor_, grid_power_phase_r_sensor_update_interval_, {}, false, false, false, 0}}, // Grid Power Phase R
-				//{GRID_VOLTAGE_PHASE_S,SofarSolar_Register{0x058C ,1 ,0 ,2 ,0.1, grid_voltage_phase_s_sensor_, grid_voltage_phase_s_sensor_update_interval_, {}, false, false, false, 0}}, // Grid Voltage Phase S
-				//{GRID_CURRENT_PHASE_S,SofarSolar_Register{0x058D ,1 ,0 ,2 ,0.01, grid_current_phase_s_sensor_, grid_current_phase_s_sensor_update_interval_, {}, false, false, false, 0}}, // Grid Current Phase S
-				//{GRID_POWER_PHASE_S,SofarSolar_Register{0x058E ,1 ,0 ,2 ,10, grid_power_phase_s_sensor_, grid_power_phase_s_sensor_update_interval_, {}, false, false, false, 0}}, // Grid Power Phase S
-				//{GRID_VOLTAGE_PHASE_T,SofarSolar_Register{0x0598 ,1 ,0 ,2 ,0.1, grid_voltage_phase_t_sensor_, grid_voltage_phase_t_sensor_update_interval_, {}, false, false, false, 0}}, // Grid Voltage Phase T
-				//{GRID_CURRENT_PHASE_T,SofarSolar_Register{0x0599, 1, 0, 2, 0.01, grid_current_phase_t_sensor_, grid_current_phase_t_sensor_update_interval_, {}, false, false, false, 0}}, // Grid Current Phase T
-				//{GRID_POWER_PHASE_T,SofarSolar_Register{0x059A, 1, 0, 2, 10, grid_power_phase_t_sensor_, grid_power_phase_t_sensor_update_interval_, {}, false, false, false, 0}}, // Grid Power Phase T
-				//{OFF_GRID_POWER_TOTAL,SofarSolar_Register{0x05A4 ,1 ,0 ,3 ,100 ,off_grid_power_total_sensor_ ,off_grid_power_total_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Off Grid Power Total
-				//{OFF_GRID_FREQUENCY,SofarSolar_Register{0x05A5, 1, 0, 2, 0.01, off_grid_frequency_sensor_, off_grid_frequency_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Frequency
-				//{OFF_GRID_VOLTAGE_PHASE_R,SofarSolar_Register{0x05A6 ,1 ,0 ,2 ,0.1 ,off_grid_voltage_phase_r_sensor_ ,off_grid_voltage_phase_r_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Off Grid Voltage Phase R
-				//{OFF_GRID_CURRENT_PHASE_R,SofarSolar_Register{0x05A7 ,1 ,0 ,2 ,0.01 ,off_grid_current_phase_r_sensor_ ,off_grid_current_phase_r_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Off Grid Current Phase R
-				//{OFF_GRID_POWER_PHASE_R,SofarSolar_Register{0x05A8 ,1 ,0 ,2 ,10 ,off_grid_power_phase_r_sensor_ ,off_grid_power_phase_r_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Off Grid Power Phase R
-				//{OFF_GRID_VOLTAGE_PHASE_S,SofarSolar_Register{0x05AC ,1 ,0 ,2 ,0.1, off_grid_voltage_phase_s_sensor_, off_grid_voltage_phase_s_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Voltage Phase S
-				//{OFF_GRID_CURRENT_PHASE_S,SofarSolar_Register{0x05AD, 1, 0, 2, 0.01, off_grid_current_phase_s_sensor_, off_grid_current_phase_s_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Current Phase S
-				//{OFF_GRID_POWER_PHASE_S,SofarSolar_Register{0x05AE, 1, 0, 2, 10, off_grid_power_phase_s_sensor_, off_grid_power_phase_s_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Power Phase S
-				//{OFF_GRID_VOLTAGE_PHASE_T,SofarSolar_Register{0x05B8 ,1 ,0 ,2 ,0.1 ,off_grid_voltage_phase_t_sensor_ ,off_grid_voltage_phase_t_sensor_update_interval_ ,{}, false ,false ,false ,0}}, // Off Grid Voltage Phase T
-				//{OFF_GRID_CURRENT_PHASE_T,SofarSolar_Register{0x05B9, 1, 0, 2, 0.01, off_grid_current_phase_t_sensor_, off_grid_current_phase_t_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Current Phase T
-				//{OFF_GRID_POWER_PHASE_T,SofarSolar_Register{0x05BA, 1, 0, 2, 10, off_grid_power_phase_t_sensor_, off_grid_power_phase_t_sensor_update_interval_, {}, false, false, false, 0}}, // Off Grid Power Phase T
-				{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, 0, 0, 1, battery_active_control_sensor_, battery_active_control_sensor_update_interval_, {}, false, false, false, BATTERY_ACTIVE_WRITE}}, // Battery Active Control
-				{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, 0, 0, 1, battery_active_oneshot_sensor_, battery_active_oneshot_sensor_update_interval_, {}, false, false, false, BATTERY_ACTIVE_WRITE}} // Battery Active Oneshot
-        	};
+        void SofarSolar_Inverter::setup() {
 
 			ESP_LOGCONFIG(TAG, "Setting up Sofar Solar Inverter");
             registers_G3[BATTERY_ACTIVE_CONTROL].write_value.uint16_value = 0;
@@ -131,234 +136,32 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::loop() {
-            if (!current_reading && !current_writing && this->zero_export_ && millis() - zero_export_last_update > 1000) { // Update zero export every second
-                zero_export_last_update = millis();
-                ESP_LOGD(TAG, "Updating zero export status");
-                // Read the current zero export status
-                registers_G3[DESIRED_GRID_POWER].write_value.int32_value = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
-                registers_G3[DESIRED_GRID_POWER].write_set_value = true;
-                registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = -5000;
-                registers_G3[MINIMUM_BATTERY_POWER].write_set_value = true;
-                registers_G3[MAXIMUM_BATTERY_POWER].write_value.int32_value = 5000;
-                registers_G3[MAXIMUM_BATTERY_POWER].write_set_value = true;
-                ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
-                register_write_task data;
-                data.register_ptr = &registers_G3[DESIRED_GRID_POWER];
-                time_begin_modbus_operation = millis();
-                this->empty_uart_buffer(); // Clear the UART buffer before sending a new request
-                this->write_desired_grid_power(data); // Write the new desired grid power, minimum battery power, and maximum battery power
-                current_writing = true; // Set the flag to indicate that a zero export write is in progress
-                current_write_task = data; // Set the flag to indicate that a zero export write is in progress
-            }
-            ESP_LOGVV(TAG, "Elements in register_tasks: %d", register_tasks.size());
-            for (auto &pair : registers_G3) {
-                if (pair.second.sensor == nullptr) {
-                    ESP_LOGVV(TAG, "Sensor for register %d is not set", pair.second.start_address);
-                    continue;
-                }
-                ESP_LOGVV(TAG, "Checking register %04X: Time since last update: %d ms, Update interval: %d ms", pair.second.start_address, (millis() - pair.second.timer), pair.second.update_interval * 1000);
-                if ((millis() - pair.second.timer) > (pair.second.update_interval * 1000) && !pair.second.is_queued) {
-                    pair.second.timer = millis();
-                    // Create a task for the register
+            for (auto &dynamic_register : this->G3_dynamic) {
+                if (dynamic_register.second.sensor_ptr == nullptr) {
+					continue; // Skip if the sensor pointer is null
+				}
+                if (millis() - dynamic_register.second.last_update >= dynamic_register.second.update_interval && !dynamic_register.second.is_queued) {
                     register_read_task task;
-                    task.register_ptr = &pair.second;
-                    // Add the task to a priority queue
-                    register_tasks.push(task);
-                    pair.second.is_queued = true;
-                    ESP_LOGV(TAG, "Register %04X is queued for reading", pair.second.start_address);
+					task.register_key = dynamic_register.first; // Set the register key for the task
+                    dynamic_register.second.is_queued = true; // Mark the register as queued
+                    register_read_queue.push(task); // Add the task to the read queue
+                    ESP_LOGVV(TAG, "Queued register %s for reading", dynamic_register.first.c_str());
                 }
             }
 
-            if (!current_reading && !current_writing && !register_tasks.empty()) {
-                // Get the highest priority task
-                register_read_task task = register_tasks.top();
-                current_reading = true;
-                time_begin_modbus_operation = millis();
-                empty_uart_buffer(); // Clear the UART buffer before sending a new request
-                send_read_modbus_registers(task.register_ptr->start_address, task.register_ptr->quantity);
-            } else if (current_reading) {
-                if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
-                    ESP_LOGE(TAG, "Timeout while waiting for response");
-                    current_reading = false;
-                    register_tasks.top().register_ptr->is_queued = false; // Mark the register as not queued anymore
-                    register_tasks.pop(); // Remove the task from the queue
-                    return;
-                }
-                std::vector<uint8_t> response;
-                if (check_for_response()) {
-                    register_read_task task = register_tasks.top(); // Get the current task
-                    register_tasks.pop();
-                    current_reading = false;
-					task.register_ptr->is_queued = false; // Mark the register as not queued anymore
-                    if (read_response(response, *task.register_ptr)) {
-                        if (extract_data_from_response(response, task)) {
-                            ESP_LOGD(TAG, "Read successful for register %04X: Value: %s", task.register_ptr->start_address, vector_to_string(response).c_str());
-                            update_sensor(task);
-                        } else {
-                            ESP_LOGE(TAG, "Failed to extract data from response for register %04X", task.register_ptr->start_address);
-                        }
-                        if (task.register_ptr->is_default_value_set) {
-                            if (task.read_value.uint64_value != task.register_ptr->default_value.uint64_value) { // Use default value if set
-                                time_begin_modbus_operation = millis();
-                                switch (task.register_ptr->write_funktion) {
-                                    case DESIRED_GRID_POWER_WRITE:
-                                        ESP_LOGD(TAG, "Writing desired grid power");
-                                        task.register_ptr->write_value.int32_value = task.read_value.int32_value;
-                                        task.register_ptr->write_set_value = true; // Set the flag to indicate that a write value is set
-                                        register_write_task write_task;
-                                        write_task.register_ptr = task.register_ptr;
-                                        this->write_desired_grid_power(write_task);
-                                        current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
-                                        break;
-                                    case BATTERY_CONF_WRITE:
-                                        ESP_LOGD(TAG, "Writing battery configuration");
-                                        task.register_ptr->write_value.uint16_value = task.read_value.uint16_value;
-                                        task.register_ptr->write_set_value = true; // Set the flag to indicate that a write value is set
-                                        write_task.register_ptr = task.register_ptr;
-                                        this->write_battery_conf(write_task);
-                                        current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
-                                        break;
-                                    case SINGLE_REGISTER_WRITE:
-                                        ESP_LOGD(TAG, "Writing single register: %04X", task.register_ptr->start_address);
-                                        task.register_ptr->write_value.uint64_value = task.read_value.uint64_value;
-                                        task.register_ptr->write_set_value = true; // Set the flag to indicate that a write value is set
-                                        write_task.register_ptr = task.register_ptr;
-                                        this->write_single_register(write_task);
-                                        current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
-                                        break;
-									case BATTERY_ACTIVE_WRITE:
-                                        ESP_LOGD(TAG, "Writing battery active control");
-                                        task.register_ptr->write_value.uint16_value = task.read_value.uint16_value;
-                                        task.register_ptr->write_set_value = true; // Set the flag to indicate that a write value is set
-                                        write_task.register_ptr = task.register_ptr;
-                                        this->write_battery_active(write_task);
-                                        current_writing = true; // Set the flag to indicate that a write is in progress
-                                        current_write_task = write_task; // Set the current write task
-                                        break;
-                                    default:
-                                        ESP_LOGE(TAG, "Unknown write function: %d", task.register_ptr->write_funktion);
-                                        break;
-                                }
-                            }
-                        }
-                    } else {
-                        ESP_LOGE(TAG, "Invalid response");
-                    }
-                } else {
-                    ESP_LOGE(TAG, "No response received");
-                }
-            } else if (current_writing) {
-                if (millis() - time_begin_modbus_operation > 500) { // Timeout after 500 ms
-                    ESP_LOGE(TAG, "Timeout while waiting for write response");
-                    current_writing = false;
-                    return;
-                }
-                std::vector<uint8_t> response;
-                if (!check_for_response()) {
-                    ESP_LOGV(TAG, "No response received write");
-                } else {
-                    current_writing = false;
-                    if (write_response(current_write_task)) {
-                        ESP_LOGD(TAG, "Write successful");
-                    } else {
-                        ESP_LOGE(TAG, "Invalid response for write");
-                    }
-                }
-            }
+			if (!current_reading && !register_read_queue.empty()) {
+				read_modbus_registers(G3_registers[register_read_queue.top().register_key].start_address, G3_registers[register_read_queue.top().register_key].register_count);
+			}
         }
 
-        bool SofarSolar_Inverter::check_for_response() {
-            // Check if there is a response available in the UART buffer
-            this->peek(); // Peek to check if there is data available
-            if (this->available()) {
-                return true; // Not enough bytes for a valid response
-            }
-            return false;
+		void SofarSolar_Inverter::on_modbus_data(const std::vector<uint8_t> &data) {
+            ESP_LOGVV(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
         }
 
-        bool SofarSolar_Inverter::read_response(std::vector<uint8_t> &response, SofarSolar_Register &register_info) {
-            // Read the response from the UART buffer
-            response.clear();
-            while (this->available()) {
-                uint8_t byte = this->read();
-                response.push_back(byte);
-            }
-            ESP_LOGVV(TAG, "Received response: %s", vector_to_string(response).c_str());
-            if (!check_crc(response)) { // Check CRC after reading the response
-                return false; // Invalid CRC
-            }
-            if (!check_for_error_code(response)) {
-                return false; // Error code present in the response
-            }
-            if (response.data()[1] != 0x03) {
-                ESP_LOGE(TAG, "Invalid Modbus response function code: %02X", response.data()[1]);
-                response.clear(); // Clear the response on invalid function code
-                return false; // Invalid function code
-            }
-            if (response.data()[2] != response.size() - 5 && response.data()[2] != register_info.quantity * 2) {
-                ESP_LOGE(TAG, "Invalid response size: expected %d, got %d", response.data()[2], response.size() - 5);
-                response.clear(); // Clear the response on invalid size
-                return false; // Invalid response size
-            }
-            return true; // Valid read response
-        }
-
-        bool SofarSolar_Inverter::extract_data_from_response(std::vector<uint8_t> &response, register_read_task &task) {
-            switch (response.data()[2]) {
-                case 2:
-                    task.read_value.uint16_value = ((response.data()[3] << 8) | response.data()[4]); // 2 bytes for start address
-                    break;
-                case 4:
-                    task.read_value.uint32_value = ((response.data()[3] << 24) | (response.data()[4] << 16) | (response.data()[5] << 8) | response.data()[6]); // 4 bytes for start address
-                    break;
-                case 8:
-                    task.read_value.uint64_value = ((response.data()[3] << 56) | (response.data()[4] << 48) | (response.data()[5] << 40) | (response.data()[6] << 32) |
-                           (response.data()[7] << 24) | (response.data()[8] << 16) | (response.data()[9] << 8) | response.data()[10]); // 8 bytes for start address
-                    break;
-                default:
-                    ESP_LOGE(TAG, "Invalid response size for extracting value");
-                    return false; // Invalid response size
-            }
-            return true; // Valid data extraction
-        }
-
-        bool SofarSolar_Inverter::write_response(register_write_task &task) {
-            // Read the response from the UART buffer
-            std::vector<uint8_t> response;
-            response.clear();
-            while (this->available()) {
-                uint8_t byte = this->read();
-                response.push_back(byte);
-            }
-            if (!check_crc(response)) { // Check CRC after reading the response
-                return false; // Invalid CRC
-            }
-            if (!check_for_error_code(response)) {
-                return false; // Error code present in the response
-            }
-            if (response.data()[1] != 0x10) {
-                ESP_LOGE(TAG, "Invalid Modbus response function code: %02X", response.data()[1]);
-                response.clear(); // Clear the response on invalid function code
-                return false; // Invalid function code
-            }
-            if (task.register_ptr->start_address != ((response.data()[2] << 8) | (response.data()[3]))) {
-                ESP_LOGE(TAG, "Invalid response address: expected %04X, got %02X%02X", task.register_ptr->start_address, response.data()[2], response.data()[3]);
-                return false; // Invalid response size
-            }
-            if (task.number_of_registers != ((response.data()[4] << 8) | (response.data()[5]))) {
-                ESP_LOGE(TAG, "Invalid response quantity: expected %d, got %02X", task.number_of_registers, ((response.data()[4] << 8) | (response.data()[5])));
-                return false; // Invalid response size
-            }
-            return true; // Valid write response
-        }
-
-        bool SofarSolar_Inverter::check_for_error_code(std::vector<uint8_t> &response) {
-            // Check if the response contains an error code
-            if (response.data()[1] == 0x90) {
-                switch (response.data()[2]) {
+        void SofarSolar_Inverter::on_modbus_error(uint8_t function_code, uint8_t exception_code) {
+            ESP_LOGE(TAG, "Modbus error: Function code %02X, Exception code %02X", function_code, exception_code);
+			if (function_code == 0x90) {
+                switch (exception_code) {
                     case 0x01:
                         ESP_LOGE(TAG, "Modbus error: Illegal function");
                         break;
@@ -375,13 +178,42 @@ namespace esphome {
                         ESP_LOGE(TAG, "Modbus error: Busy with slave equipment");
                         break;
                     default:
-                        ESP_LOGE(TAG, "Modbus error: Unknown error code %02X", response.data()[2]);
+                        ESP_LOGE(TAG, "Modbus error: Unknown error code %02X", exception_code);
                 }
-                response.clear(); // Clear the response on error
-                return false; // Modbus error response
             }
-            return true; // No error code present
         }
+
+		void SofarSolar_Inverter::on_read_response(ModbusRegisterType register_type, uint16_t start_address, const std::vector<uint8_t> &data) {
+            ESP_LOGVV(TAG, "Read response for register type %d at address %04X: %s", register_type, start_address, vector_to_string(data).c_str());
+            if (register_type != ModbusRegisterType::HOLDING) {
+				ESP_LOGE(TAG, "Invalid register type for read response: %d", register_type);
+                return; // Only handle holding registers
+			}
+		}
+
+		void SofarSolar_Inverter::on_write_response(ModbusRegisterType register_type, uint16_t start_address, const std::vector<uint8_t> &data) {};
+
+
+            //if (response.data()[2] != response.size() - 5 && response.data()[2] != register_info.quantity * 2) {
+            //    ESP_LOGE(TAG, "Invalid response size: expected %d, got %d", response.data()[2], response.size() - 5);
+            //    response.clear(); // Clear the response on invalid size
+            //    return false; // Invalid response size
+            //}
+
+
+            //if (response.data()[1] != 0x10) {
+            //    ESP_LOGE(TAG, "Invalid Modbus response function code: %02X", response.data()[1]);
+            //    response.clear(); // Clear the response on invalid function code
+            //    return false; // Invalid function code
+            //}
+            //if (task.register_ptr->start_address != ((response.data()[2] << 8) | (response.data()[3]))) {
+            //    ESP_LOGE(TAG, "Invalid response address: expected %04X, got %02X%02X", task.register_ptr->start_address, response.data()[2], response.data()[3]);
+            //    return false; // Invalid response size
+            //}
+            //if (task.number_of_registers != ((response.data()[4] << 8) | (response.data()[5]))) {
+            //    ESP_LOGE(TAG, "Invalid response quantity: expected %d, got %02X", task.number_of_registers, ((response.data()[4] << 8) | (response.data()[5])));
+            //    return false; // Invalid response size
+            //}
 
         void SofarSolar_Inverter::write_desired_grid_power(register_write_task &task) {
             // Write the desired grid power, minimum battery power, and maximum battery power
@@ -792,17 +624,18 @@ namespace esphome {
             //}
         }
 
-        void SofarSolar_Inverter::send_read_modbus_registers(uint16_t start_address, uint16_t quantity) {
+        void SofarSolar_Inverter::read_modbus_registers(uint16_t start_address, uint16_t register_count) {
             // Create Modbus frame for reading registers
-            std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x03, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(quantity >> 8), static_cast<uint8_t>(quantity & 0xFF)};
-            send_modbus(frame);
+			ModbusCommandItem command = ModbusCommandItem::create_read_command( , HOLDING, start_address, register_count, on_read_response);
+			ModbusController::queue_command(command);
         }
 
-        void SofarSolar_Inverter::send_write_modbus_registers(uint16_t start_address, uint16_t quantity, const std::vector<uint8_t> &data) {
+        void SofarSolar_Inverter::write_modbus_registers(uint16_t start_address, uint16_t quantity, const std::vector<uint8_t> &data) {
             // Create Modbus frame for writing registers
             std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(quantity >> 8), static_cast<uint8_t>(quantity & 0xFF), static_cast<uint8_t>(data.size())};
             frame.insert(frame.end(), data.begin(), data.end());
-            send_modbus(frame);
+            ModbusCommandItem command = ModbusCommandItem::create_custom_command( , frame, on_write_response);
+			ModbusController::queue_command(command);
         }
 
         bool SofarSolar_Inverter::receive_modbus_response(std::vector<uint8_t> &response, uint8_t response_length) {
@@ -833,60 +666,6 @@ namespace esphome {
             return true;
         }
 
-        void SofarSolar_Inverter::send_modbus(std::vector<uint8_t> frame) {
-            // Send Modbus frame over UART
-            calculate_crc(frame);
-            ESP_LOGD(TAG, "Sending Modbus frame: %s", vector_to_string(frame).c_str());
-            this->write_array(frame);
-        }
-
-        void SofarSolar_Inverter::calculate_crc(std::vector<uint8_t> &frame) {
-            uint16_t crc = 0xFFFF;  // Initialwert für CRC16-CCITT-FALSE
-
-            // Iteriere über alle Bytes im Vektor
-            for (size_t i = 0; i < frame.size(); i++) {
-                crc ^= frame[i];  // XOR mit dem Byte
-
-                // Führe die 8 Bit-Schiebeoperationen durch
-                for (uint8_t bit = 0; bit < 8; bit++) {
-                    if (crc & 0x0001) {
-                        crc = (crc >> 1) ^ 0xA001;  // Polynom für Modbus CRC-16 (0xA001, reversed 0x8005)
-                    } else {
-                        crc >>= 1;
-                    }
-                }
-            }
-            frame.push_back((crc) & 0xFF);
-            frame.push_back((crc) >> 8);
-        }
-
-        bool SofarSolar_Inverter::check_crc(std::vector<uint8_t> frame) {
-            if (frame.size() < 2) {
-                ESP_LOGE(TAG, "Frame too short to check CRC");
-                return false;
-            }
-            uint16_t crc_received = (frame[frame.size() - 1] << 8) | frame[frame.size() - 2];
-            frame.pop_back();
-            frame.pop_back();
-            calculate_crc(frame);
-            uint16_t crc_calculated = (frame[frame.size() - 1] << 8) | frame[frame.size() - 2];
-            if (crc_received != crc_calculated) {
-                ESP_LOGE(TAG, "CRC check failed: received %04X, calculated %04X", crc_received, crc_calculated);
-                return false;
-            } else {
-                ESP_LOGD(TAG, "CRC check passed: %04X", crc_received);
-                return true;
-            }
-        }
-
-        void SofarSolar_Inverter::empty_uart_buffer() {
-            ESP_LOGVV(TAG, "Bytes vor leeren: %d", this->available());
-            uint8_t byte;
-            while (this->available()) {
-                this->read_byte(&byte);
-            }
-            ESP_LOGVV(TAG, "Bytes nach leeren: %d", this->available());
-        }
         void SofarSolar_Inverter::set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { pv_generation_today_sensor_ = pv_generation_today_sensor; }
         void SofarSolar_Inverter::set_pv_generation_total_sensor(sensor::Sensor *pv_generation_total_sensor) { pv_generation_total_sensor_ = pv_generation_total_sensor; }
         void SofarSolar_Inverter::set_load_consumption_today_sensor(sensor::Sensor *load_consumption_today_sensor) { load_consumption_today_sensor_ = load_consumption_today_sensor; }
