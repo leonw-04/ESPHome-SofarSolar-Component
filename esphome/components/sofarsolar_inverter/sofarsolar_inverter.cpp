@@ -128,6 +128,7 @@ namespace esphome {
                 if (dynamic_register.second.sensor == nullptr) {
 					continue; // Skip if the sensor pointer is null
 				}
+				ESP_LOGVV(TAG, "Checking register %s for update. Last update %d, Update Intervall %d", dynamic_register.first.c_str(), millis() - dynamic_register.second.last_update, dynamic_register.second.update_interval);
                 if (millis() - dynamic_register.second.last_update >= dynamic_register.second.update_interval && !dynamic_register.second.is_queued) {
 					dynamic_register.second.last_update = millis(); // Update the last update time
                     register_read_task task;
@@ -148,6 +149,7 @@ namespace esphome {
 			if (current_writing || current_reading) {
                 switch (data[1]) {
 					case 0x03: // Read Holding Registers
+						register_read_queue.top().is_queued = false; // Mark the register as not queued
 						parse_read_response(data);
 						break;
 					case 0x10: // Write Multiple Registers
