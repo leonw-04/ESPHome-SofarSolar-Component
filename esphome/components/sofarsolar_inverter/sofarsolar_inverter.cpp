@@ -150,7 +150,7 @@ namespace esphome {
         }
 
 		void SofarSolar_Inverter::on_modbus_data(const std::vector<uint8_t> &data) {
-            ESP_LOGVV(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
+            ESP_LOGD(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
 			if (current_writing || current_reading) {
                 switch (data[1]) {
 					case 0x03: // Read Holding Registers
