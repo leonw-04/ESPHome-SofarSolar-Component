@@ -110,18 +110,17 @@ namespace esphome {
         std::priority_queue<register_write_task> register_write_queue; // Priority queue for register write tasks
 
         void SofarSolar_Inverter::setup() {
-
-			ESP_LOGCONFIG(TAG, "Setting up Sofar Solar Inverter");
-            registers_G3[BATTERY_ACTIVE_CONTROL].write_value.uint16_value = 0;
-            registers_G3[BATTERY_ACTIVE_CONTROL].write_set_value = true;
-            registers_G3[BATTERY_ACTIVE_ONESHOT].write_value.uint16_value = 1;
-            registers_G3[BATTERY_ACTIVE_ONESHOT].write_set_value = true;
-            time_begin_modbus_operation = millis();
-			register_write_task data;
-            data.register_ptr = &registers_G3[BATTERY_ACTIVE_CONTROL];
-            this->write_battery_active(data); // Write the battery active control register
-            current_writing = true; // Set the flag to indicate that a write is in progress
-            current_write_task = data; // Set the flag to indicate that a write is in progress
+			//ESP_LOGCONFIG(TAG, "Setting up Sofar Solar Inverter");
+            //registers_G3[BATTERY_ACTIVE_CONTROL].write_value.uint16_value = 0;
+            //registers_G3[BATTERY_ACTIVE_CONTROL].write_set_value = true;
+            //registers_G3[BATTERY_ACTIVE_ONESHOT].write_value.uint16_value = 1;
+            //registers_G3[BATTERY_ACTIVE_ONESHOT].write_set_value = true;
+            //time_begin_modbus_operation = millis();
+			//register_write_task data;
+            //data.register_ptr = &registers_G3[BATTERY_ACTIVE_CONTROL];
+            //this->write_battery_active(data); // Write the battery active control register
+            //current_writing = true; // Set the flag to indicate that a write is in progress
+            //current_write_task = data; // Set the flag to indicate that a write is in progress
         }
 
         void SofarSolar_Inverter::loop() {
