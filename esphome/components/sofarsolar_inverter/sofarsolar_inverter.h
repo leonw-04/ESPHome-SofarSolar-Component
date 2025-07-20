@@ -94,7 +94,7 @@ namespace esphome {
 
         struct register_write_task;
 
-		static const G3_registers = {
+		static const std::map<uint8_t, SofarSolar_Register> G3_registers = {
 			{PV_GENERATION_TODAY, SofarSolar_Register{0x0684, 2, U_DWORD, 1, -2, NONE}}, // PV Generation Today
             {PV_GENERATION_TOTAL, SofarSolar_Register{0x0686, 2, U_DWORD, 0, -1, NONE}}, // PV Generation Total
             {LOAD_CONSUMPTION_TODAY, SofarSolar_Register{0x0688, 2, U_DWORD, 1, -2, NONE}}, // Load Consumption Today
@@ -158,7 +158,7 @@ namespace esphome {
 			{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}} // Battery Active Oneshot
         };
 
-        class SofarSolar_Inverter : public modbus_controller::ModbusController, public Component {
+        class SofarSolar_Inverter : public modbus::ModbusDevice, public Component {
         public:
 
             std::map<uint8_t, SofarSolar_RegisterTime> G3_dynamic;
