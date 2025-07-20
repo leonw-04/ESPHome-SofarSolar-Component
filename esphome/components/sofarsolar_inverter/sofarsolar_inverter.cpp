@@ -138,7 +138,7 @@ namespace esphome {
             }
 
 			if (!current_reading && !register_read_queue.empty()) {
-				read_modbus_registers(G3_registers.at(register_read_queue.top().register_key).start_address, G3_registers.at(register_read_queue.top().register_key).register_count);
+				read_modbus_register(G3_registers.at(register_read_queue.top().register_key).start_address, G3_registers.at(register_read_queue.top().register_key).register_count);
 			}
         }
 
@@ -266,13 +266,13 @@ namespace esphome {
             //}
         }
 
-        void SofarSolar_Inverter::read_modbus_registers(uint16_t start_address, uint16_t register_count) {
+        void SofarSolar_Inverter::read_modbus_register(uint16_t start_address, uint16_t register_count) {
             // Create Modbus frame for reading registers
 			std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x03, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(register_count >> 8), static_cast<uint8_t>(register_count & 0xFF)};
             this->send_raw(frame);
         }
 
-        void SofarSolar_Inverter::write_modbus_registers(uint16_t start_address, uint16_t register_count, const std::vector<uint8_t> &data) {
+        void SofarSolar_Inverter::write_modbus_register(uint16_t start_address, uint16_t register_count, const std::vector<uint8_t> &data) {
             // Create Modbus frame for writing registers
             std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(register_count >> 8), static_cast<uint8_t>(register_count & 0xFF), static_cast<uint8_t>(data.size())};
             frame.insert(frame.end(), data.begin(), data.end());

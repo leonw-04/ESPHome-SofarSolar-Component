@@ -192,7 +192,7 @@ namespace esphome {
 			void parse_read_response(const std::vector<uint8_t> &data);
 			void parse_write_response(const std::vector<uint8_t> &data);
 
-        	void read_modbus_registers(uint16_t start_address, uint16_t register_count);
+        	void read_modbus_register(uint16_t start_address, uint16_t register_count);
 			void write_modbus_register(uint16_t start_address, uint16_t value, uint8_t type, uint8_t write_function);
 
             std::string vector_to_string(const std::vector<uint8_t> &data) {
@@ -205,10 +205,10 @@ namespace esphome {
                 return result;
             }
 
-			void write_desired_grid_power(register_write_task &task);
-			void write_battery_conf(register_write_task &task);
-			void write_battery_active(register_write_task &task);
-			void write_single_register(register_write_task &task);
+			//void write_desired_grid_power(register_write_task &task);
+			//void write_battery_conf(register_write_task &task);
+			//void write_battery_active(register_write_task &task);
+			//void write_single_register(register_write_task &task);
 
             void set_model(std::string model) { this->model_ = model;}
             void set_modbus_address(int modbus_address) { this->modbus_address_ = modbus_address;}
