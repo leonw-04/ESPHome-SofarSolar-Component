@@ -30,7 +30,7 @@ namespace esphome {
 			uint8_t first_register_key; // Pointer to the register to write
 			uint8_t number_of_registers; // Number of registers to write
             bool operator<(const register_read_task &other) const {
-                return G3_registers.at(this->register_key).priority > G3_registers.at(other.register_key).priority;
+                return G3_registers.at(this->first_register_key).priority > G3_registers.at(other.first_register_key).priority;
             }
         };
 
