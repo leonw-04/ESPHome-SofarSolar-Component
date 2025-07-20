@@ -105,6 +105,8 @@ namespace esphome {
 				start_address(start_address), register_count(register_count), type(type), priority(priority), scale(scale), write_function(write_function) {}
     	};
 
+    	struct SofarSolar_RegisterDynamic;
+
 		struct register_read_task;
 
         struct register_write_task;
