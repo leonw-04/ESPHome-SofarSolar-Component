@@ -103,8 +103,8 @@ namespace esphome {
         bool current_reading = false; // Pointer to the current reading task
         bool current_writing = false; // Pointer to the current writing task
         register_write_task current_write_task; // Pointer to the current writing task
-        uint64_t time_begin_modbus_operation = 0;
-        uint64_t zero_export_last_update = 0;
+        uint32_t time_begin_modbus_operation = 0;
+        uint32_t zero_export_last_update = 0;
         std::priority_queue<register_read_task> register_read_queue; // Priority queue for register read tasks
         std::priority_queue<register_write_task> register_write_queue; // Priority queue for register write tasks
 
@@ -140,7 +140,12 @@ namespace esphome {
 
 			if (!current_reading && !register_read_queue.empty()) {
 				read_modbus_register(G3_registers.at(register_read_queue.top().register_key).start_address, G3_registers.at(register_read_queue.top().register_key).register_count);
+				current_reading = true; // Set the flag to indicate that a read is in progress
+				time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
 			}
+			if ((current_reading || current_writing) && millis() - time_begin_modbus_operation > 500) { // Timeout for read operation
+				current_reading = false; // Reset the flag for read operation
+				register_read_queue.pop(); // Remove the top task from the read queue
         }
 
 		void SofarSolar_Inverter::on_modbus_data(const std::vector<uint8_t> &data) {
@@ -148,8 +153,10 @@ namespace esphome {
 			if (current_writing || current_reading) {
                 switch (data[1]) {
 					case 0x03: // Read Holding Registers
-						G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
 						parse_read_response(data);
+						G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
+						current_reading = false; // Reset the flag for read operation
+						register_read_queue.pop(); // Remove the top task from the read queue
 						break;
 					case 0x10: // Write Multiple Registers
 						parse_write_response(data);
