@@ -1,6 +1,9 @@
-import esphome.config_validation as cv
 import esphome.codegen as cg
-from esphome.components import modbus, sensor
+from esphome.components import sensor
+import esphome.config_validation as cv
+
+from .. import CONF_SOFARSOLAR_INVERTER_ID, SOFARSOLAR_INVERTER_COMPONENT_SCHEMA
+
 from esphome.const import CONF_ID, DEVICE_CLASS_POWER, DEVICE_CLASS_ENERGY, DEVICE_CLASS_ENERGY_STORAGE, \
     DEVICE_CLASS_VOLTAGE, DEVICE_CLASS_CURRENT
 
@@ -27,11 +30,6 @@ from esphome.const import (
 )
 
 DEPENDENCIES = ["modbus"]
-
-CONF_MODEL = "model"
-CONF_MODBUS_ADDRESS = "address"
-CONF_ZERO_EXPORT = "zero_export"
-CONF_POWER_ID = "power_id"
 
 CONF_PV_GENERATION_TODAY = "pv_generation_today"
 CONF_PV_GENERATION_TOTAL = "pv_generation_total"
@@ -97,11 +95,6 @@ CONF_BATTERY_ACTIVE_ONESHOT = "battery_active_oneshot"
 UPDATE_INTERVAL = "update_interval"
 DEFAULT_VALUE = "default_value"
 ENFORCE_DEFAULT_VALUE = "enforce_default_value"
-
-
-
-sofarsolar_inverter_ns = cg.esphome_ns.namespace("sofarsolar_inverter")
-SofarSolar_Inverter = sofarsolar_inverter_ns.class_("SofarSolar_Inverter", cg.Component, modbus.ModbusDevice)
 
 TYPES = {
     CONF_PV_GENERATION_TODAY: sensor.sensor_schema(
@@ -754,28 +747,13 @@ TYPES = {
     ),
 }
 
-CONFIG_SCHEMA = cv.Schema({
-    cv.GenerateID(): cv.declare_id(SofarSolar_Inverter),
-    cv.Required(CONF_MODEL): cv.string,
-    cv.Optional(CONF_MODBUS_ADDRESS, default=1): cv.int_range(0, 255),
-    cv.Optional(CONF_ZERO_EXPORT, default=False): cv.boolean,
-    cv.Optional(CONF_POWER_ID): cv.use_id(sensor.Sensor),
+CONFIG_SCHEMA = SOFARSOLAR_INVERTER_COMPONENT_SCHEMA.extend({
     **{cv.Optional(type): schema for type, schema in TYPES.items()},
-}).extend(modbus.modbus_device_schema(0x01))
+})
+
 
 async def to_code(config):
-    var = cg.new_Pvariable(config[CONF_ID])
-    await cg.register_component(var, config)
-    await modbus.register_modbus_device(var, config)
-
-    cg.add(var.set_model(config[CONF_MODEL]))
-    cg.add(var.set_modbus_address(config[CONF_MODBUS_ADDRESS]))
-    cg.add(var.set_zero_export(config[CONF_ZERO_EXPORT]))
-
-    if bar := config.get(CONF_POWER_ID):
-        power_sensor = await cg.get_variable(config[CONF_POWER_ID])
-        cg.add(var.set_power_id(power_sensor))
-
+    var = cg.new_Pvariable(config[CONF_SOFARSOLAR_INVERTER_ID])
     for type, _ in TYPES.items():
         if type in config:
             conf = config[type]
