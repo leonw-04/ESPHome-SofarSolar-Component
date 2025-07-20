@@ -146,6 +146,7 @@ namespace esphome {
 			if ((current_reading || current_writing) && millis() - time_begin_modbus_operation > 500) { // Timeout for read operation
 				current_reading = false; // Reset the flag for read operation
 				register_read_queue.pop(); // Remove the top task from the read queue
+			}
         }
 
 		void SofarSolar_Inverter::on_modbus_data(const std::vector<uint8_t> &data) {
