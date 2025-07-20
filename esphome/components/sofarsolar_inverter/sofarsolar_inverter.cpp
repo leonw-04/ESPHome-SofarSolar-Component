@@ -15,8 +15,8 @@ namespace esphome {
             bool default_value_set; // Flag to indicate if the default value is set
 			bool enforce_default_value; // Flag to indicate if the default value should be enforced
 			bool is_queued = false; // Flag to indicate if the register is queued for reading/writing
-			SofarSolar_RegisterDynamic(sensor::Sensor *sensor_ptr, uint16_t update_interval, SofarSolar_RegisterValue default_value = {}, bool default_value_set = false, bool enforce_default_value = false)
-                : last_update(0), update_interval(update_interval), sensor_ptr(sensor_ptr), default_value(default_value), default_value_set(default_value_set), enforce_default_value(enforce_default_value) {}
+			SofarSolar_RegisterDynamic(sensor::Sensor *sensor, uint16_t update_interval, SofarSolar_RegisterValue default_value = {}, bool default_value_set = false, bool enforce_default_value = false)
+                : last_update(0), update_interval(update_interval), sensor(sensor), default_value(default_value), default_value_set(default_value_set), enforce_default_value(enforce_default_value) {}
 		};
 
 		struct register_read_task {
@@ -125,7 +125,7 @@ namespace esphome {
 
         void SofarSolar_Inverter::loop() {
             for (auto &dynamic_register : this->G3_dynamic) {
-                if (dynamic_register.second.sensor_ptr == nullptr) {
+                if (dynamic_register.second.sensor == nullptr) {
 					continue; // Skip if the sensor pointer is null
 				}
                 if (millis() - dynamic_register.second.last_update >= dynamic_register.second.update_interval && !dynamic_register.second.is_queued) {
