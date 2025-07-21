@@ -23,7 +23,7 @@ CONFIG_SCHEMA = SOFARSOLAR_INVERTER_COMPONENT_SCHEMA.extend(
 )
 
 async def to_code(config):
-    paren = cg.new_Pvariable(config[CONF_SOFARSOLAR_INVERTER_ID])
+    paren = await cg.get_variable(config[CONF_SOFARSOLAR_INVERTER_ID])
 
     for type, (on, off) in TYPES.items():
         if type in config:
