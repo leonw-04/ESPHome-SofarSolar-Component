@@ -269,7 +269,7 @@ namespace esphome {
 			if (data.size() != 4) {
 				ESP_LOGE(TAG, "Invalid write response size: %d", data.size());
 			}
-			if (G3_register[register_write_queue.top().first_register_key].start_address != ((data[0] << 8) | data[1])) {
+			if (G3_register.at(register_write_queue.top().first_register_key).start_address != ((data[0] << 8) | data[1])) {
 				ESP_LOGE(TAG, "Invalid response address: expected %04X, got %02X%02X", G3_registers.at(register_write_queue.top().first_register_key).start_address, data[2], data[3]);
 				return; // Invalid response address
 			}
