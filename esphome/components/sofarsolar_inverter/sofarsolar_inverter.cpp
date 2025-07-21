@@ -311,7 +311,7 @@ namespace esphome {
             for (const auto &reg : G3_registers) {
                 ESP_LOGCONFIG(TAG, "  %s: start_address = %04X, type = %d, scale = %f, enforce_default_value = %s",
                               G3_dynamic.at(reg.first).sensor->get_name().c_str(), reg.second.start_address, reg.second.type, reg.second.scale,
-                              TRUEFALSE(G3_dynamic.at(enforce_default_value)));
+                              TRUEFALSE(G3_dynamic.at(reg.first).enforce_default_value));
             }
         }
 
