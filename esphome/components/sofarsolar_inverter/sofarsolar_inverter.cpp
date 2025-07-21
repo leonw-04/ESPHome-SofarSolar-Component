@@ -585,6 +585,25 @@ namespace esphome {
 
         }
 
+    	void switch_command(const std::string &command) {
+			switch (command) {
+				case "battery_charge_only_on":
+					this->battery_charge_only_switch_state_ = true;
+					break;
+				case "battery_charge_only_off":
+					this->battery_charge_only_switch_state_ = false;
+					break;
+				case "battery_discharge_only_on":
+					this->battery_discharge_only_switch_state_ = true;
+					break;
+				case "battery_discharge_only_off":
+					this->battery_discharge_only_switch_state_ = false;
+					break;
+				default:
+					ESP_LOGE(TAG, "Unknown command: %s", command.c_str());
+			}
+		}
+
         void SofarSolar_Inverter::set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { G3_dynamic.at(PV_GENERATION_TODAY).sensor = pv_generation_today_sensor; }
 		void SofarSolar_Inverter::set_pv_generation_total_sensor(sensor::Sensor *pv_generation_total_sensor) { G3_dynamic.at(PV_GENERATION_TOTAL).sensor = pv_generation_total_sensor; }
 		void SofarSolar_Inverter::set_load_consumption_today_sensor(sensor::Sensor *load_consumption_today_sensor) { G3_dynamic.at(LOAD_CONSUMPTION_TODAY).sensor = load_consumption_today_sensor; }

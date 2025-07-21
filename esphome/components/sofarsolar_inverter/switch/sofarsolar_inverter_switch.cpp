@@ -19,6 +19,10 @@ namespace esphome {
             } else {
                 ESP_LOGD(TAG, "Turning OFF: %s", this->off_command_.c_str());
             }
+            if (this->parent_ == nullptr) {
+                ESP_LOGE(TAG, "Parent SofarSolar_Inverter is not set!");
+                return;
+            } else
         }
     }
 }
