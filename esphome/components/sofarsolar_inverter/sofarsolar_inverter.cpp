@@ -113,7 +113,7 @@ namespace esphome {
 
         void SofarSolar_Inverter::setup() {
 			ESP_LOGCONFIG(TAG, "Setting up Sofar Solar Inverter");
-            G3_dynamic.at(BATTERY_ACTIVE_CONTROL).write_value.uint16_value = 0;
+            G3_dynamic.at(BATTERY_ACTIVE_CONTROL).write_value.uint16_value = 1;
             G3_dynamic.at(BATTERY_ACTIVE_CONTROL).write_set_value = true;
             G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).write_value.uint16_value = 1;
             G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).write_set_value = true;
