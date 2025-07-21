@@ -130,12 +130,12 @@ namespace esphome {
 				zero_export_last_update = millis();
 				ESP_LOGD(TAG, "Updating zero export status");
 				// Read the current zero export status
-				registers_G3[DESIRED_GRID_POWER].write_value.int32_value = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
-				registers_G3[DESIRED_GRID_POWER].write_set_value = true;
-				registers_G3[MINIMUM_BATTERY_POWER].write_value.int32_value = -5000;
-				registers_G3[MINIMUM_BATTERY_POWER].write_set_value = true;
-				registers_G3[MAXIMUM_BATTERY_POWER].write_value.int32_value = 5000;
-				registers_G3[MAXIMUM_BATTERY_POWER].write_set_value = true;
+				G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value = this->total_active_power_inverter_sensor_->state + this->power_sensor_->state;
+				G3_dynamic.at(DESIRED_GRID_POWER).write_set_value = true;
+				G3_dynamic.at(MINIMUM_BATTERY_POWER).write_value.int32_value = -5000;
+				G3_dynamic.at(MINIMUM_BATTERY_POWER).write_set_value = true;
+				G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_value.int32_value = 5000;
+				G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_set_value = true;
 				ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", this->total_active_power_inverter_sensor_->state, this->power_sensor_->state, registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
 				this->write_desired_grid_power(); // Write the new desired grid power, minimum battery power, and maximum battery power
 			}
