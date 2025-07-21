@@ -3,6 +3,8 @@
 #include "vector"
 #include "map"
 #include "esphome/components/sensor/sensor.h"
+#include "esphome/components/switch/switch.h"
+#include "esphome/components/text_sensor/text_sensor.h"
 #include "esphome/components/modbus/modbus.h"
 #include "esphome/core/component.h"
 
