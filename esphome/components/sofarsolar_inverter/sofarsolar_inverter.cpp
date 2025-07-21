@@ -312,9 +312,10 @@ namespace esphome {
         	for (const auto &reg : G3_registers) {
         		log_str +=
 					"  " + std::string(G3_dynamic.at(reg.first).sensor->get_name().c_str()) +
-					": start_address = " + esphome::to_string(reg.second.start_address, 4, '0', std::ios::hex) +
+					": start_address = " + esphome::to_string(reg.second.start_address) +
 					", type = " + std::to_string(reg.second.type) +
 					", scale = " + std::to_string(reg.second.scale) +
+					", update_interval = " + std::to_string(G3_dynamic.at(reg.first).update_interval) +
 					", enforce_default_value = " + TRUEFALSE(G3_dynamic.at(reg.first).enforce_default_value) + "\n";
         	}
         	ESP_LOGCONFIG(TAG, "%s", log_str.c_str());
