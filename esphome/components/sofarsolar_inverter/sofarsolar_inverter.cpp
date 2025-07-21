@@ -137,7 +137,7 @@ namespace esphome {
 			}
 
             for (auto &dynamic_register : this->G3_dynamic) {
-				ESP_LOGD(TAG, "Checking register %d for update. Last update %d, Update Intervall %d", dynamic_register.first, millis() - dynamic_register.second.last_update, dynamic_register.second.update_interval);
+				ESP_LOGVV(TAG, "Checking register %d for update. Last update %d, Update Intervall %d", dynamic_register.first, millis() - dynamic_register.second.last_update, dynamic_register.second.update_interval);
                 if (dynamic_register.second.sensor == nullptr) {
 					continue; // Skip if the sensor pointer is null
 				}
