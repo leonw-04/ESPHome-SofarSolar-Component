@@ -586,25 +586,20 @@ namespace esphome {
         }
 
     	void SofarSolar_Inverter::switch_command(const std::string &command) {
-			switch (command) {
-				case "battery_charge_only_on":
-					this->battery_charge_only_switch_state_ = true;
-					ESP_LOGD(TAG, "Battery charge only switch turned ON");
-					break;
-				case "battery_charge_only_off":
-					this->battery_charge_only_switch_state_ = false;
-					ESP_LOGD(TAG, "Battery charge only switch turned OFF");
-					break;
-				case "battery_discharge_only_on":
-					this->battery_discharge_only_switch_state_ = true;
-					ESP_LOGD(TAG, "Battery discharge only switch turned ON");
-					break;
-				case "battery_discharge_only_off":
-					this->battery_discharge_only_switch_state_ = false;
-					ESP_LOGD(TAG, "Battery discharge only switch turned OFF");
-					break;
-				default:
-					ESP_LOGE(TAG, "Unknown command: %s", command.c_str());
+			if (command == "battery_charge_only_on") {
+				this->battery_charge_only_switch_state_ = true;
+				ESP_LOGD(TAG, "Battery charge only switch turned ON");
+			} else if (command == "battery_charge_only_off") {
+				this->battery_charge_only_switch_state_ = false;
+				ESP_LOGD(TAG, "Battery charge only switch turned OFF");
+			} else if (command == "battery_discharge_only_on"} {
+				this->battery_discharge_only_switch_state_ = true;
+				ESP_LOGD(TAG, "Battery discharge only switch turned ON");
+			} else if (command == "battery_discharge_only_off") {
+				this->battery_discharge_only_switch_state_ = false;
+				ESP_LOGD(TAG, "Battery discharge only switch turned OFF");
+			} else {
+				ESP_LOGE(TAG, "Unknown command: %s", command.c_str());
 			}
 		}
 
