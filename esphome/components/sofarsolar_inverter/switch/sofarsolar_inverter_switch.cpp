@@ -11,11 +11,6 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "SofarSolar_Inverter Switch");
             ESP_LOGCONFIG(TAG, "  on_command: '%s'", this->on_command_.c_str());
             ESP_LOGCONFIG(TAG, "  off_command: '%s'", this->off_command_.c_str());
-            if (this->parent_ != nullptr) {
-                ESP_LOGCONFIG(TAG, "  parent: %s", this->parent_->get_name().c_str());
-            } else {
-                ESP_LOGCONFIG(TAG, "  parent: None");
-            }
         }
 
         void SofarSolar_Inverter_Switch::write_state(bool state) {
