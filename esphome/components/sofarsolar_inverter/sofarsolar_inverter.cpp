@@ -592,7 +592,7 @@ namespace esphome {
 			} else if (command == "battery_charge_only_off") {
 				this->battery_charge_only_switch_state_ = false;
 				ESP_LOGD(TAG, "Battery charge only switch turned OFF");
-			} else if (command == "battery_discharge_only_on"} {
+			} else if (command == "battery_discharge_only_on") {
 				this->battery_discharge_only_switch_state_ = true;
 				ESP_LOGD(TAG, "Battery discharge only switch turned ON");
 			} else if (command == "battery_discharge_only_off") {
