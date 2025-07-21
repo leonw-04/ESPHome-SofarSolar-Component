@@ -393,6 +393,12 @@ namespace esphome {
 			void set_battery_conf_cell_type_sensor_enforce_default_value(bool enforce_default_value);
 			void set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value);
 
+			void set_battery_charge_only_switch(switch_::Switch *battery_charge_only_switch) { this->battery_charge_only_switch_ = battery_charge_only_switch; }
+			void set_battery_discharge_only_switch(switch_::Switch *battery_discharge_only_switch) { this->battery_discharge_only_switch_ = battery_discharge_only_switch; }
+
+			switch_::Switch *battery_charge_only_switch = nullptr;
+			switch_::Switch *battery_discharge_only_switch = nullptr;
+
             std::string model_;
             int modbus_address_;
             bool zero_export_;
