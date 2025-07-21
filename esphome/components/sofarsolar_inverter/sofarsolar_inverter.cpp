@@ -320,7 +320,7 @@ namespace esphome {
         void SofarSolar_Inverter::write_desired_grid_power() {
             // Write the desired grid power, minimum battery power, and maximum battery power
             int32_t new_desired_grid_power;
-            if (G3_dynamic.at(DESIRED_GRID_POWER).enforce_default_value && G3_dynamic.at(DESIRED_GRID_POWER).is_default_value_set) {
+            if (G3_dynamic.at(DESIRED_GRID_POWER).enforce_default_value && G3_dynamic.at(DESIRED_GRID_POWER).default_value_set) {
                 new_desired_grid_power = G3_dynamic.at(DESIRED_GRID_POWER).default_value.int32_value;
             } else if (G3_dynamic.at(DESIRED_GRID_POWER).write_set_value) {
                 new_desired_grid_power = G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value;
@@ -328,7 +328,7 @@ namespace esphome {
                 new_desired_grid_power = G3_dynamic.at(DESIRED_GRID_POWER).sensor->state;
             }
             int32_t new_minimum_battery_power;
-            if (G3_dynamic.at(MINIMUM_BATTERY_POWER).enforce_default_value && G3_dynamic.at(MINIMUM_BATTERY_POWER).is_default_value_set) {
+            if (G3_dynamic.at(MINIMUM_BATTERY_POWER).enforce_default_value && G3_dynamic.at(MINIMUM_BATTERY_POWER).default_value_set) {
                 new_minimum_battery_power = G3_dynamic.at(MINIMUM_BATTERY_POWER).default_value.int32_value;
             } else if (G3_dynamic.at(MINIMUM_BATTERY_POWER).write_set_value) {
                 new_minimum_battery_power = G3_dynamic.at(MINIMUM_BATTERY_POWER).write_value.int32_value;
@@ -336,7 +336,7 @@ namespace esphome {
                 new_minimum_battery_power = G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state;
             }
             int32_t new_maximum_battery_power;
-            if (G3_dynamic.at(MAXIMUM_BATTERY_POWER).enforce_default_value && G3_dynamic.at(DESIRED_GRID_POWER).is_default_value_set) {
+            if (G3_dynamic.at(MAXIMUM_BATTERY_POWER).enforce_default_value && G3_dynamic.at(DESIRED_GRID_POWER).default_value_set) {
                 new_maximum_battery_power = G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value.int32_value;
             } else if (registers_G3[MAXIMUM_BATTERY_POWER].write_set_value) {
                 new_maximum_battery_power = G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_value.int32_value;
@@ -371,7 +371,7 @@ namespace esphome {
             std::vector<uint8_t> data;
             ESP_LOGD(TAG, "Writing battery configuration");
             uint16_t new_battery_conf_id;
-            if (G3_dynamic.at(BATTERY_CONF_ID).enforce_default_value && G3_dynamic.at(BATTERY_CONF_ID).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_ID).enforce_default_value && G3_dynamic.at(BATTERY_CONF_ID).default_value_set) {
                 new_battery_conf_id = G3_dynamic.at(BATTERY_CONF_ID).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_ID).write_set_value) {
                 new_battery_conf_id = G3_dynamic.at(BATTERY_CONF_ID).write_value.uint16_value;
@@ -381,7 +381,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_id >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_id & 0xFF));
             uint16_t new_battery_conf_address;
-            if (G3_dynamic.at(BATTERY_CONF_ADDRESS).enforce_default_value && G3_dynamic.at(BATTERY_CONF_ADDRESS).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_ADDRESS).enforce_default_value && G3_dynamic.at(BATTERY_CONF_ADDRESS).default_value_set) {
                 new_battery_conf_address = G3_dynamic.at(BATTERY_CONF_ADDRESS).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_ADDRESS).write_set_value) {
                 new_battery_conf_address = G3_dynamic.at(BATTERY_CONF_ADDRESS).write_value.uint16_value;
@@ -391,7 +391,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_address >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_address & 0xFF));
             uint16_t new_battery_conf_protocol;
-            if (G3_dynamic.at(BATTERY_CONF_PROTOCOL).enforce_default_value && G3_dynamic.at(BATTERY_CONF_PROTOCOL).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_PROTOCOL).enforce_default_value && G3_dynamic.at(BATTERY_CONF_PROTOCOL).default_value_set) {
                 new_battery_conf_protocol = G3_dynamic.at(BATTERY_CONF_PROTOCOL).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_PROTOCOL).write_set_value) {
                 new_battery_conf_protocol = G3_dynamic.at(BATTERY_CONF_PROTOCOL).write_value.uint16_value;
@@ -401,7 +401,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_protocol >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_protocol & 0xFF));
             uint16_t new_battery_conf_voltage_over;
-            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).default_value_set) {
                 new_battery_conf_voltage_over = G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).write_set_value) {
                 new_battery_conf_voltage_over = G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).write_value.uint16_value;
@@ -411,7 +411,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_over >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_over & 0xFF));
             uint16_t new_battery_conf_voltage_charge;
-            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).default_value_set) {
                 new_battery_conf_voltage_charge = G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).write_set_value) {
                 new_battery_conf_voltage_charge = G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).write_value.uint16_value;
@@ -421,7 +421,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_charge >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_charge & 0xFF));
             uint16_t new_battery_conf_voltage_lack;
-            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).default_value_set) {
                 new_battery_conf_voltage_lack = G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).write_set_value) {
                 new_battery_conf_voltage_lack = G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).write_value.uint16_value;
@@ -431,7 +431,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_lack >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_lack & 0xFF));
             uint16_t new_battery_conf_voltage_discharge_stop;
-            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).default_value_set) {
                 new_battery_conf_voltage_discharge_stop = G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).write_set_value) {
                 new_battery_conf_voltage_discharge_stop = G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).write_value.uint16_value;
@@ -441,7 +441,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_discharge_stop >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_discharge_stop & 0xFF));
             uint16_t new_battery_conf_current_charge_limit;
-            if (G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).default_value_set) {
                 new_battery_conf_current_charge_limit = G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).write_set_value) {
                 new_battery_conf_current_charge_limit = G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).write_value.uint16_value;
@@ -451,7 +451,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_current_charge_limit >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_current_charge_limit & 0xFF));
             uint16_t new_battery_conf_current_discharge_limit;
-            if (G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).default_value_set) {
                 new_battery_conf_current_discharge_limit = G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).write_set_value) {
                 new_battery_conf_current_discharge_limit = G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).write_value.uint16_value;
@@ -461,7 +461,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_current_discharge_limit >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_current_discharge_limit & 0xFF));
             uint16_t new_battery_conf_depth_of_discharge;
-            if (G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).default_value_set) {
                 new_battery_conf_depth_of_discharge = G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).write_set_value) {
                 new_battery_conf_depth_of_discharge = G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).write_value.uint16_value;
@@ -471,7 +471,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_depth_of_discharge >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_depth_of_discharge & 0xFF));
             uint16_t new_battery_conf_end_of_discharge;
-            if (G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).default_value_set) {
                 new_battery_conf_end_of_discharge = G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).write_set_value) {
                 new_battery_conf_end_of_discharge = G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).write_value.uint16_value;
@@ -481,7 +481,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_end_of_discharge >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_end_of_discharge & 0xFF));
             uint16_t new_battery_conf_capacity;
-            if (G3_dynamic.at(BATTERY_CONF_CAPACITY).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CAPACITY).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_CAPACITY).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CAPACITY).default_value_set) {
                 new_battery_conf_capacity = G3_dynamic.at(BATTERY_CONF_CAPACITY).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_CAPACITY).write_set_value) {
                 new_battery_conf_capacity = G3_dynamic.at(BATTERY_CONF_CAPACITY).write_value.uint16_value;
@@ -491,7 +491,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_capacity >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_capacity & 0xFF));
             uint16_t new_battery_conf_voltage_nominal;
-            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).default_value_set) {
                 new_battery_conf_voltage_nominal = G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).write_set_value) {
                 new_battery_conf_voltage_nominal = G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).write_value.uint16_value;
@@ -501,7 +501,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal & 0xFF));
             uint16_t new_battery_conf_cell_type;
-            if (G3_dynamic.at(BATTERY_CONF_CELL_TYPE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CELL_TYPE).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_CELL_TYPE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value_set) {
                 new_battery_conf_cell_type = G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_CELL_TYPE).write_set_value) {
                 new_battery_conf_cell_type = G3_dynamic.at(BATTERY_CONF_CELL_TYPE).write_value.uint16_value;
@@ -511,7 +511,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type & 0xFF));
             uint16_t new_battery_conf_eps_buffer;
-            if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_set) {
                 new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_set_value) {
                 new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_value.uint16_value;
@@ -534,7 +534,7 @@ namespace esphome {
             ESP_LOGD(TAG, "Writing battery active state");
             std::vector<uint8_t> data;
             uint16_t new_battery_active_control;
-            if (G3_dynamic.at(BATTERY_ACTIVE_CONTROL).enforce_default_value && G3_dynamic.at(BATTERY_ACTIVE_CONTROL).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_ACTIVE_CONTROL).enforce_default_value && G3_dynamic.at(BATTERY_ACTIVE_CONTROL).default_value_set) {
                 new_battery_active_control = G3_dynamic.at(BATTERY_ACTIVE_CONTROL).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_ACTIVE_CONTROL).write_set_value) {
                 new_battery_active_control = G3_dynamic.at(BATTERY_ACTIVE_CONTROL).write_value.uint16_value;
@@ -544,7 +544,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
             uint16_t new_battery_active_oneshot;
-            if (G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).enforce_default_value && G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).is_default_value_set) {
+            if (G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).enforce_default_value && G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).default_value_set) {
                 new_battery_active_oneshot = G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).default_value.uint16_value;
             } else if (G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).write_set_value) {
                 new_battery_active_oneshot = G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).write_value.uint16_value;
