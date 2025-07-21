@@ -398,8 +398,8 @@ namespace esphome {
 			void set_battery_charge_only_switch(switch_::Switch *battery_charge_only_switch) { this->battery_charge_only_switch_ = battery_charge_only_switch; }
 			void set_battery_discharge_only_switch(switch_::Switch *battery_discharge_only_switch) { this->battery_discharge_only_switch_ = battery_discharge_only_switch; }
 
-			switch_::Switch *battery_charge_only_switch = nullptr;
-			switch_::Switch *battery_discharge_only_switch = nullptr;
+			switch_::Switch *battery_charge_only_switch_ = nullptr;
+			switch_::Switch *battery_discharge_only_switch_ = nullptr;
 
             std::string model_;
             int modbus_address_;
