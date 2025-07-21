@@ -10,8 +10,8 @@ CONF_BATTERY_CHARGE_ONLY = "battery_charge_only"
 CONF_BATTERY_DISCHARGE_ONLY = "battery_discharge_only"
 
 TYPES = {
-    CONF_BATTERY_CHARGE_ONLY,
-    CONF_BATTERY_DISCHARGE_ONLY,
+    CONF_BATTERY_CHARGE_ONLY: ("battery_charge_only_on", "battery_charge_only_off"),
+    CONF_BATTERY_DISCHARGE_ONLY: ("battery_discharge_only_on", "battery_discharge_only_off"),
 }
 
 SofarSolar_Inverter_Switch = sofarsolar_inverter_ns.class_("SofarSolar_Inverter_Switch", switch.Switch, cg.Component)
