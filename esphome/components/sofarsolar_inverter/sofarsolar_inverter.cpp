@@ -186,9 +186,8 @@ namespace esphome {
 				register_read_queue.pop(); // Remove the top task from the read queue
 			} else if (current_writing) {
 				parse_write_response(data);
-				G3_dynamic.at(register_write_queue.top().first_register_key).is_queued = false; // Mark the register as not queued
 				current_writing = false; // Reset the flag for read operation
-				register_read_queue.pop(); // Remove the top task from the read queue
+				register_write_queue.pop(); // Remove the top task from the read queue
 			} else {
 				ESP_LOGE(TAG, "Received Modbus data while not in a read or write operation");
 			}
