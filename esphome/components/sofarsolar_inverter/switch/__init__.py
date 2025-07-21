@@ -16,7 +16,7 @@ TYPES = {
 
 SofarSolar_Inverter_Switch = sofarsolar_inverter_ns.class_("SofarSolar_Inverter_Switch", switch.Switch, cg.Component)
 
-SOFARSOLAR_INVERTER_SWITCH_SCHEMA = switch.Switch(SofarSolar_Inverter_Switch).extend({cv.COMPONENT_SCHEMA})
+SOFARSOLAR_INVERTER_SWITCH_SCHEMA = switch.switch_schema(SofarSolar_Inverter_Switch).extend({cv.COMPONENT_SCHEMA})
 
 CONFIG_SCHEMA = SOFARSOLAR_INVERTER_COMPONENT_SCHEMA.extend(
     {cv.Optional(type): SOFARSOLAR_INVERTER_SWITCH_SCHEMA for type in TYPES}
