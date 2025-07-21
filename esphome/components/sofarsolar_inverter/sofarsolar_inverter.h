@@ -120,7 +120,7 @@ namespace esphome {
             {BATTERY_CHARGE_TOTAL, SofarSolar_Register{0x0696, 2, U_DWORD, 0, -1, NONE}}, // Battery Charge Total
             {BATTERY_DISCHARGE_TODAY, SofarSolar_Register{0x0698, 2, U_DWORD, 1, -2, NONE}}, // Battery Discharge Today
             {BATTERY_DISCHARGE_TOTAL, SofarSolar_Register{0x069A, 2, U_DWORD, 0, -1, NONE}}, // Battery Discharge Total
-            {TOTAL_ACTIVE_POWER_INVERTER,SofarSolar_Register{0x0485, 1, S_WORD, 3, 1, NONE}}, // Total Active Power Inverter
+            {TOTAL_ACTIVE_POWER_INVERTER, SofarSolar_Register{0x0485, 1, S_WORD, 3, 1, NONE}}, // Total Active Power Inverter
             {PV_VOLTAGE_1 ,SofarSolar_Register{0x0584, 1, U_WORD, 2, -1, NONE}}, // PV Voltage 1
             {PV_CURRENT_1 ,SofarSolar_Register{0x0585, 1, U_WORD, 2, -2, NONE}}, // PV Current 1
             {PV_POWER_1 ,SofarSolar_Register{0x0586, 1, U_WORD, 2, 1, NONE}}, // PV Power 1
@@ -145,32 +145,32 @@ namespace esphome {
 			{BATTERY_CONF_CURRENT_CHARGE_LIMIT, SofarSolar_Register{0x104B, 1, U_WORD, 0, -2, BATTERY_CONF_WRITE}}, // Battery Conf Current Charge Limit
 			{BATTERY_CONF_CURRENT_DISCHARGE_LIMIT, SofarSolar_Register{0x104C, 1, U_WORD, 0, -2, BATTERY_CONF_WRITE}}, // Battery Conf Current Discharge Limit
 			{BATTERY_CONF_DEPTH_OF_DISCHARGE, SofarSolar_Register{0x104D, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Depth of Discharge
-			{BATTERY_CONF_END_OF_DISCHARGE,SofarSolar_Register{0x104E, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf End of Discharge
-			{BATTERY_CONF_CAPACITY,SofarSolar_Register{0x104F, 1, U_WORD, 0, 1, BATTERY_CONF_WRITE}}, // Battery Conf Capacity
+			{BATTERY_CONF_END_OF_DISCHARGE, SofarSolar_Register{0x104E, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf End of Discharge
+			{BATTERY_CONF_CAPACITY, SofarSolar_Register{0x104F, 1, U_WORD, 0, 1, BATTERY_CONF_WRITE}}, // Battery Conf Capacity
 			{BATTERY_CONF_CELL_TYPE, SofarSolar_Register{0x1051, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Cell Type
 			{BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052, 1, U_WORD, 0, 1, BATTERY_CONF_WRITE}}, // Battery Conf EPS Buffer
-			{BATTERY_CONF_CONTROL,SofarSolar_Register{0x1053, 1 , U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Control
-			{GRID_FREQUENCY,SofarSolar_Register{0x0484, 1, U_WORD, 2, -2, NONE}}, // Grid Frequency
-			{GRID_VOLTAGE_PHASE_R,SofarSolar_Register{0x0580, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase R
-			{GRID_CURRENT_PHASE_R,SofarSolar_Register{0x0581, 1 ,U_WORD, 2, -2, NONE}}, // Grid Current Phase R
-			{GRID_POWER_PHASE_R,SofarSolar_Register{0x0582, 1, U_WORD, 2, 1, NONE}}, // Grid Power Phase R
-			{GRID_VOLTAGE_PHASE_S,SofarSolar_Register{0x058C, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase S
-			{GRID_CURRENT_PHASE_S,SofarSolar_Register{0x058D, 1, U_WORD, 2, -2, NONE}}, // Grid Current Phase S
-			{GRID_POWER_PHASE_S,SofarSolar_Register{0x058E, 1, U_WORD, 2, 1, NONE}}, // Grid Power Phase S
-			{GRID_VOLTAGE_PHASE_T,SofarSolar_Register{0x0598, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase T
-			{GRID_CURRENT_PHASE_T,SofarSolar_Register{0x0599, 1, U_WORD, 2, -2, NONE}}, // Grid Current Phase T
-			{GRID_POWER_PHASE_T,SofarSolar_Register{0x059A, 1, U_WORD, 2, 1, NONE}}, // Grid Power Phase T
-			{OFF_GRID_POWER_TOTAL,SofarSolar_Register{0x05A4, 1, U_WORD, 3, 2, NONE}}, // Off Grid Power Total
-			{OFF_GRID_FREQUENCY,SofarSolar_Register{0x05A5, 1, U_WORD, 2, -2, NONE}}, // Off Grid Frequency
-			{OFF_GRID_VOLTAGE_PHASE_R,SofarSolar_Register{0x05A6, 1, U_WORD, 2, -1, NONE}}, // Off Grid Voltage Phase R
-			{OFF_GRID_CURRENT_PHASE_R,SofarSolar_Register{0x05A7, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase R
-			{OFF_GRID_POWER_PHASE_R,SofarSolar_Register{0x05A8, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase R
-			{OFF_GRID_VOLTAGE_PHASE_S,SofarSolar_Register{0x05AC, 1, U_WORD, 2, -1, NONE}}, // Off Grid Voltage Phase S
-			{OFF_GRID_CURRENT_PHASE_S,SofarSolar_Register{0x05AD, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase S
-			{OFF_GRID_POWER_PHASE_S,SofarSolar_Register{0x05AE, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase S
-			{OFF_GRID_VOLTAGE_PHASE_T,SofarSolar_Register{0x05B8, 1, U_WORD, 2, -1, NONE}}, // Off Grid Voltage Phase T
-			{OFF_GRID_CURRENT_PHASE_T,SofarSolar_Register{0x05B9, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase T
-			{OFF_GRID_POWER_PHASE_T,SofarSolar_Register{0x05BA, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase T
+			{BATTERY_CONF_CONTROL, SofarSolar_Register{0x1053, 1 , U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Control
+			{GRID_FREQUENCY, SofarSolar_Register{0x0484, 1, U_WORD, 2, -2, NONE}}, // Grid Frequency
+			{GRID_VOLTAGE_PHASE_R, SofarSolar_Register{0x0580, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase R
+			{GRID_CURRENT_PHASE_R, SofarSolar_Register{0x0581, 1 ,U_WORD, 2, -2, NONE}}, // Grid Current Phase R
+			{GRID_POWER_PHASE_R, SofarSolar_Register{0x0582, 1, U_WORD, 2, 1, NONE}}, // Grid Power Phase R
+			{GRID_VOLTAGE_PHASE_S, SofarSolar_Register{0x058C, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase S
+			{GRID_CURRENT_PHASE_S, SofarSolar_Register{0x058D, 1, U_WORD, 2, -2, NONE}}, // Grid Current Phase S
+			{GRID_POWER_PHASE_S, SofarSolar_Register{0x058E, 1, U_WORD, 2, 1, NONE}}, // Grid Power Phase S
+			{GRID_VOLTAGE_PHASE_T, SofarSolar_Register{0x0598, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase T
+			{GRID_CURRENT_PHASE_T, SofarSolar_Register{0x0599, 1, U_WORD, 2, -2, NONE}}, // Grid Current Phase T
+			{GRID_POWER_PHASE_T, SofarSolar_Register{0x059A, 1, U_WORD, 2, 1, NONE}}, // Grid Power Phase T
+			{OFF_GRID_POWER_TOTAL, SofarSolar_Register{0x05A4, 1, U_WORD, 3, 2, NONE}}, // Off Grid Power Total
+			{OFF_GRID_FREQUENCY, SofarSolar_Register{0x05A5, 1, U_WORD, 2, -2, NONE}}, // Off Grid Frequency
+			{OFF_GRID_VOLTAGE_PHASE_R, SofarSolar_Register{0x05A6, 1, U_WORD, 2, -1, NONE}}, // Off Grid Voltage Phase R
+			{OFF_GRID_CURRENT_PHASE_R, SofarSolar_Register{0x05A7, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase R
+			{OFF_GRID_POWER_PHASE_R, SofarSolar_Register{0x05A8, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase R
+			{OFF_GRID_VOLTAGE_PHASE_S, SofarSolar_Register{0x05AC, 1, U_WORD, 2, -1, NONE}}, // Off Grid Voltage Phase S
+			{OFF_GRID_CURRENT_PHASE_S, SofarSolar_Register{0x05AD, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase S
+			{OFF_GRID_POWER_PHASE_S, SofarSolar_Register{0x05AE, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase S
+			{OFF_GRID_VOLTAGE_PHASE_T, SofarSolar_Register{0x05B8, 1, U_WORD, 2, -1, NONE}}, // Off Grid Voltage Phase T
+			{OFF_GRID_CURRENT_PHASE_T, SofarSolar_Register{0x05B9, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase T
+			{OFF_GRID_POWER_PHASE_T, SofarSolar_Register{0x05BA, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase T
 			{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}}, // Battery Active Control
 			{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}} // Battery Active Oneshot
         };
