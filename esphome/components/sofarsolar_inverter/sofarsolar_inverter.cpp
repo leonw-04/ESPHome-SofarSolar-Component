@@ -136,7 +136,7 @@ namespace esphome {
 				G3_dynamic.at(MINIMUM_BATTERY_POWER).write_set_value = true;
 				G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_value.int32_value = 5000;
 				G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_set_value = true;
-				ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state, this->power_sensor_->state, registers_G3[DESIRED_GRID_POWER].write_value.int32_value);
+				ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state, this->power_sensor_->state, G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value);
 				this->write_desired_grid_power(); // Write the new desired grid power, minimum battery power, and maximum battery power
 			}
 
