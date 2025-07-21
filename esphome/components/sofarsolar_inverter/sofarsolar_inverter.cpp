@@ -112,17 +112,13 @@ namespace esphome {
         std::priority_queue<register_write_task> register_write_queue; // Priority queue for register write tasks
 
         void SofarSolar_Inverter::setup() {
-			//ESP_LOGCONFIG(TAG, "Setting up Sofar Solar Inverter");
-            //registers_G3[BATTERY_ACTIVE_CONTROL].write_value.uint16_value = 0;
-            //registers_G3[BATTERY_ACTIVE_CONTROL].write_set_value = true;
-            //registers_G3[BATTERY_ACTIVE_ONESHOT].write_value.uint16_value = 1;
-            //registers_G3[BATTERY_ACTIVE_ONESHOT].write_set_value = true;
-            //time_begin_modbus_operation = millis();
-			//register_write_task data;
-            //data.register_ptr = &registers_G3[BATTERY_ACTIVE_CONTROL];
-            //this->write_battery_active(data); // Write the battery active control register
-            //current_writing = true; // Set the flag to indicate that a write is in progress
-            //current_write_task = data; // Set the flag to indicate that a write is in progress
+			ESP_LOGCONFIG(TAG, "Setting up Sofar Solar Inverter");
+            G3_dynamic.at(BATTERY_ACTIVE_CONTROL).write_value.uint16_value = 0;
+            G3_dynamic.at(BATTERY_ACTIVE_CONTROL).write_set_value = true;
+            G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).write_value.uint16_value = 1;
+            G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).write_set_value = true;
+            time_begin_modbus_operation = millis();
+            this->write_battery_active(); // Write the battery active control register
         }
 
         void SofarSolar_Inverter::loop() {
@@ -190,6 +186,9 @@ namespace esphome {
 				register_read_queue.pop(); // Remove the top task from the read queue
 			} else if (current_writing) {
 				parse_write_response(data);
+				G3_dynamic.at(register_write_queue.top().register_key).is_queued = false; // Mark the register as not queued
+				current_writing = false; // Reset the flag for read operation
+				register_read_queue.pop(); // Remove the top task from the read queue
 			} else {
 				ESP_LOGE(TAG, "Received Modbus data while not in a read or write operation");
 			}
@@ -267,6 +266,17 @@ namespace esphome {
 
 		void SofarSolar_Inverter::parse_write_response(const std::vector<uint8_t> &data) {
         	ESP_LOGVV(TAG, "Parsing write response: %s", vector_to_string(data).c_str());
+			if (data.size() != 4) {
+				ESP_LOGE(TAG, "Invalid write response size: %d", data.size());
+			}
+			if (G3_register[register_write_queue.top().first_register_key].start_address != ((data[0] << 8) | data[1])) {
+				ESP_LOGE(TAG, "Invalid response address: expected %04X, got %02X%02X", G3_registers.at(register_write_queue.top().first_register_key).start_address, data[2], data[3]);
+				return; // Invalid response address
+			}
+			if (register_write_queue.top().number_of_registers != ((data[2] << 8) | data[3])) {
+				ESP_LOGE(TAG, "Invalid response quantity: expected %d, got %02X", register_write_queue.top().number_of_registers, ((data[2] << 8) | data[3]));
+				return; // Invalid response quantity
+			}
 		};
 
             //if (response.data()[2] != response.size() - 5 && response.data()[2] != register_info.quantity * 2) {
