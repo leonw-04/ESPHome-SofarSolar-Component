@@ -157,7 +157,7 @@ namespace esphome {
 
 			if(!current_reading && !current_writing && !register_write_queue.empty()) {
 				// If there is a write task in the queue, process it
-				write_modbus_register(G3_registers.at(register_write_queue.top().first_register_key).start_address, G3_registers.at(register_write_queue.top().first_register_key).register_count, register_write_queue.top().data); // Write the register
+				write_modbus_register(G3_registers.at(register_write_queue.top().first_register_key).start_address, register_write_queue.top().number_of_registers, register_write_queue.top().data); // Write the register
 				current_writing = true; // Set the flag to indicate that a write is in progress
 				time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
 			}
