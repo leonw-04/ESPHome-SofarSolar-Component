@@ -338,7 +338,7 @@ namespace esphome {
             int32_t new_maximum_battery_power;
             if (G3_dynamic.at(MAXIMUM_BATTERY_POWER).enforce_default_value && G3_dynamic.at(DESIRED_GRID_POWER).default_value_set) {
                 new_maximum_battery_power = G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value.int32_value;
-            } else if (registers_G3[MAXIMUM_BATTERY_POWER].write_set_value) {
+            } else if (G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_set_value) {
                 new_maximum_battery_power = G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_value.int32_value;
             } else {
                 new_maximum_battery_power = G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state;
@@ -360,7 +360,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power >> 8));
             data.push_back(static_cast<uint8_t>(new_maximum_battery_power & 0xFF));
         	register_write_task task;
-        	task.register_key = DESIRED_GRID_POWER; // Set the register key for the write task
+        	task.first_register_key = DESIRED_GRID_POWER; // Set the register key for the write task
         	task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
         	task.data = data; // Set the data to write
         	register_write_queue.push(task); // Add the write task to the queue
@@ -523,7 +523,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(0x01 >> 8));
             data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
         	register_write_task task;
-        	task.register_key = BATTERY_CONF_ID; // Set the register key for the write task
+        	task.first_register_key = BATTERY_CONF_ID; // Set the register key for the write task
         	task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
         	task.data = data; // Set the data to write
         	register_write_queue.push(task); // Add the write task to the queue
@@ -554,7 +554,7 @@ namespace esphome {
             data.push_back(static_cast<uint8_t>(new_battery_active_oneshot >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_active_oneshot & 0xFF));
         	register_write_task task;
-        	task.register_key = BATTERY_ACTIVE_CONTROL; // Set the register key for the write task
+        	task.first_register_key = BATTERY_ACTIVE_CONTROL; // Set the register key for the write task
 			task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
 			task.data = data; // Set the data to write
         	register_write_queue.push(task); // Add the write task to the queue
