@@ -128,9 +128,17 @@ namespace esphome {
 				// Read the current zero export status
 				G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value = G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state;
 				G3_dynamic.at(DESIRED_GRID_POWER).write_set_value = true;
-				G3_dynamic.at(MINIMUM_BATTERY_POWER).write_value.int32_value = -5000;
+				if (battery_charge_only_switch_state_) {
+					G3_dynamic.at(MINIMUM_BATTERY_POWER).write_value.int32_value = 0;
+				} else {
+					G3_dynamic.at(MINIMUM_BATTERY_POWER).write_value.int32_value = -5000;
+				}
 				G3_dynamic.at(MINIMUM_BATTERY_POWER).write_set_value = true;
-				G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_value.int32_value = 5000;
+				if (battery_discharge_only_switch_state_) {
+					G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_value.int32_value = 0;
+				} else {
+					G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_value.int32_value = 5000;
+				}
 				G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_set_value = true;
 				ESP_LOGD(TAG, "Current total active power inverter: %f W, Current power sensor: %f W, New desired grid power: %d W", G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state, this->power_sensor_->state, G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value);
 				this->write_desired_grid_power(); // Write the new desired grid power, minimum battery power, and maximum battery power
