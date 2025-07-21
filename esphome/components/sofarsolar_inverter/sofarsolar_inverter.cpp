@@ -308,7 +308,7 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "  modbus_address = %i", this->modbus_address_);
             ESP_LOGCONFIG(TAG, "  zero_export = %s", TRUEFALSE(this->zero_export_));
             ESP_LOGCONFIG(TAG, "  power_sensor = %s", this->power_sensor_ ? this->power_sensor_->get_name().c_str() : "None");
-        	std::string log_str;
+        	//std::string log_str;
         	//for (const auto &reg : G3_registers) {
         	//	log_str +=
 			//		"  " + std::string(G3_dynamic.at(reg.first).sensor->get_name().c_str()) +
