@@ -18,7 +18,7 @@ namespace esphome {
                 void write_state(bool state) override;
                 std::string on_command_;
                 std::string off_command_;
-                Pipsolar *parent_;
+                SofarSolar_Inverter *parent_;
         };
     }
 }
