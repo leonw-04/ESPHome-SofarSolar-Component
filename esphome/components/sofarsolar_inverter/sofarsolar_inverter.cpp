@@ -137,7 +137,7 @@ namespace esphome {
 			}
 
             for (auto &dynamic_register : this->G3_dynamic) {
-				ESP_LOGVV(TAG, "Checking register %d for update. Last update %d, Update Intervall %d", dynamic_register.first, millis() - dynamic_register.second.last_update, dynamic_register.second.update_interval);
+				ESP_LOGD(TAG, "Checking register %s for update. Last update %d, Update Intervall %d", dynamic_register.second.sensor->get_name().c_str(), millis() - dynamic_register.second.last_update, dynamic_register.second.update_interval);
                 if (dynamic_register.second.sensor == nullptr) {
 					continue; // Skip if the sensor pointer is null
 				}
@@ -309,16 +309,16 @@ namespace esphome {
             ESP_LOGCONFIG(TAG, "  zero_export = %s", TRUEFALSE(this->zero_export_));
             ESP_LOGCONFIG(TAG, "  power_sensor = %s", this->power_sensor_ ? this->power_sensor_->get_name().c_str() : "None");
         	std::string log_str;
-        	for (const auto &reg : G3_registers) {
-        		log_str +=
-					"  " + std::string(G3_dynamic.at(reg.first).sensor->get_name().c_str()) +
-					": start_address = " + esphome::to_string(reg.second.start_address) +
-					", type = " + std::to_string(reg.second.type) +
-					", scale = " + std::to_string(reg.second.scale) +
-					", update_interval = " + std::to_string(G3_dynamic.at(reg.first).update_interval) +
-					", enforce_default_value = " + TRUEFALSE(G3_dynamic.at(reg.first).enforce_default_value) + "\n";
-        	}
-        	ESP_LOGCONFIG(TAG, "%s", log_str.c_str());
+        	//for (const auto &reg : G3_registers) {
+        	//	log_str +=
+			//		"  " + std::string(G3_dynamic.at(reg.first).sensor->get_name().c_str()) +
+			//		": start_address = " + esphome::to_string(reg.second.start_address) +
+			//		", type = " + std::to_string(reg.second.type) +
+			//		", scale = " + std::to_string(reg.second.scale) +
+			//		", update_interval = " + std::to_string(G3_dynamic.at(reg.first).update_interval) +
+			//		", enforce_default_value = " + TRUEFALSE(G3_dynamic.at(reg.first).enforce_default_value) + "\n";
+        	//}
+        	//ESP_LOGCONFIG(TAG, "%s", log_str.c_str());
         }
 
         void SofarSolar_Inverter::read_modbus_register(uint16_t start_address, uint16_t register_count) {
