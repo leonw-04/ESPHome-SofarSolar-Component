@@ -338,7 +338,7 @@ namespace esphome {
                 new_minimum_battery_power = G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state;
             }
             int32_t new_maximum_battery_power;
-            if (G3_dynamic.at(MAXIMUM_BATTERY_POWER).enforce_default_value && G3_dynamic.at(DESIRED_GRID_POWER).default_value_set) {
+            if (G3_dynamic.at(MAXIMUM_BATTERY_POWER).enforce_default_value && G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value_set) {
                 new_maximum_battery_power = G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value.int32_value;
             } else if (G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_set_value) {
                 new_maximum_battery_power = G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_value.int32_value;
@@ -364,6 +364,7 @@ namespace esphome {
         	register_write_task task;
         	task.first_register_key = DESIRED_GRID_POWER; // Set the register key for the write task
         	task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
+			ESP_LOGD(TAG, "Number of registers to write: %d", task.number_of_registers);
         	task.data = data; // Set the data to write
         	register_write_queue.push(task); // Add the write task to the queue
         }
