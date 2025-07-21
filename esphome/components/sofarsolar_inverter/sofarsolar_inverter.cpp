@@ -316,7 +316,7 @@ namespace esphome {
             std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(register_count >> 8), static_cast<uint8_t>(register_count & 0xFF), static_cast<uint8_t>(data.size())};
             frame.insert(frame.end(), data.begin(), data.end());
 			ESP_LOGD(TAG, "Writing Modbus registers: %s", vector_to_string(frame).c_str());
-            this->send_raw(data);
+            this->send_raw(frame);
         }
 
         void SofarSolar_Inverter::write_desired_grid_power() {
