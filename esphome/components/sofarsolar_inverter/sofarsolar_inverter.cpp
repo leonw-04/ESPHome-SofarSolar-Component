@@ -585,7 +585,7 @@ namespace esphome {
 
         }
 
-    	void switch_command(const std::string &command) {
+    	void SofarSolar_Inverter::switch_command(const std::string &command) {
 			switch (command) {
 				case "battery_charge_only_on":
 					this->battery_charge_only_switch_state_ = true;

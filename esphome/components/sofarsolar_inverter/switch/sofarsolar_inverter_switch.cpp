@@ -22,7 +22,9 @@ namespace esphome {
             if (this->parent_ == nullptr) {
                 ESP_LOGE(TAG, "Parent SofarSolar_Inverter is not set!");
                 return;
-            } else
+            } else {
+                this->parent_->switch_command(state ? this->on_command_ : this->off_command_);
+            }
         }
     }
 }
