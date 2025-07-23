@@ -4,6 +4,7 @@
 #include "map"
 #include "esphome/components/sensor/sensor.h"
 #include "esphome/components/switch/switch.h"
+#include "esphome/components/button/button.h"
 #include "esphome/components/text_sensor/text_sensor.h"
 #include "esphome/components/modbus/modbus.h"
 #include "esphome/core/component.h"
@@ -405,6 +406,15 @@ namespace esphome {
 
 			bool battery_charge_only_switch_state_ = false;
 			bool battery_discharge_only_switch_state_ = false;
+
+			void set_battery_activation_button(button::Button *battery_activation_button) { this->battery_activation_button_ = battery_activation_button; }
+			void set_battery_config_write_button(button::Button *battery_config_write_button) { this->battery_config_write_button_ = battery_config_write_button; }
+
+			button::Button *battery_activation_button_ = nullptr;
+			button::Button *battery_config_write_button_ = nullptr;
+
+			void battery_activation();
+			void battery_config_write();
 
             std::string model_;
             int modbus_address_;

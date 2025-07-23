@@ -612,6 +612,19 @@ namespace esphome {
 			}
 		}
 
+		void SofarSolar_Inverter::battery_activation() {
+            G3_dynamic.at(BATTERY_ACTIVE_CONTROL).write_value.uint16_value = 1;
+            G3_dynamic.at(BATTERY_ACTIVE_CONTROL).write_set_value = true;
+            G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).write_value.uint16_value = 1;
+            G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).write_set_value = true;
+            time_begin_modbus_operation = millis();
+            this->write_battery_active(); // Write the battery active control register
+		}
+
+		void SofarSolar_Inverter::battery_config_write() {
+			this.write_battery_conf(); // Write the battery configuration registers
+		}
+
         void SofarSolar_Inverter::set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { G3_dynamic.at(PV_GENERATION_TODAY).sensor = pv_generation_today_sensor; }
 		void SofarSolar_Inverter::set_pv_generation_total_sensor(sensor::Sensor *pv_generation_total_sensor) { G3_dynamic.at(PV_GENERATION_TOTAL).sensor = pv_generation_total_sensor; }
 		void SofarSolar_Inverter::set_load_consumption_today_sensor(sensor::Sensor *load_consumption_today_sensor) { G3_dynamic.at(LOAD_CONSUMPTION_TODAY).sensor = load_consumption_today_sensor; }
