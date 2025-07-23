@@ -32,4 +32,4 @@ async def to_code(config):
     if battery_write_conf := config.get(CONF_BATTERY_CONFIG_WRITE_BUTTON):
         b = await button.new_button(battery_write_conf)
         await cg.register_parented(b, config[CONF_SOFARSOLAR_INVERTER_ID])
-        cg.add(paren.set_battery_write_config_button(b))
+        cg.add(paren.set_battery_config_write_button(b))
