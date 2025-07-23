@@ -622,7 +622,7 @@ namespace esphome {
 		}
 
 		void SofarSolar_Inverter::battery_config_write() {
-			this.write_battery_conf(); // Write the battery configuration registers
+			this->write_battery_conf(); // Write the battery configuration registers
 		}
 
         void SofarSolar_Inverter::set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { G3_dynamic.at(PV_GENERATION_TODAY).sensor = pv_generation_today_sensor; }
