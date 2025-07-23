@@ -6,8 +6,8 @@ from .. import CONF_SOFARSOLAR_INVERTER_ID, SOFARSOLAR_INVERTER_COMPONENT_SCHEMA
 
 DEPENDENCIES = ["modbus"]
 
-CONF_BATTERY_ACTIVATION_BUTTON = "battery_activation_button"
-CONF_BATTERY_CONFIG_WRITE_BUTTON = "battery_config_write_button"
+CONF_BATTERY_ACTIVATION_BUTTON = "battery_activation"
+CONF_BATTERY_CONFIG_WRITE_BUTTON = "battery_config_write"
 
 BatteryActivationButton = sofarsolar_inverter_ns.class_("BatteryActivation", button.Button)
 BatteryConfigWriteButton = sofarsolar_inverter_ns.class_("BatteryConfigWrite", button.Button)
