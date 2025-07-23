@@ -9,8 +9,8 @@ DEPENDENCIES = ["modbus"]
 CONF_BATTERY_ACTIVATION_BUTTON = "battery_activation"
 CONF_BATTERY_CONFIG_WRITE_BUTTON = "battery_config_write"
 
-BatteryActivationButton = sofarsolar_inverter_ns.class_("BatteryActivation", button.Button)
-BatteryConfigWriteButton = sofarsolar_inverter_ns.class_("BatteryConfigWrite", button.Button)
+BatteryActivationButton = sofarsolar_inverter_ns.class_("BatteryActivationButton", button.Button)
+BatteryConfigWriteButton = sofarsolar_inverter_ns.class_("BatteryConfigWriteButton", button.Button)
 
 CONFIG_SCHEMA = SOFARSOLAR_INVERTER_COMPONENT_SCHEMA.extend(
     {
@@ -32,4 +32,4 @@ async def to_code(config):
     if battery_write_conf := config.get(CONF_BATTERY_CONFIG_WRITE_BUTTON):
         b = await button.new_button(battery_write_conf)
         await cg.register_parented(b, config[CONF_SOFARSOLAR_INVERTER_ID])
-        cg.add(paren.set_battery_write_config_button(b))
+        cg.add(paren.set_battery_config_write_button(b))
