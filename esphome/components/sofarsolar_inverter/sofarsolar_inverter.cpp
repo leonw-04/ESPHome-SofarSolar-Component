@@ -587,6 +587,7 @@ namespace esphome {
             }
             data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+			ESP_LOGD(TAG, "Writing battery active control: %d", new_battery_active_control);
             uint16_t new_battery_active_oneshot;
             if (G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).enforce_default_value && G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).default_value_set) {
                 new_battery_active_oneshot = G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).default_value.uint16_value;
@@ -597,6 +598,7 @@ namespace esphome {
             }
             data.push_back(static_cast<uint8_t>(new_battery_active_oneshot >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_active_oneshot & 0xFF));
+			ESP_LOGD(TAG, "Writing battery active oneshot: %d", new_battery_active_oneshot);
         	register_write_task task;
         	task.first_register_key = BATTERY_ACTIVE_CONTROL; // Set the register key for the write task
 			task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
