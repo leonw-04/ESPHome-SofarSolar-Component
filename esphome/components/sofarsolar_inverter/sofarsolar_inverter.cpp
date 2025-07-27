@@ -540,8 +540,8 @@ namespace esphome {
                 new_battery_conf_voltage_nominal = G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration voltage nominal: %d", new_battery_conf_voltage_nominal);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal & 0xFF));
             uint16_t new_battery_conf_cell_type;
             if (G3_dynamic.at(BATTERY_CONF_CELL_TYPE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value_set) {
                 new_battery_conf_cell_type = G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value.uint16_value;
@@ -551,17 +551,17 @@ namespace esphome {
                 new_battery_conf_cell_type = G3_dynamic.at(BATTERY_CONF_CELL_TYPE).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration cell type: %d", new_battery_conf_cell_type);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type & 0xFF));
-            //uint16_t new_battery_conf_eps_buffer;
-            //if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_set) {
-            //    new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value.uint16_value;
-            //} else if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_set_value) {
-            //    new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_value.uint16_value;
-            //} else {
-            //    new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).sensor->state;
-            //}
-			//ESP_LOGD(TAG, "Writing battery configuration EPS buffer: %d", new_battery_conf_eps_buffer);
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type & 0xFF));
+            uint16_t new_battery_conf_eps_buffer;
+            if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_set) {
+                new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value.uint16_value;
+            } else if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_set_value) {
+                new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_value.uint16_value;
+            } else {
+                new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).sensor->state;
+            }
+			ESP_LOGD(TAG, "Writing battery configuration EPS buffer: %d", new_battery_conf_eps_buffer);
             //data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
             //data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
             //data.push_back(static_cast<uint8_t>(0x01 >> 8));
