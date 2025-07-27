@@ -553,17 +553,17 @@ namespace esphome {
 			ESP_LOGD(TAG, "Writing battery configuration cell type: %d", new_battery_conf_cell_type);
             data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type & 0xFF));
-            uint16_t new_battery_conf_eps_buffer;
-            if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_set) {
-                new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value.uint16_value;
-            } else if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_set_value) {
-                new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_value.uint16_value;
-            } else {
-                new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).sensor->state;
-            }
-			ESP_LOGD(TAG, "Writing battery configuration EPS buffer: %d", new_battery_conf_eps_buffer);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
+            //uint16_t new_battery_conf_eps_buffer;
+            //if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_set) {
+            //    new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value.uint16_value;
+            //} else if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_set_value) {
+            //    new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).write_value.uint16_value;
+            //} else {
+            //    new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).sensor->state;
+            //}
+			//ESP_LOGD(TAG, "Writing battery configuration EPS buffer: %d", new_battery_conf_eps_buffer);
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
             //data.push_back(static_cast<uint8_t>(0x01 >> 8));
             //data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
         	register_write_task task;
