@@ -206,7 +206,7 @@ namespace esphome {
 
         void SofarSolar_Inverter::on_modbus_error(uint8_t function_code, uint8_t exception_code) {
             ESP_LOGE(TAG, "Modbus error: Function code %02X, Exception code %02X", function_code, exception_code);
-			if (function_code == 0x90) {
+			if (function_code == 0x03 || function_code == 0x10 || function_code == 0x90) {
                 switch (exception_code) {
                     case 0x01:
                         ESP_LOGE(TAG, "Modbus error: Illegal function");
@@ -564,8 +564,8 @@ namespace esphome {
 			ESP_LOGD(TAG, "Writing battery configuration EPS buffer: %d", new_battery_conf_eps_buffer);
             data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
-            data.push_back(static_cast<uint8_t>(0x01 >> 8));
-            data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
+            //data.push_back(static_cast<uint8_t>(0x01 >> 8));
+            //data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
         	register_write_task task;
         	task.first_register_key = BATTERY_CONF_ID; // Set the register key for the write task
         	task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
