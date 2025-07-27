@@ -419,8 +419,8 @@ namespace esphome {
                 new_battery_conf_address = G3_dynamic.at(BATTERY_CONF_ADDRESS).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration address: %d", new_battery_conf_address);
-            //data.push_back(static_cast<uint8_t>(new_battery_conf_address >> 8));
-            //data.push_back(static_cast<uint8_t>(new_battery_conf_address & 0xFF));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_address >> 8));
+            data.push_back(static_cast<uint8_t>(new_battery_conf_address & 0xFF));
             uint16_t new_battery_conf_protocol;
             if (G3_dynamic.at(BATTERY_CONF_PROTOCOL).enforce_default_value && G3_dynamic.at(BATTERY_CONF_PROTOCOL).default_value_set) {
                 new_battery_conf_protocol = G3_dynamic.at(BATTERY_CONF_PROTOCOL).default_value.uint16_value;
