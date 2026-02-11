@@ -199,6 +199,7 @@ namespace esphome {
                 }
             }
 
+        	ESP_LOGD(TAG, "Current write queue size: %d", register_write_queue.size());
 			if(!current_reading && !current_writing && !register_write_queue.empty() && millis() - time_begin_modbus_operation > 150) {
 				// If there is a write task in the queue, process it
 				write_modbus_register(G3_registers.at(register_write_queue.top().first_register_key).start_address, register_write_queue.top().number_of_registers, register_write_queue.top().data); // Write the register
