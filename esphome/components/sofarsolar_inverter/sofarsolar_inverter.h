@@ -70,17 +70,28 @@
 #define OFF_GRID_POWER_PHASE_T 59
 #define BATTERY_ACTIVE_CONTROL 60
 #define BATTERY_ACTIVE_ONESHOT 61
+#define POWER_CONTROL 62
+#define ACTIVE_POWER_EXPORT_LIMIT 63
+#define ACTIVE_POWER_IMPORT_LIMIT 64
+#define REACTIVE_POWER_SETTING 65
+#define POWER_FACTOR_SETTING 66
+#define ACTIVE_POWER_LIMIT_SPEED 67
+#define REACTIVE_POWER_RESPONSE_TIME 68
+#define SVG_FIXED_REACTIVE_POWER_SETTING 69
 
 #define NONE 0
 #define SINGLE_REGISTER_WRITE 1
 #define DESIRED_GRID_POWER_WRITE 2
 #define BATTERY_CONF_WRITE 3
 #define BATTERY_ACTIVE_WRITE 4
+#define POWER_WRITE 4
 
 #define U_WORD 0x01
 #define U_DWORD 0x02
 #define S_WORD 0x03
 #define S_DWORD 0x04
+
+#define HYD6000EP 1
 
 namespace esphome {
     namespace sofarsolar_inverter {
@@ -107,6 +118,14 @@ namespace esphome {
     		SofarSolar_Register(uint16_t start_address, uint16_t register_count, uint8_t type, uint8_t priority, int8_t scale, uint8_t write_function) :
 				start_address(start_address), register_count(register_count), type(type), priority(priority), scale(scale), write_function(write_function) {}
     	};
+
+		struct Model_Parameters {
+			uint8_t phase_count; // Number of phases (1 or 3)
+			uint16_t max_output_power_w; // Maximum output power in watts
+			Model_Parameters() : phase_count(1), max_output_power_w(0) {}
+			Model_Parameters(uint8_t phase_count, uint16_t max_output_power_w) :
+                phase_count(phase_count), max_output_power_w(max_output_power_w) {}
+		};
 
     	struct SofarSolar_RegisterDynamic;
 
@@ -176,6 +195,19 @@ namespace esphome {
 			{OFF_GRID_POWER_PHASE_T, SofarSolar_Register{0x05BA, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase T
 			{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}}, // Battery Active Control
 			{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}} // Battery Active Oneshot
+			{POWER_CONTROL, SofarSolar_Register{0x1105, 1, U_WORD, 0, 0, POWER_WRITE}} // Battery Active Oneshot
+			{ACTIVE_POWER_EXPORT_LIMIT, SofarSolar_Register{0x1106, 1, U_WORD, 0, 0, POWER_WRITE}} // Active Power Export Limit
+			{ACTIVE_POWER_IMPORT_LIMIT, SofarSolar_Register{0x1107, 1, U_WORD, 0, 0, POWER_WRITE}} // Active Power Import Limit
+            {REACTIVE_POWER_SETTING, SofarSolar_Register{0x1108, 1, S_WORD, 0, 0, POWER_WRITE}} // Reactive Power Setting
+            {POWER_FACTOR_SETTING, SofarSolar_Register{0x1109, 1, S_WORD, 0, 0, POWER_WRITE}} // Power Factor Setting
+            {ACTIVE_POWER_LIMIT_SPEED, SofarSolar_Register{0x110A, 1, U_WORD, 0, 0, POWER_WRITE}} // Active Power Limit Speed
+            {REACTIVE_POWER_RESPONSE_TIME, SofarSolar_Register{0x110B, 1, U_WORD, 0, 0, POWER_WRITE}} // Reactive Power Response Time
+            {SVG_FIXED_REACTIVE_POWER_SETTING, SofarSolar_Register{0x110C, 1, S_WORD, 0, 0, NONE}} // SVG Fixed Reactive Power Setting
+        };
+
+		static const std::map<uint8_t, uint8_t, uint16_t> model_parameters = {
+			//Model, Phase Count, Max Output Power (W)
+            {HYD6000EP, Model_Parameters{1, 5000}} // HYD6000EP, 1 phase, 5000W
         };
 
         class SofarSolar_Inverter : public modbus::ModbusDevice, public Component {
@@ -226,7 +258,8 @@ namespace esphome {
 			void write_battery_active();
 			void write_single_register();
 
-            void set_model(std::string model) { this->model_ = model;}
+            void set_model(std::string model) { this->model_ = model; this->set_model_id(model); }
+            void set_model_id(std::string model):
             void set_modbus_address(int modbus_address) { this->modbus_address_ = modbus_address;}
             void set_zero_export(bool zero_export) { this->zero_export_ = zero_export;}
             void set_power_id(sensor::Sensor *power_id) { this->power_sensor_ = power_id;}
@@ -417,6 +450,7 @@ namespace esphome {
 			void battery_config_write();
 
             std::string model_;
+			int model_id_;
             int modbus_address_;
             bool zero_export_;
             sensor::Sensor *power_sensor_;
