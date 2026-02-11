@@ -641,88 +641,88 @@ namespace esphome {
         	ESP_LOGD(TAG, "Writing Power Percentage");
         	ESP_LOGD(TAG, "Power Control");
         	std::vector<uint8_t> data;
-        	uint16_t new_battery_active_control;
+        	uint16_t new_power_control;
         	if (G3_dynamic.at(POWER_CONTROL).enforce_default_value && G3_dynamic.at(POWER_CONTROL).default_value_set) {
-        		new_battery_active_control = G3_dynamic.at(POWER_CONTROL).default_value.uint16_value;
+        		new_power_control = G3_dynamic.at(POWER_CONTROL).default_value.uint16_value;
         	} else if (G3_dynamic.at(POWER_CONTROL).write_set_value) {
-        		new_battery_active_control = G3_dynamic.at(POWER_CONTROL).write_value.uint16_value;
+        		new_power_control = G3_dynamic.at(POWER_CONTROL).write_value.uint16_value;
         	} else {
-        		new_battery_active_control = G3_dynamic.at(POWER_CONTROL).sensor->state;
+        		new_power_control = G3_dynamic.at(POWER_CONTROL).sensor->state;
         	}
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+        	data.push_back(static_cast<uint8_t>(new_power_control >> 8));
+        	data.push_back(static_cast<uint8_t>(new_power_control & 0xFF));
 
         	ESP_LOGD(TAG, "Active Power Export Limit");
-        	uint16_t new_battery_active_control;
+        	uint16_t new_active_power_export_limit;
         	if (G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).enforce_default_value && G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value_set) {
-        		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value.uint16_value;
+        		new_active_power_export_limit = G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value.uint16_value;
         	} else if (G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value) {
-        		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value;
+        		new_active_power_export_limit = G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value;
         	} else {
-        		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).sensor->state;
+        		new_active_power_export_limit = G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).sensor->state;
         	}
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+        	data.push_back(static_cast<uint8_t>(new_active_power_export_limit >> 8));
+        	data.push_back(static_cast<uint8_t>(new_active_power_export_limit & 0xFF));
 
         	ESP_LOGD(TAG, "Active Power Import Limit");
-        	uint16_t new_battery_active_control;
+        	uint16_t new_active_power_import_limit;
         	if (G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).enforce_default_value && G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value_set) {
-        		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value.uint16_value;
+        		new_active_power_import_limit = G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value.uint16_value;
         	} else if (G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_set_value) {
-        		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value;
+        		new_active_power_import_limit = G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value;
         	} else {
-        		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).sensor->state;
+        		new_active_power_import_limit = G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).sensor->state;
         	}
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+        	data.push_back(static_cast<uint8_t>(new_active_power_import_limit >> 8));
+        	data.push_back(static_cast<uint8_t>(new_active_power_import_limit & 0xFF));
 
         	ESP_LOGD(TAG, "Reactive Power Setting");
-        	uint16_t new_battery_active_control;
+        	uint16_t new_reactive_power_setting;
         	if (G3_dynamic.at(REACTIVE_POWER_SETTING).enforce_default_value && G3_dynamic.at(REACTIVE_POWER_SETTING).default_value_set) {
-        		new_battery_active_control = G3_dynamic.at(REACTIVE_POWER_SETTING).default_value.int16_value;
+        		new_reactive_power_setting = G3_dynamic.at(REACTIVE_POWER_SETTING).default_value.int16_value;
         	} else if (G3_dynamic.at(REACTIVE_POWER_SETTING).write_set_value) {
-        		new_battery_active_control = G3_dynamic.at(REACTIVE_POWER_SETTING).write_value.int16_value;
+        		new_reactive_power_setting = G3_dynamic.at(REACTIVE_POWER_SETTING).write_value.int16_value;
         	} else {
-        		new_battery_active_control = G3_dynamic.at(REACTIVE_POWER_SETTING).sensor->state;
+        		new_reactive_power_setting = G3_dynamic.at(REACTIVE_POWER_SETTING).sensor->state;
         	}
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+        	data.push_back(static_cast<uint8_t>(new_reactive_power_setting >> 8));
+        	data.push_back(static_cast<uint8_t>(new_reactive_power_setting & 0xFF));
 
         	ESP_LOGD(TAG, "Power Factor Setting");
-        	uint16_t new_battery_active_control;
+        	uint16_t new_pwoer_factor_setting;
         	if (G3_dynamic.at(POWER_FACTOR_SETTING).enforce_default_value && G3_dynamic.at(POWER_FACTOR_SETTING).default_value_set) {
-        		new_battery_active_control = G3_dynamic.at(POWER_FACTOR_SETTING).default_value.int16_value;
+        		new_pwoer_factor_setting = G3_dynamic.at(POWER_FACTOR_SETTING).default_value.int16_value;
         	} else if (G3_dynamic.at(POWER_FACTOR_SETTING).write_set_value) {
-        		new_battery_active_control = G3_dynamic.at(POWER_FACTOR_SETTING).write_value.int16_value;
+        		new_pwoer_factor_setting = G3_dynamic.at(POWER_FACTOR_SETTING).write_value.int16_value;
         	} else {
-        		new_battery_active_control = G3_dynamic.at(POWER_FACTOR_SETTING).sensor->state;
+        		new_pwoer_factor_setting = G3_dynamic.at(POWER_FACTOR_SETTING).sensor->state;
         	}
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+        	data.push_back(static_cast<uint8_t>(new_pwoer_factor_setting >> 8));
+        	data.push_back(static_cast<uint8_t>(new_pwoer_factor_setting & 0xFF));
 
         	ESP_LOGD(TAG, "Active Power Limit Speed");
-        	uint16_t new_battery_active_control;
+        	uint16_t new_active_power_limit_speed;
         	if (G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).enforce_default_value && G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).default_value_set) {
-        		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).default_value.uint16_value;
+        		new_active_power_limit_speed = G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).default_value.uint16_value;
         	} else if (G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_set_value) {
-        		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_value.uint16_value;
+        		new_active_power_limit_speed = G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_value.uint16_value;
         	} else {
-        		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).sensor->state;
+        		new_active_power_limit_speed = G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).sensor->state;
         	}
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+        	data.push_back(static_cast<uint8_t>(new_active_power_limit_speed >> 8));
+        	data.push_back(static_cast<uint8_t>(new_active_power_limit_speed & 0xFF));
 
         	ESP_LOGD(TAG, "Reactive Power Response Time");
-        	uint16_t new_battery_active_control;
+        	uint16_t new_reactive_power_response_time;
         	if (G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).enforce_default_value && G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).default_value_set) {
-        		new_battery_active_control = G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).default_value.uint16_value;
+        		new_reactive_power_response_time = G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).default_value.uint16_value;
         	} else if (G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_set_value) {
-        		new_battery_active_control = G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_value.uint16_value;
+        		new_reactive_power_response_time = G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_value.uint16_value;
         	} else {
-        		new_battery_active_control = G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).sensor->state;
+        		new_reactive_power_response_time = G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).sensor->state;
         	}
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
-        	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+        	data.push_back(static_cast<uint8_t>(new_reactive_power_response_time >> 8));
+        	data.push_back(static_cast<uint8_t>(new_reactive_power_response_time & 0xFF));
 
         	register_write_task task;
         	task.first_register_key = POWER_CONTROL; // Set the register key for the write task
