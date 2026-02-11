@@ -122,7 +122,7 @@ namespace esphome {
 
         void SofarSolar_Inverter::loop() {
         	ESP_LOGD(TAG, "Test");
-			if (millis() - zero_export_last_update > 1000 && this->zero_export_) {
+			if (millis() - zero_export_last_update > 1000 && !this->zero_export_) {
 				zero_export_last_update = millis();
 				ESP_LOGD(TAG, "Updating zero export status");
 				// Read the current zero export status
@@ -137,6 +137,7 @@ namespace esphome {
 				}
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value = percentage;
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value = true;
+				ESP_LOGD(TAG, "Setting active power export limit to %d (percentage: %d%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, percentage);
 
 				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value = 0;
 				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_set_value = true;
