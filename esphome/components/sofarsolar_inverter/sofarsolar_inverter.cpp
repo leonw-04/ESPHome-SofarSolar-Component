@@ -124,6 +124,7 @@ namespace esphome {
 			if (millis() - zero_export_last_update > 1000 && this->zero_export_) {
 				zero_export_last_update = millis();
 				ESP_LOGD(TAG, "Updating zero export status");
+				ESP_LOGD(TAG, "Test");
 				// Read the current zero export status
 				G3_dynamic.at(POWER_CONTROL).write_value.uint16_value = 0b00001;
 				G3_dynamic.at(POWER_CONTROL).write_set_value = true;
@@ -136,7 +137,6 @@ namespace esphome {
 				}
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value = percentage;
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value = true;
-				ESP_LOGD(TAG, "Test");
 				ESP_LOGD(TAG, "Setting active power export limit to %d (percentage: %d%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, percentage);
 
 				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value = 0;
