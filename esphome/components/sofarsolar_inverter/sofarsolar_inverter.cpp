@@ -194,12 +194,12 @@ namespace esphome {
 					task.register_key = dynamic_register.first; // Set the register key for the task
                     dynamic_register.second.is_queued = true; // Mark the register as queued
                     register_read_queue.push(task); // Add the task to the read queue
-					ESP_LOGD(TAG, "Current reading queue size: %d", register_read_queue.size());
-                    ESP_LOGV(TAG, "Queued register %s for reading", dynamic_register.first.c_str());
+					ESP_LOGV(TAG, "Current reading queue size: %d", register_read_queue.size());
+                    ESP_LOGVV(TAG, "Queued register %s for reading", dynamic_register.first.c_str());
                 }
             }
 
-        	ESP_LOGD(TAG, "Current write queue size: %d", register_write_queue.size());
+        	ESP_LOGV(TAG, "Current write queue size: %d", register_write_queue.size());
 			if(!current_reading && !current_writing && !register_write_queue.empty() && millis() - time_begin_modbus_operation > 150) {
 				// If there is a write task in the queue, process it
 				write_modbus_register(G3_registers.at(register_write_queue.top().first_register_key).start_address, register_write_queue.top().number_of_registers, register_write_queue.top().data); // Write the register
