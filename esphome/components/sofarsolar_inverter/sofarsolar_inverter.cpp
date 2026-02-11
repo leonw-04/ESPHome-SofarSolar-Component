@@ -206,7 +206,7 @@ namespace esphome {
 
         void SofarSolar_Inverter::on_modbus_error(uint8_t function_code, uint8_t exception_code) {
             ESP_LOGE(TAG, "Modbus error: Function code %02X, Exception code %02X", function_code, exception_code);
-			if (function_code == 0x90) {
+			if (function_code == 0x03 || function_code == 0x10 || function_code == 0x90) {
                 switch (exception_code) {
                     case 0x01:
                         ESP_LOGE(TAG, "Modbus error: Illegal function");
@@ -430,8 +430,8 @@ namespace esphome {
                 new_battery_conf_protocol = G3_dynamic.at(BATTERY_CONF_PROTOCOL).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration protocol: %d", new_battery_conf_protocol);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_protocol >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_protocol & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_protocol >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_protocol & 0xFF));
             uint16_t new_battery_conf_voltage_over;
             if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).default_value_set) {
                 new_battery_conf_voltage_over = G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).default_value.uint16_value;
@@ -441,8 +441,8 @@ namespace esphome {
                 new_battery_conf_voltage_over = G3_dynamic.at(BATTERY_CONF_VOLTAGE_OVER).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration voltage over: %d", new_battery_conf_voltage_over);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_over >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_over & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_over >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_over & 0xFF));
             uint16_t new_battery_conf_voltage_charge;
             if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).default_value_set) {
                 new_battery_conf_voltage_charge = G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).default_value.uint16_value;
@@ -452,8 +452,8 @@ namespace esphome {
                 new_battery_conf_voltage_charge = G3_dynamic.at(BATTERY_CONF_VOLTAGE_CHARGE).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration voltage charge: %d", new_battery_conf_voltage_charge);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_charge >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_charge & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_charge >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_charge & 0xFF));
             uint16_t new_battery_conf_voltage_lack;
             if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).default_value_set) {
                 new_battery_conf_voltage_lack = G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).default_value.uint16_value;
@@ -463,8 +463,8 @@ namespace esphome {
                 new_battery_conf_voltage_lack = G3_dynamic.at(BATTERY_CONF_VOLTAGE_LACK).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration voltage lack: %d", new_battery_conf_voltage_lack);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_lack >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_lack & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_lack >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_lack & 0xFF));
             uint16_t new_battery_conf_voltage_discharge_stop;
             if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).default_value_set) {
                 new_battery_conf_voltage_discharge_stop = G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).default_value.uint16_value;
@@ -474,8 +474,8 @@ namespace esphome {
                 new_battery_conf_voltage_discharge_stop = G3_dynamic.at(BATTERY_CONF_VOLTAGE_DISCHARGE_STOP).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration voltage discharge stop: %d", new_battery_conf_voltage_discharge_stop);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_discharge_stop >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_discharge_stop & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_discharge_stop >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_discharge_stop & 0xFF));
             uint16_t new_battery_conf_current_charge_limit;
             if (G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).default_value_set) {
                 new_battery_conf_current_charge_limit = G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).default_value.uint16_value;
@@ -485,8 +485,8 @@ namespace esphome {
                 new_battery_conf_current_charge_limit = G3_dynamic.at(BATTERY_CONF_CURRENT_CHARGE_LIMIT).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration current charge limit: %d", new_battery_conf_current_charge_limit);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_current_charge_limit >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_current_charge_limit & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_current_charge_limit >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_current_charge_limit & 0xFF));
             uint16_t new_battery_conf_current_discharge_limit;
             if (G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).default_value_set) {
                 new_battery_conf_current_discharge_limit = G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).default_value.uint16_value;
@@ -496,8 +496,8 @@ namespace esphome {
                 new_battery_conf_current_discharge_limit = G3_dynamic.at(BATTERY_CONF_CURRENT_DISCHARGE_LIMIT).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration current charge limit: %d", new_battery_conf_current_charge_limit);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_current_discharge_limit >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_current_discharge_limit & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_current_discharge_limit >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_current_discharge_limit & 0xFF));
             uint16_t new_battery_conf_depth_of_discharge;
             if (G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).default_value_set) {
                 new_battery_conf_depth_of_discharge = G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).default_value.uint16_value;
@@ -507,8 +507,8 @@ namespace esphome {
                 new_battery_conf_depth_of_discharge = G3_dynamic.at(BATTERY_CONF_DEPTH_OF_DISCHARGE).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration depth of discharge: %d", new_battery_conf_depth_of_discharge);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_depth_of_discharge >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_depth_of_discharge & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_depth_of_discharge >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_depth_of_discharge & 0xFF));
             uint16_t new_battery_conf_end_of_discharge;
             if (G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).default_value_set) {
                 new_battery_conf_end_of_discharge = G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).default_value.uint16_value;
@@ -518,8 +518,8 @@ namespace esphome {
                 new_battery_conf_end_of_discharge = G3_dynamic.at(BATTERY_CONF_END_OF_DISCHARGE).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration end of discharge: %d", new_battery_conf_end_of_discharge);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_end_of_discharge >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_end_of_discharge & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_end_of_discharge >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_end_of_discharge & 0xFF));
             uint16_t new_battery_conf_capacity;
             if (G3_dynamic.at(BATTERY_CONF_CAPACITY).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CAPACITY).default_value_set) {
                 new_battery_conf_capacity = G3_dynamic.at(BATTERY_CONF_CAPACITY).default_value.uint16_value;
@@ -529,8 +529,8 @@ namespace esphome {
                 new_battery_conf_capacity = G3_dynamic.at(BATTERY_CONF_CAPACITY).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration capacity: %d", new_battery_conf_capacity);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_capacity >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_capacity & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_capacity >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_capacity & 0xFF));
             uint16_t new_battery_conf_voltage_nominal;
             if (G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).enforce_default_value && G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).default_value_set) {
                 new_battery_conf_voltage_nominal = G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).default_value.uint16_value;
@@ -540,8 +540,8 @@ namespace esphome {
                 new_battery_conf_voltage_nominal = G3_dynamic.at(BATTERY_CONF_VOLTAGE_NOMINAL).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration voltage nominal: %d", new_battery_conf_voltage_nominal);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_voltage_nominal & 0xFF));
             uint16_t new_battery_conf_cell_type;
             if (G3_dynamic.at(BATTERY_CONF_CELL_TYPE).enforce_default_value && G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value_set) {
                 new_battery_conf_cell_type = G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value.uint16_value;
@@ -551,8 +551,8 @@ namespace esphome {
                 new_battery_conf_cell_type = G3_dynamic.at(BATTERY_CONF_CELL_TYPE).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration cell type: %d", new_battery_conf_cell_type);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type & 0xFF));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_cell_type & 0xFF));
             uint16_t new_battery_conf_eps_buffer;
             if (G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value && G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_set) {
                 new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value.uint16_value;
@@ -562,10 +562,10 @@ namespace esphome {
                 new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).sensor->state;
             }
 			ESP_LOGD(TAG, "Writing battery configuration EPS buffer: %d", new_battery_conf_eps_buffer);
-            data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
-            data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
-            data.push_back(static_cast<uint8_t>(0x01 >> 8));
-            data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
+            //data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
+            //data.push_back(static_cast<uint8_t>(0x01 >> 8));
+            //data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
         	register_write_task task;
         	task.first_register_key = BATTERY_CONF_ID; // Set the register key for the write task
         	task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
@@ -587,6 +587,7 @@ namespace esphome {
             }
             data.push_back(static_cast<uint8_t>(new_battery_active_control >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
+			ESP_LOGD(TAG, "Writing battery active control: %d", new_battery_active_control);
             uint16_t new_battery_active_oneshot;
             if (G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).enforce_default_value && G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).default_value_set) {
                 new_battery_active_oneshot = G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).default_value.uint16_value;
@@ -597,6 +598,7 @@ namespace esphome {
             }
             data.push_back(static_cast<uint8_t>(new_battery_active_oneshot >> 8));
             data.push_back(static_cast<uint8_t>(new_battery_active_oneshot & 0xFF));
+			ESP_LOGD(TAG, "Writing battery active oneshot: %d", new_battery_active_oneshot);
         	register_write_task task;
         	task.first_register_key = BATTERY_ACTIVE_CONTROL; // Set the register key for the write task
 			task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
