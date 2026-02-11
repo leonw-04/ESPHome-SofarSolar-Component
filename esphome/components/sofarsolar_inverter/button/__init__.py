@@ -4,7 +4,7 @@ import esphome.config_validation as cv
 
 from .. import CONF_SOFARSOLAR_INVERTER_ID, SOFARSOLAR_INVERTER_COMPONENT_SCHEMA, sofarsolar_inverter_ns
 
-DEPENDENCIES = ["modbus", "button"]
+DEPENDENCIES = ["modbus"]
 
 CONF_BATTERY_ACTIVATION_BUTTON = "battery_activation"
 CONF_BATTERY_CONFIG_WRITE_BUTTON = "battery_config_write"
