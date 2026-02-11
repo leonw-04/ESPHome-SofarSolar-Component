@@ -121,6 +121,7 @@ namespace esphome {
         }
 
         void SofarSolar_Inverter::loop() {
+        	ESP_LOGD(TAG, "Test");
 			if (millis() - zero_export_last_update > 1000 && this->zero_export_) {
 				zero_export_last_update = millis();
 				ESP_LOGD(TAG, "Updating zero export status");
