@@ -99,7 +99,7 @@ namespace esphome {
 				{OFF_GRID_POWER_PHASE_T, SofarSolar_RegisterDynamic{}}, // Off Grid Power Phase T
 				{BATTERY_ACTIVE_CONTROL, SofarSolar_RegisterDynamic{}}, // Battery Active Control
 				{BATTERY_ACTIVE_ONESHOT, SofarSolar_RegisterDynamic{}}, // Battery Active Oneshot
-				{POWER_CONTROL, SofarSolar_RegisterDynamic{}} // Power Control
+				{POWER_CONTROL, SofarSolar_RegisterDynamic{}}, // Power Control
 				{ACTIVE_POWER_EXPORT_LIMIT, SofarSolar_RegisterDynamic{}}, // Active Power Export Limit
 				{ACTIVE_POWER_IMPORT_LIMIT, SofarSolar_RegisterDynamic{}}, // Active Power Import Limit
 				{REACTIVE_POWER_SETTING, SofarSolar_RegisterDynamic{}}, // Reactive Power Setting
