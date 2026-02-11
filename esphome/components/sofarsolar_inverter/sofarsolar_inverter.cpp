@@ -137,7 +137,7 @@ namespace esphome {
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value = percentage;
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value = true;
 
-				ESP_LOGD(TAG, "Setting active power export limit to %d (percentage: %d%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, percentage / 10);
+				ESP_LOGD(TAG, "Setting active power export limit to %d (percentage: %d%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, percentage);
 
 				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value = 0;
 				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_set_value = true;
