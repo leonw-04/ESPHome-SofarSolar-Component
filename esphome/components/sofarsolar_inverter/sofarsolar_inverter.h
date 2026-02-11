@@ -205,7 +205,7 @@ namespace esphome {
             {SVG_FIXED_REACTIVE_POWER_SETTING, SofarSolar_Register{0x110C, 1, S_WORD, 0, 0, NONE}} // SVG Fixed Reactive Power Setting
         };
 
-		static const std::map<uint8_t, uint8_t, uint16_t> model_parameters = {
+		static const std::map<uint8_t, Model_Parameters> model_parameters = {
 			//Model, Phase Count, Max Output Power (W)
             {HYD6000EP, Model_Parameters{1, 5000}} // HYD6000EP, 1 phase, 5000W
         };
