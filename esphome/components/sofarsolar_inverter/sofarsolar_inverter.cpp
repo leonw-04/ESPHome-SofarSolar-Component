@@ -124,34 +124,6 @@ namespace esphome {
 			if (millis() - zero_export_last_update > 1000 && this->zero_export_) {
 				zero_export_last_update = millis();
 				ESP_LOGD(TAG, "Updating zero export status");
-				// Read the current zero export status
-				G3_dynamic.at(POWER_CONTROL).write_value.uint16_value = 0b00001;
-				G3_dynamic.at(POWER_CONTROL).write_set_value = true;
-
-				int percentage = (G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state)*10 / model_parameters.at(this->model_id_).max_output_power_w;
-				if (percentage < 0) {
-					percentage = 0;
-				} else if (percentage > 1000) {
-					percentage = 1000;
-				}
-				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value = percentage;
-				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value = true;
-				ESP_LOGD(TAG, "Setting active power export limit to %d (percentage: %d%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, percentage);
-
-				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value = 0;
-				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_set_value = true;
-
-				G3_dynamic.at(REACTIVE_POWER_SETTING).write_value.int16_value = 0;
-				G3_dynamic.at(REACTIVE_POWER_SETTING).write_set_value = true;
-
-				G3_dynamic.at(POWER_FACTOR_SETTING).write_value.int16_value = 0;
-				G3_dynamic.at(POWER_FACTOR_SETTING).write_set_value = true;
-
-				G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_value.uint16_value = 1;
-				G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_set_value = true;
-
-				G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_value.uint16_value = 0;
-				G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_set_value = true;
 
 				if (!((battery_charge_only_switch_state_ == true && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == 0) || (battery_charge_only_switch_state_ == false && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == -5000) || (battery_discharge_only_switch_state_ == true && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 0) || (battery_discharge_only_switch_state_ == false && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 5000) || (model_parameters.at(this->model_id_).max_output_power_w == G3_dynamic.at(DESIRED_GRID_POWER).sensor->state))) {
 					G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value = model_parameters.at(this->model_id_).max_output_power_w;
