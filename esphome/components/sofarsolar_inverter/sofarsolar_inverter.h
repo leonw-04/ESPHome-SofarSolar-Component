@@ -259,7 +259,7 @@ namespace esphome {
 			void write_single_register();
 
             void set_model(std::string model) { this->model_ = model; this->set_model_id(model); }
-            void set_model_id(std::string model):
+            void set_model_id(std::string model);
             void set_modbus_address(int modbus_address) { this->modbus_address_ = modbus_address;}
             void set_zero_export(bool zero_export) { this->zero_export_ = zero_export;}
             void set_power_id(sensor::Sensor *power_id) { this->power_sensor_ = power_id;}
