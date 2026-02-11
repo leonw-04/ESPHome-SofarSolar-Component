@@ -153,7 +153,7 @@ namespace esphome {
 				G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_value.uint16_value = 0;
 				G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_set_value = true;
 
-				//this->write_power(); // Write the power control registers
+				this->write_power(); // Write the power control registers
 
 				if (!((battery_charge_only_switch_state_ == true && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == 0) || (battery_charge_only_switch_state_ == false && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == -5000) || (battery_discharge_only_switch_state_ == true && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 0) || (battery_discharge_only_switch_state_ == false && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 5000) || (model_parameters.at(this->model_id_).max_output_power_w == G3_dynamic.at(DESIRED_GRID_POWER).sensor->state))) {
 					G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value = model_parameters.at(this->model_id_).max_output_power_w;
@@ -771,6 +771,7 @@ namespace esphome {
 	        if (model.compare("hyd6000-ep") == 0) {
 	            this->model_id_ = HYD6000EP;
 	        }
+        	ESP_LOGD(TAG, "Inverter model ID set to: %d", this->model_id_);
         }
 
         void SofarSolar_Inverter::set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor) { G3_dynamic.at(PV_GENERATION_TODAY).sensor = pv_generation_today_sensor; }
