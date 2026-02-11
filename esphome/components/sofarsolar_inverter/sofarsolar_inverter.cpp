@@ -768,7 +768,7 @@ namespace esphome {
 
     	void SofarSolar_Inverter::set_model_id(std::string model) {
 	        if (model.compare("hyd6000-ep") == 0) {
-	            this->model_id_ = HYD6000_EP;
+	            this->model_id_ = HYD6000EP;
 	        }
         }
 
