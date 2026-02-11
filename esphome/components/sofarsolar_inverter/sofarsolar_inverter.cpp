@@ -213,7 +213,7 @@ namespace esphome {
 				time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
 			}
 
-			if (millis() - time_begin_modbus_operation > 500) { // Timeout for read operation
+			if (millis() - time_begin_modbus_operation > 200) { // Timeout for read operation
 				if (current_reading) {
 					G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
 					current_reading = false; // Reset the flag for read operation
