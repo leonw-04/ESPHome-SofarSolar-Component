@@ -125,6 +125,8 @@ namespace esphome {
 				zero_export_last_update = millis();
 				ESP_LOGD(TAG, "Updating zero export status");
 				// Read the current zero export status
+				G3_dynamic.at(POWER_CONTROL).write_value.uint16_value = 0b00001;
+				G3_dynamic.at(POWER_CONTROL).write_set_value = true;
 
 				int percentage = (G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state)*10 / model_parameters.at(this->model_id_).max_output_power_w;
 				if (percentage < 0) {
@@ -135,21 +137,6 @@ namespace esphome {
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value = percentage;
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value = true;
 				ESP_LOGD(TAG, "Setting active power export limit to %d (percentage: %d%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, percentage);
-
-				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value = 0;
-				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_set_value = true;
-
-				G3_dynamic.at(REACTIVE_POWER_SETTING).write_value.int16_value = 0;
-				G3_dynamic.at(REACTIVE_POWER_SETTING).write_set_value = true;
-
-				G3_dynamic.at(POWER_FACTOR_SETTING).write_value.int16_value = 0;
-				G3_dynamic.at(POWER_FACTOR_SETTING).write_set_value = true;
-
-				G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_value.uint16_value = 1;
-				G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_set_value = true;
-
-				G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_value.uint16_value = 0;
-				G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_set_value = true;
 
 				this->write_power(); // Write the power control registers
 
