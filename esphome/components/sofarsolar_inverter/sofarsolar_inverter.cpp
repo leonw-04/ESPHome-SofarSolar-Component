@@ -653,7 +653,6 @@ namespace esphome {
         	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
 
         	ESP_LOGD(TAG, "Active Power Export Limit");
-        	std::vector<uint8_t> data;
         	uint16_t new_battery_active_control;
         	if (G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).enforce_default_value && G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value_set) {
         		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value.uint16_value;
@@ -666,7 +665,6 @@ namespace esphome {
         	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
 
         	ESP_LOGD(TAG, "Active Power Import Limit");
-        	std::vector<uint8_t> data;
         	uint16_t new_battery_active_control;
         	if (G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).enforce_default_value && G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value_set) {
         		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value.uint16_value;
@@ -679,7 +677,6 @@ namespace esphome {
         	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
 
         	ESP_LOGD(TAG, "Reactive Power Setting");
-        	std::vector<uint8_t> data;
         	uint16_t new_battery_active_control;
         	if (G3_dynamic.at(REACTIVE_POWER_SETTING).enforce_default_value && G3_dynamic.at(REACTIVE_POWER_SETTING).default_value_set) {
         		new_battery_active_control = G3_dynamic.at(REACTIVE_POWER_SETTING).default_value.int16_value;
@@ -692,7 +689,6 @@ namespace esphome {
         	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
 
         	ESP_LOGD(TAG, "Power Factor Setting");
-        	std::vector<uint8_t> data;
         	uint16_t new_battery_active_control;
         	if (G3_dynamic.at(POWER_FACTOR_SETTING).enforce_default_value && G3_dynamic.at(POWER_FACTOR_SETTING).default_value_set) {
         		new_battery_active_control = G3_dynamic.at(POWER_FACTOR_SETTING).default_value.int16_value;
@@ -705,7 +701,6 @@ namespace esphome {
         	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
 
         	ESP_LOGD(TAG, "Active Power Limit Speed");
-        	std::vector<uint8_t> data;
         	uint16_t new_battery_active_control;
         	if (G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).enforce_default_value && G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).default_value_set) {
         		new_battery_active_control = G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).default_value.uint16_value;
@@ -718,7 +713,6 @@ namespace esphome {
         	data.push_back(static_cast<uint8_t>(new_battery_active_control & 0xFF));
 
         	ESP_LOGD(TAG, "Reactive Power Response Time");
-        	std::vector<uint8_t> data;
         	uint16_t new_battery_active_control;
         	if (G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).enforce_default_value && G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).default_value_set) {
         		new_battery_active_control = G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).default_value.uint16_value;
