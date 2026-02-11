@@ -736,7 +736,9 @@ namespace esphome {
         	register_write_task task;
         	task.first_register_key = POWER_CONTROL; // Set the register key for the write task
         	task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
+			ESP_LOGD(TAG, "Number of registers to write: %d", task.number_of_registers);
         	task.data = data; // Set the data to write
+			ESP_LOGD(TAG, "Data of registers to write: %d", task.data);
         	register_write_queue.push(task); // Add the write task to the queue
         }
 
