@@ -848,6 +848,13 @@ namespace esphome {
 		void SofarSolar_Inverter::set_off_grid_power_phase_t_sensor(sensor::Sensor *off_grid_power_phase_t_sensor) { G3_dynamic.at(OFF_GRID_POWER_PHASE_T).sensor = off_grid_power_phase_t_sensor; }
 		void SofarSolar_Inverter::set_battery_active_control_sensor(sensor::Sensor *battery_active_control_sensor) { G3_dynamic.at(BATTERY_ACTIVE_CONTROL).sensor = battery_active_control_sensor; }
 		void SofarSolar_Inverter::set_battery_active_oneshot_sensor(sensor::Sensor *battery_active_oneshot_sensor) { G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).sensor = battery_active_oneshot_sensor; }
+    	void SofarSolar_Inverter::set_power_control_sensor(sensor::Sensor *power_control_sensor) { G3_dynamic.at(POWER_CONTROL).sensor = power_control_sensor; }
+    	void SofarSolar_Inverter::set_active_power_export_limit_sensor(sensor::Sensor *active_power_export_limit_sensor) { G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).sensor = active_power_export_limit_sensor; }
+    	void SofarSolar_Inverter::set_active_power_import_limit_sensor(sensor::Sensor *active_power_import_limit_sensor) { G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).sensor = active_power_import_limit_sensor; }
+		void SofarSolar_Inverter::set_reactive_power_setting_sensor(sensor::Sensor *reactive_power_setting_sensor) { G3_dynamic.at(REACTIVE_POWER_SETTING).sensor = reactive_power_setting_sensor; }
+		void SofarSolar_Inverter::set_power_factor_setting_sensor(sensor::Sensor *power_factor_setting_sensor) { G3_dynamic.at(POWER_FACTOR_SETTING).sensor = power_factor_setting_sensor; }
+		void SofarSolar_Inverter::set_active_power_limit_speed_sensor(sensor::Sensor *active_power_limit_speed_sensor) { G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).sensor = active_power_limit_speed_sensor; }
+		void SofarSolar_Inverter::set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor) { G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).sensor = reactive_power_response_time_sensor; }
 
 
        // Set update intervals for sensors
@@ -913,7 +920,13 @@ namespace esphome {
 		void SofarSolar_Inverter::set_off_grid_power_phase_t_sensor_update_interval(uint16_t off_grid_power_phase_t_sensor_update_interval) { G3_dynamic.at(OFF_GRID_POWER_PHASE_T).update_interval = off_grid_power_phase_t_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_battery_active_control_sensor_update_interval(uint16_t battery_active_control_sensor_update_interval) { G3_dynamic.at(BATTERY_ACTIVE_CONTROL).update_interval = battery_active_control_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_battery_active_oneshot_sensor_update_interval(uint16_t battery_active_oneshot_sensor_update_interval) { G3_dynamic.at(BATTERY_ACTIVE_ONESHOT).update_interval = battery_active_oneshot_sensor_update_interval * 1000; }
-
+		void SofarSolar_Inverter::set_power_control_sensor_update_interval(uint16_t power_control_sensor_update_interval) { G3_dynamic.at(POWER_CONTROL).update_interval = power_control_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_active_power_export_limit_sensor_update_interval(uint16_t active_power_export_limit_sensor_update_interval) { G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).update_interval = active_power_export_limit_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_active_power_import_limit_sensor_update_interval(uint16_t active_power_import_limit_sensor_update_interval) { G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).update_interval = active_power_import_limit_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_reactive_power_setting_sensor_update_interval(uint16_t reactive_power_setting_sensor_update_interval) { G3_dynamic.at(REACTIVE_POWER_SETTING).update_interval = reactive_power_setting_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_power_factor_setting_sensor_update_interval(uint16_t power_factor_setting_sensor_update_interval) { G3_dynamic.at(POWER_FACTOR_SETTING).update_interval = power_factor_setting_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_active_power_limit_speed_sensor_update_interval(uint16_t active_power_limit_speed_sensor_update_interval) { G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).update_interval = active_power_limit_speed_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_reactive_power_response_time_sensor_update_interval(uint16_t reactive_power_response_time_sensor_update_interval) { G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).update_interval = reactive_power_response_time_sensor_update_interval * 1000; }
 
         // Set default values for sensors
 

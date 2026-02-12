@@ -326,6 +326,13 @@ namespace esphome {
 			void set_off_grid_power_phase_t_sensor(sensor::Sensor *off_grid_power_phase_t_sensor);
 			void set_battery_active_control_sensor(sensor::Sensor *battery_active_control_sensor);
 			void set_battery_active_oneshot_sensor(sensor::Sensor *battery_active_oneshot_sensor);
+			void set_power_control_sensor(sensor::Sensor *power_control_sensor);
+            void set_active_power_export_limit_sensor(sensor::Sensor *active_power_export_limit_sensor);
+			void set_active_power_import_limit_sensor(sensor::Sensor *active_power_import_limit_sensor);
+			void set_reactive_power_setting_sensor(sensor::Sensor *reactive_power_setting_sensor);
+			void set_power_factor_setting_sensor(sensor::Sensor *power_factor_setting_sensor);
+			void set_active_power_limit_speed_sensor(sensor::Sensor *active_power_limit_speed_sensor);
+			void set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor
 
             // Set update intervals for sensors
             void set_pv_generation_today_sensor_update_interval(uint16_t pv_generation_today_sensor_update_interval);
@@ -389,6 +396,13 @@ namespace esphome {
 			void set_off_grid_power_phase_t_sensor_update_interval(uint16_t off_grid_power_phase_t_sensor_update_interval);
 			void set_battery_active_control_sensor_update_interval(uint16_t battery_active_control_sensor_update_interval);
 			void set_battery_active_oneshot_sensor_update_interval(uint16_t battery_active_oneshot_sensor_update_interval);
+			void set_power_control_sensor_update_interval(uint16_t power_control_sensor_update_interval);
+            void set_active_power_export_limit_sensor_update_interval(uint16_t active_power_export_limit_sensor_update_interval);
+			void set_active_power_import_limit_sensor_update_interval(uint16_t active_power_import_limit_sensor_update_interval);
+            void set_reactive_power_setting_sensor_update_interval(uint16_t reactive_power_setting_sensor_update_interval);
+            void set_power_factor_setting_sensor_update_interval(uint16_t power_factor_setting_sensor_update_interval);
+			void set_active_power_limit_speed_sensor_update_interval(uint16_t active_power_limit_speed_sensor_update_interval);
+            void set_reactive_power_response_time_sensor_update_interval(uint16_t reactive_power_response_time_sensor_update_interval);
 
 			void set_desired_grid_power_sensor_default_value(int64_t default_value);
 			void set_minimum_battery_power_sensor_default_value(int64_t default_value);
