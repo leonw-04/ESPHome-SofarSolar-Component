@@ -573,20 +573,20 @@ namespace esphome {
 			void set_off_grid_power_phase_r_max_percent_change(float max_percent_change);
 			void set_off_grid_voltage_phase_s_max_percent_change(float max_percent_change);
 			void set_off_grid_current_phase_s_max_percent_change(float max_percent_change);
-			void set_off_grid_power_phase_s_max_percent change(float max_percent_change);
-			void set_off_grid_voltage_phase_t_max_percent change(float max_percent_change);
-			void set_off_grid_current_phase_t_max percent change(float max_percent_change);
-			void set_off_grid_power_phase_t_max percent change(float max_percent_change);
-			void set_battery_active_control_max percent change(float max_percent_change);
-			void set_battery_active_oneshot_max percent change(float max_percent_change);
-			void set_power_control_max percent change(float max_percent_change);
-            void set_active_power_export_limit_max percent change(float max_percent_change);
-            void set_active_power_import_limit_max percent change(float max_percent_change);
-            void set_reactive_power_setting_max percent change(float max_percent_change);
-            void set_power_factor_setting_max percent change(float max_percent_change);
-            void set_active_power_limit_speed_max percent change(float max_percent_change);
-            void set_reactive_power_response_time_max percent change(float max_percent_change);
-			void set_svg_fixed_reactive_power_setting_max percent change(float max_percent_change);
+			void set_off_grid_power_phase_s_max_percent_change(float max_percent_change);
+			void set_off_grid_voltage_phase_t_max_percent_change(float max_percent_change);
+			void set_off_grid_current_phase_t_max_percent_change(float max_percent_change);
+			void set_off_grid_power_phase_t_max_percent_change(float max_percent_change);
+			void set_battery_active_control_max_percent_change(float max_percent_change);
+			void set_battery_active_oneshot_max_percent_change(float max_percent_change);
+			void set_power_control_max_percent_change(float max_percent_change);
+            void set_active_power_export_limit_max_percent_change(float max_percent_change);
+            void set_active_power_import_limit_max_percent_change(float max_percent_change);
+            void set_reactive_power_setting_max_percent_change(float max_percent_change);
+            void set_power_factor_setting_max_percent_change(float max_percent_change);
+            void set_active_power_limit_speed_max_percent_change(float max_percent_change);
+            void set_reactive_power_response_time_max_percent_change(float max_percent_change);
+			void set_svg_fixed_reactive_power_setting_max_percent_change(float max_percent_change);
 
 			void switch_command(const std::string &command);
 
