@@ -136,7 +136,7 @@ namespace esphome {
 				G3_dynamic.at(POWER_CONTROL).write_value.uint16_value = 0b00001;
 				G3_dynamic.at(POWER_CONTROL).write_set_value = true;
 
-				ESP_LOGD(TAG, "Current total active power inverter: %f W + %f W / %f W", G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state, this->power_sensor_->state, model_parameters.at(this->model_id_).max_output_power_w);
+				ESP_LOGD(TAG, "Current total active power inverter: %f W + %f W / %d W", G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state, this->power_sensor_->state, model_parameters.at(this->model_id_).max_output_power_w);
 				ESP_LOGD(TAG, "Model id %d, %d W", this->model_id_, model_parameters.at(this->model_id_).max_output_power_w);
 				int percentage = (G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state) * 10 / model_parameters.at(this->model_id_).max_output_power_w;
 				if (percentage < 0) {
