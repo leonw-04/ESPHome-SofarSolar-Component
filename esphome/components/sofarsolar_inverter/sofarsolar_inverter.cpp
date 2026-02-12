@@ -796,14 +796,14 @@ namespace esphome {
 			} else if (G3_dynamic.at(register_key).is_max_change_flat) {
 				if (difference > G3_dynamic.at(register_key).max_change) {
 					ESP_LOGD(TAG, "Flat filter applied for register key %d: difference %f exceeds max change flat %f", register_key, difference, G3_dynamic.at(register_key).max_change_flat);
-					return NaN; // Return the old state if the change is too large
+					return NAN; // Return the old state if the change is too large
 				} else {
 					return new_state; // Return the new state if the change is within the flat threshold
 				}
 			} else {
 				if (difference / G3_dynamic.at(register_key).sensor->state > G3_dynamic.at(register_key).max_change) {
 					ESP_LOGD(TAG, "Percentage filter applied for register key %d: difference %f exceeds max change percentage %f", register_key, difference, G3_dynamic.at(register_key).max_change_percentage);
-					return NaN; // Return the old state if the change is too large
+					return NAN; // Return the old state if the change is too large
 				} else {
 					return new_state; // Return the new state if the change is within the flat threshold
 				}
