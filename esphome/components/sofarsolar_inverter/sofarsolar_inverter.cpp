@@ -283,7 +283,7 @@ namespace esphome {
                         return;
                     }
                     uint16_t value = (data[0] << 8) | data[1];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), register_read_queue.top().register_key));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).sensor->state, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change));
                     break;
 				}
 				case S_WORD: {
@@ -292,7 +292,7 @@ namespace esphome {
                         return;
                     }
                     int16_t value = (data[0] << 8) | data[1];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), register_read_queue.top().register_key));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).sensor->state, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change));
                     break;
 				}
 				case U_DWORD: {
@@ -301,7 +301,7 @@ namespace esphome {
                         return;
                     }
                     uint32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), register_read_queue.top().register_key));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).sensor->state, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change));
                     break;
 				}
 				case S_DWORD: {
@@ -310,7 +310,7 @@ namespace esphome {
                         return;
                     }
                     int32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), register_read_queue.top().register_key));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).sensor->state, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change));
                     break;
 				}
 				default:
@@ -789,20 +789,20 @@ namespace esphome {
         	ESP_LOGD(TAG, "Inverter model ID set to: %d", this->model_id_);
         }
 
-    	float filter(float new_state, int register_key) {
+    	static float filter(float new_state, float old_state, bool is_flat, uint16_t max_change) {
 	        float difference = std::abs(new_state - G3_dynamic.at(register_key).sensor->state);
-        	if (G3_dynamic.at(register_key).max_change == 0) {
+        	if (max_change == 0) {
 				return new_state; // No filtering if max change is set to 0
-			} else if (G3_dynamic.at(register_key).is_max_change_flat) {
-				if (difference > G3_dynamic.at(register_key).max_change) {
-					ESP_LOGD(TAG, "Flat filter applied for register key %d: difference %f exceeds max change flat %f", register_key, difference, G3_dynamic.at(register_key).max_change_flat);
+			} else if (is_flat) {
+				if (difference > max_change) {
+					ESP_LOGD(TAG, "Flat filter applied for register key %d: difference %f exceeds max change flat %f", register_key, difference, max_change);
 					return NAN; // Return the old state if the change is too large
 				} else {
 					return new_state; // Return the new state if the change is within the flat threshold
 				}
 			} else {
-				if (difference / G3_dynamic.at(register_key).sensor->state > G3_dynamic.at(register_key).max_change) {
-					ESP_LOGD(TAG, "Percentage filter applied for register key %d: difference %f exceeds max change percentage %f", register_key, difference, G3_dynamic.at(register_key).max_change_percentage);
+				if (difference / G3_dynamic.at(register_key).sensor->state > max_change) {
+					ESP_LOGD(TAG, "Percentage filter applied for register key %d: difference %f exceeds max change percentage %f", register_key, difference, max_change);
 					return NAN; // Return the old state if the change is too large
 				} else {
 					return new_state; // Return the new state if the change is within the flat threshold

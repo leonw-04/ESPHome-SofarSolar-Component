@@ -255,7 +255,7 @@ namespace esphome {
                 }
             }
 
-			float filter(float new_state, int register_key);
+			static float filter(float new_state, float old_state, bool is_flat, uint16_t max_change);
 
 			void write_desired_grid_power();
 			void write_battery_conf();
