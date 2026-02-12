@@ -136,7 +136,8 @@ namespace esphome {
 				G3_dynamic.at(POWER_CONTROL).write_value.uint16_value = 0b00001;
 				G3_dynamic.at(POWER_CONTROL).write_set_value = true;
 
-				int percentage = (G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state)*10 / model_parameters.at(this->model_id_).max_output_power_w;
+				ESP_LOGD(TAG, "Current total active power inverter: %f W + %f W / %f W", G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state, this->power_sensor_->state, model_parameters.at(this->model_id_).max_output_power_w);
+				int percentage = (G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state) * 10 / model_parameters.at(this->model_id_).max_output_power_w;
 				if (percentage < 0) {
 					percentage = 0;
 				} else if (percentage > 1000) {
@@ -213,7 +214,7 @@ namespace esphome {
 				time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
 			}
 
-			if (millis() - time_begin_modbus_operation > 200) { // Timeout for read operation
+			if (millis() - time_begin_modbus_operation > 500) { // Timeout for read operation
 				if (current_reading) {
 					G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
 					current_reading = false; // Reset the flag for read operation
