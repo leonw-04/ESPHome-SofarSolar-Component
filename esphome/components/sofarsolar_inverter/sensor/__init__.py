@@ -5,7 +5,7 @@ import esphome.config_validation as cv
 from .. import CONF_SOFARSOLAR_INVERTER_ID, SOFARSOLAR_INVERTER_COMPONENT_SCHEMA
 
 from esphome.const import CONF_ID, DEVICE_CLASS_POWER, DEVICE_CLASS_ENERGY, DEVICE_CLASS_ENERGY_STORAGE, \
-    DEVICE_CLASS_VOLTAGE, DEVICE_CLASS_CURRENT
+    DEVICE_CLASS_VOLTAGE, DEVICE_CLASS_CURRENT, UNIT_PERCENT, UNIT_SECOND
 
 from esphome.const import (
     DEVICE_CLASS_POWER,
@@ -92,6 +92,13 @@ CONF_OFF_GRID_CURRENT_PHASE_T = "off_grid_current_phase_t"
 CONF_OFF_GRID_POWER_PHASE_T = "off_grid_power_phase_t"
 CONF_BATTERY_ACTIVE_CONTROL = "battery_active_control"
 CONF_BATTERY_ACTIVE_ONESHOT = "battery_active_oneshot"
+CONF_POWER_CONTROL = "power_control"
+CONF_ACTIVE_POWER_EXPORT_LIMIT = "active_power_export_limit"
+CONF_ACTIVE_POWER_IMPORT_LIMIT = "active_power_import_limit"
+CONF_REACTIVE_POWER_SETTING = "reactive_power_setting"
+CONF_POWER_FACTOR_SETTING = "power_factor_setting"
+CONF_ACTIVE_POWER_LIMIT_SPEED = "active_power_limit_speed"
+CONF_REACTIVE_POWER_RESPONSE_TIME = "reactive_power_response_time"
 UPDATE_INTERVAL = "update_interval"
 DEFAULT_VALUE = "default_value"
 ENFORCE_DEFAULT_VALUE = "enforce_default_value"
@@ -743,6 +750,76 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_POWER_CONTROL: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_EMPTY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_ACTIVE_POWER_EXPORT_LIMIT: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_ACTIVE_POWER_IMPORT_LIMIT: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_REACTIVE_POWER_SETTING: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_POWER_FACTOR_SETTING: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_ACTIVE_POWER_LIMIT_SPEED: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_REACTIVE_POWER_RESPONSE_TIME: sensor.sensor_schema(
+        unit_of_measurement=UNIT_SECOND,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
         }
     ),
 }
