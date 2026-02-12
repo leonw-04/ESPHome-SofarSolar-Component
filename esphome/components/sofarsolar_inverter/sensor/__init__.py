@@ -114,7 +114,7 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
-            cv.Optional(MAX_FLAT_CHANGE, default=""): cv.int_,
+            cv.Optional(MAX_FLAT_CHANGE): cv.int_,
             cv.Optional(MAX_PERCENTAGE_CHANGE): cv.percentage_int,
         }
     ),
