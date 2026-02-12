@@ -17,7 +17,7 @@ namespace esphome {
 			bool enforce_default_value; // Flag to indicate if the default value should be enforced
 			bool write_set_value = false; // Flag to indicate if the write value is set
 			bool is_queued = false; // Flag to indicate if the register is queued for reading/writing
-			bool is_flat_change = false; // Flag to indicate if the register value is a flat change
+			bool is_max_change_flat = false; // Flag to indicate if the register value is a flat change
 			uint16_t max_change = 0; // Maximum allowed change for the register value
 			SofarSolar_RegisterDynamic() : sensor(nullptr), update_interval(0), last_update(0), default_value({}), default_value_set(false), enforce_default_value(false) {}
 		};
