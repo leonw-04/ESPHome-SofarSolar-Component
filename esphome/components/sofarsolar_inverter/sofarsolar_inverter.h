@@ -332,7 +332,7 @@ namespace esphome {
 			void set_reactive_power_setting_sensor(sensor::Sensor *reactive_power_setting_sensor);
 			void set_power_factor_setting_sensor(sensor::Sensor *power_factor_setting_sensor);
 			void set_active_power_limit_speed_sensor(sensor::Sensor *active_power_limit_speed_sensor);
-			void set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor
+			void set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor);
 
             // Set update intervals for sensors
             void set_pv_generation_today_sensor_update_interval(uint16_t pv_generation_today_sensor_update_interval);
