@@ -283,7 +283,7 @@ namespace esphome {
                         return;
                     }
                     uint16_t value = (data[0] << 8) | data[1];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale, register_read_queue.top().register_key)));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), register_read_queue.top().register_key));
                     break;
 				}
 				case S_WORD: {
@@ -292,7 +292,7 @@ namespace esphome {
                         return;
                     }
                     int16_t value = (data[0] << 8) | data[1];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale, register_read_queue.top().register_key)));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), register_read_queue.top().register_key));
                     break;
 				}
 				case U_DWORD: {
@@ -301,7 +301,7 @@ namespace esphome {
                         return;
                     }
                     uint32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale, register_read_queue.top().register_key)));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), register_read_queue.top().register_key));
                     break;
 				}
 				case S_DWORD: {
@@ -310,7 +310,7 @@ namespace esphome {
                         return;
                     }
                     int32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale, register_read_queue.top().register_key)));
+                    G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), register_read_queue.top().register_key));
                     break;
 				}
 				default:
