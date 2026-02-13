@@ -209,7 +209,7 @@ namespace esphome {
 
 		static const std::map<uint8_t, Model_Parameters> model_parameters = {
 			//Model, Phase Count, Max Output Power (W)
-            {HYD6000EP, Model_Parameters{1, 5000}} // HYD6000EP, 1 phase, 5000W
+            {HYD6000EP, Model_Parameters{1, 6000}} // HYD6000EP, 1 phase, 5000W
         };
 
         class SofarSolar_Inverter : public modbus::ModbusDevice, public Component {
