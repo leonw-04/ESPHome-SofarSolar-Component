@@ -667,7 +667,7 @@ namespace esphome
 			data.push_back(static_cast<uint8_t>(new_power_control >> 8));
 			data.push_back(static_cast<uint8_t>(new_power_control & 0xFF));
 
-			ESP_LOGD(TAG, "Active Power Export Limit");
+			ESP_LOGV(TAG, "Active Power Export Limit");
 			uint16_t new_active_power_export_limit;
 			if (G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).enforce_default_value && G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value_set) {
 				new_active_power_export_limit = G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value.uint16_value;
@@ -679,7 +679,7 @@ namespace esphome
 			data.push_back(static_cast<uint8_t>(new_active_power_export_limit >> 8));
 			data.push_back(static_cast<uint8_t>(new_active_power_export_limit & 0xFF));
 
-			ESP_LOGD(TAG, "Active Power Import Limit");
+			ESP_LOGV(TAG, "Active Power Import Limit");
 			uint16_t new_active_power_import_limit;
 			if (G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).enforce_default_value && G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value_set) {
 				new_active_power_import_limit = G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value.uint16_value;
@@ -691,7 +691,7 @@ namespace esphome
 			data.push_back(static_cast<uint8_t>(new_active_power_import_limit >> 8));
 			data.push_back(static_cast<uint8_t>(new_active_power_import_limit & 0xFF));
 
-			ESP_LOGD(TAG, "Reactive Power Setting");
+			ESP_LOGV(TAG, "Reactive Power Setting");
 			uint16_t new_reactive_power_setting;
 			if (G3_dynamic.at(REACTIVE_POWER_SETTING).enforce_default_value && G3_dynamic.at(REACTIVE_POWER_SETTING).default_value_set) {
 				new_reactive_power_setting = G3_dynamic.at(REACTIVE_POWER_SETTING).default_value.int16_value;
@@ -703,7 +703,7 @@ namespace esphome
 			data.push_back(static_cast<uint8_t>(new_reactive_power_setting >> 8));
 			data.push_back(static_cast<uint8_t>(new_reactive_power_setting & 0xFF));
 
-			ESP_LOGD(TAG, "Power Factor Setting");
+			ESP_LOGV(TAG, "Power Factor Setting");
 			uint16_t new_pwoer_factor_setting;
 			if (G3_dynamic.at(POWER_FACTOR_SETTING).enforce_default_value && G3_dynamic.at(POWER_FACTOR_SETTING).default_value_set) {
 				new_pwoer_factor_setting = G3_dynamic.at(POWER_FACTOR_SETTING).default_value.int16_value;
@@ -715,7 +715,7 @@ namespace esphome
 			data.push_back(static_cast<uint8_t>(new_pwoer_factor_setting >> 8));
 			data.push_back(static_cast<uint8_t>(new_pwoer_factor_setting & 0xFF));
 
-			ESP_LOGD(TAG, "Active Power Limit Speed");
+			ESP_LOGV(TAG, "Active Power Limit Speed");
 			uint16_t new_active_power_limit_speed;
 			if (G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).enforce_default_value && G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).default_value_set) {
 				new_active_power_limit_speed = G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).default_value.uint16_value;
@@ -727,7 +727,7 @@ namespace esphome
 			data.push_back(static_cast<uint8_t>(new_active_power_limit_speed >> 8));
 			data.push_back(static_cast<uint8_t>(new_active_power_limit_speed & 0xFF));
 
-			ESP_LOGD(TAG, "Reactive Power Response Time");
+			ESP_LOGV(TAG, "Reactive Power Response Time");
 			uint16_t new_reactive_power_response_time;
 			if (G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).enforce_default_value && G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).default_value_set) {
 				new_reactive_power_response_time = G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).default_value.uint16_value;
@@ -742,9 +742,9 @@ namespace esphome
 			register_write_task task;
 			task.first_register_key = POWER_CONTROL; // Set the register key for the write task
 			task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
-			ESP_LOGD(TAG, "Number of registers to write: %d", task.number_of_registers);
+			ESP_LOGVV(TAG, "Number of registers to write: %d", task.number_of_registers);
 			task.data = data; // Set the data to write
-			ESP_LOGD(TAG, "Data of registers to write: %d", task.data);
+			ESP_LOGVV(TAG, "Data of registers to write: %d", task.data);
 			register_write_queue.push(task); // Add the write task to the queue
 		}
 
