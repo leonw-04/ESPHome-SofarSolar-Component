@@ -790,7 +790,7 @@ namespace esphome
 			ESP_LOGD(TAG, "Inverter model ID set to: %d", this->model_id_);
 		}
 
-		static float filter(float new_state, float old_state, bool is_flat, uint16_t max_change) {
+		static float SofarSolar_Inverter::filter(float new_state, float old_state, bool is_flat, uint16_t max_change) {
 			float difference = std::abs(new_state - old_state);
 			if (max_change == 0) {
 				return new_state; // No filtering if max change is set to 0
