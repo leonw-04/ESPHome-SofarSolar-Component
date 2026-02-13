@@ -255,29 +255,7 @@ namespace esphome {
                 }
             }
 
-			static float filter(float new_state, float old_state, bool is_flat, uint16_t max_change) {
-				if (std::isnan(old_state)) {
-                    return new_state; // No filtering if old state is not a number
-                }
-				float difference = std::abs(new_state - old_state);
-				if (max_change == 0) {
-					return new_state; // No filtering if max change is set to 0
-				} else if (is_flat) {
-					if (difference > max_change) {
-						//ESP_LOGW(TAG, "Flat filter: Change of %.2f exceeds max change of %d. Keeping old state.", difference, max_change);
-						return NAN; // Return the old state if the change is too large
-					} else {
-						return new_state; // Return the new state if the change is within the flat threshold
-					}
-				} else {
-					if (difference / old_state > max_change) {
-						//ESP_LOGW(TAG, "Relative filter: Change of %.2f%% exceeds max change of %d%%. Keeping old state.", (difference / old_state) * 100, max_change);
-						return NAN; // Return the old state if the change is too large
-					} else {
-						return new_state; // Return the new state if the change is within the flat threshold
-					}
-				}
-			}
+			float filter(float new_state, float old_state, bool is_flat, uint16_t max_change);
 
 			void write_desired_grid_power();
 			void write_battery_conf();
