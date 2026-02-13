@@ -256,6 +256,9 @@ namespace esphome {
             }
 
 			static float filter(float new_state, float old_state, bool is_flat, uint16_t max_change) {
+				if (std::isnan(old_state)) {
+                    return new_state; // No filtering if old state is not a number
+                }
 				float difference = std::abs(new_state - old_state);
 				if (max_change == 0) {
 					return new_state; // No filtering if max change is set to 0
