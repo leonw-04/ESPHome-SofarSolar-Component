@@ -400,7 +400,7 @@ TYPES = {
             cv.Optional(MAX_PERCENTAGE_CHANGE): cv.percentage_int,
         }
     ),
-    CONF_BATTERY_TEMPERATUR_ENV_1: sensor.sensor_schema(
+    CONF_BATTERY_TEMPERATURE_ENV_1: sensor.sensor_schema(
         unit_of_measurement=UNIT_CELSIUS,
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_TEMPERATURE,
