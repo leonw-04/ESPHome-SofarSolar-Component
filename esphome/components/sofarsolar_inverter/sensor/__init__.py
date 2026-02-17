@@ -165,6 +165,7 @@ CONF_REACTIVE_POWER_SETTING = "reactive_power_setting"
 CONF_POWER_FACTOR_SETTING = "power_factor_setting"
 CONF_ACTIVE_POWER_LIMIT_SPEED = "active_power_limit_speed"
 CONF_REACTIVE_POWER_RESPONSE_TIME = "reactive_power_response_time"
+
 UPDATE_INTERVAL = "update_interval"
 DEFAULT_VALUE = "default_value"
 ENFORCE_DEFAULT_VALUE = "enforce_default_value"
