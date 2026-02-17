@@ -96,7 +96,11 @@ namespace esphome
 				G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_set_value = true;
 
 				this->write_power(); // Write the power control registers
-
+				ESP_LOGD(TAG, "Test1 %b", battery_charge_only_switch_state_ == true && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == 0);
+				ESP_LOGD(TAG, "Test2 %b", battery_charge_only_switch_state_ == false && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == -5000);
+				ESP_LOGD(TAG, "Test3 %b", battery_discharge_only_switch_state_ == true && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 0);
+				ESP_LOGD(TAG, "Test4 %b", battery_discharge_only_switch_state_ == false && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 5000);
+				ESP_LOGD(TAG, "Test5 %b", -model_parameters.at(this->model_id_).max_output_power_w == G3_dynamic.at(DESIRED_GRID_POWER).sensor->state);
 				if (!(((battery_charge_only_switch_state_ == true && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == 0) || (battery_charge_only_switch_state_ == false && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == -5000)) && ((battery_discharge_only_switch_state_ == true && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 0) || (battery_discharge_only_switch_state_ == false && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 5000)) && (-model_parameters.at(this->model_id_).max_output_power_w == G3_dynamic.at(DESIRED_GRID_POWER).sensor->state))) {
 					G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value = model_parameters.at(this->model_id_).max_output_power_w;
 					G3_dynamic.at(DESIRED_GRID_POWER).write_set_value = true;
