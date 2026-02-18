@@ -14,6 +14,7 @@ namespace esphome
 			sensor::Sensor *sensor; // Pointer to the sensor associated with the register
 			SofarSolar_RegisterValue default_value; // Value of the register
 			SofarSolar_RegisterValue write_value; // Value to write to the register
+			float last_value; // Last value read from the register
 			bool default_value_set; // Flag to indicate if the default value is set
 			bool enforce_default_value; // Flag to indicate if the default value should be enforced
 			bool write_set_value = false; // Flag to indicate if the write value is set
@@ -213,7 +214,11 @@ namespace esphome
 						return;
 					}
 					uint16_t value = (data[0] << 8) | data[1];
-					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).sensor->state, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change));
+					float new_state = this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).last_value, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change);
+					if (!std::isnan(new_state)) {
+                        G3_dynamic.at(register_read_queue.top().register_key).last_value = new_state;
+                    }
+					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
 			case S_WORD: {
@@ -222,7 +227,11 @@ namespace esphome
 						return;
 					}
 					int16_t value = (data[0] << 8) | data[1];
-					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).sensor->state, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change));
+					float new_state = this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).last_value, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change);
+					if (!std::isnan(new_state)) {
+                        G3_dynamic.at(register_read_queue.top().register_key).last_value = new_state;
+                    }
+					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
 			case U_DWORD: {
@@ -231,7 +240,11 @@ namespace esphome
 						return;
 					}
 					uint32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).sensor->state, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change));
+					float new_state = this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).last_value, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change);
+					if (!std::isnan(new_state)) {
+                        G3_dynamic.at(register_read_queue.top().register_key).last_value = new_state;
+                    }
+					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
 			case S_DWORD: {
@@ -240,7 +253,11 @@ namespace esphome
 						return;
 					}
 					int32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).sensor->state, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change));
+					float new_state = this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).last_value, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change);
+					if (!std::isnan(new_state)) {
+                        G3_dynamic.at(register_read_queue.top().register_key).last_value = new_state;
+                    }
+					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
 			default:
@@ -720,9 +737,6 @@ namespace esphome
 		}
 
 		float SofarSolar_Inverter::filter(float new_state, float old_state, bool is_flat, uint16_t max_change) {
-			if (std::isnan(old_state)) {
-				return new_state; // No filtering if old state is not a number
-			}
 			float difference = std::abs(new_state - old_state);
 			if (max_change == 0) {
 				return new_state; // No filtering if max change is set to 0
