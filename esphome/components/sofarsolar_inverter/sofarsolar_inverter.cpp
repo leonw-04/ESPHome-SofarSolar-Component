@@ -719,7 +719,7 @@ namespace esphome
 			ESP_LOGD(TAG, "Inverter model ID set to: %d", this->model_id_);
 		}
 
-		float SofarSolar_Inverter::filter(float new_state, float old_state, bool is_flat, uint16_t max_change) {
+		float SofarSolar_Inverter::filter(float new_state, float old_state, bool is_flat, float max_change) {
 			if (std::isnan(old_state)) {
 				return new_state; // No filtering if old state is not a number
 			}
@@ -727,15 +727,15 @@ namespace esphome
 			if (max_change == 0) {
 				return new_state; // No filtering if max change is set to 0
 			} else if (is_flat) {
-				if (difference > max_change) {
-					ESP_LOGW(TAG, "Flat filter: Change of %.2f exceeds max change of %d. Keeping old state.", difference, max_change);
+				if (difference < max_change) {
+					ESP_LOGW(TAG, "Flat filter: Change of %.2f exceeds max change of %d.", difference, max_change);
 					return NAN; // Return the old state if the change is too large
 				} else {
 					return new_state; // Return the new state if the change is within the flat threshold
 				}
 			} else {
-				if (difference / old_state > max_change) {
-					ESP_LOGW(TAG, "Relative filter: Change of %.2f%% exceeds max change of %d%%. Keeping old state.", (difference / old_state) * 100, max_change);
+				if (difference / old_state < max_change) {
+					ESP_LOGW(TAG, "Relative filter: Change of %.2f%% exceeds max change of %d%%.", (difference / old_state) * 100, max_change);
 					return NAN; // Return the old state if the change is too large
 				} else {
 					return new_state; // Return the new state if the change is within the flat threshold
