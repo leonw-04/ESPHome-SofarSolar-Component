@@ -211,10 +211,7 @@ namespace esphome
 						return;
 					}
 					uint16_t value = (data[0] << 8) | data[1];
-					float new_state = this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).last_value, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change);
-					if (!std::isnan(new_state)) {
-                        G3_dynamic.at(register_read_queue.top().register_key).last_value = new_state;
-                    }
+					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
@@ -224,10 +221,7 @@ namespace esphome
 						return;
 					}
 					int16_t value = (data[0] << 8) | data[1];
-					float new_state = this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).last_value, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change);
-					if (!std::isnan(new_state)) {
-                        G3_dynamic.at(register_read_queue.top().register_key).last_value = new_state;
-                    }
+					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
@@ -237,10 +231,7 @@ namespace esphome
 						return;
 					}
 					uint32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-					float new_state = this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).last_value, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change);
-					if (!std::isnan(new_state)) {
-                        G3_dynamic.at(register_read_queue.top().register_key).last_value = new_state;
-                    }
+					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
@@ -250,10 +241,7 @@ namespace esphome
 						return;
 					}
 					int32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-					float new_state = this->filter(static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale), G3_dynamic.at(register_read_queue.top().register_key).last_value, G3_dynamic.at(register_read_queue.top().register_key).is_max_change_flat, G3_dynamic.at(register_read_queue.top().register_key).max_change);
-					if (!std::isnan(new_state)) {
-                        G3_dynamic.at(register_read_queue.top().register_key).last_value = new_state;
-                    }
+					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
