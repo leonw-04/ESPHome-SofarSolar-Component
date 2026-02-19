@@ -126,8 +126,8 @@ namespace esphome
 					task.register_key = dynamic_register.first; // Set the register key for the task
 					dynamic_register.second.is_queued = true; // Mark the register as queued
 					register_read_queue.push(task); // Add the task to the read queue
-					ESP_LOGD(TAG, "Current reading queue size: %d", register_read_queue.size());
-					ESP_LOGD(TAG, "Queued register %d for reading", dynamic_register.first);
+					ESP_LOGV(TAG, "Current reading queue size: %d", register_read_queue.size());
+					ESP_LOGV(TAG, "Queued register %d for reading", dynamic_register.first);
 				}
 			}
 
@@ -160,7 +160,7 @@ namespace esphome
 		}
 
 		void SofarSolar_Inverter::on_modbus_data(const std::vector<uint8_t> &data) {
-			ESP_LOGD(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
+			ESP_LOGV(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
 			if(current_reading) {
 				parse_read_response(data);
 				time_begin_modbus_operation = millis(); // Reset the start time of the Modbus operation
