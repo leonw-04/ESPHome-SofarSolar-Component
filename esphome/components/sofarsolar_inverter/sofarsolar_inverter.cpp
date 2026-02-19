@@ -10,7 +10,7 @@ namespace esphome
 
 		struct SofarSolar_RegisterDynamic {
 			uint32_t last_update; // Last update time in milliseconds
-			uint16_t update_interval; // Update interval in milliseconds
+			uint32_t update_interval; // Update interval in milliseconds
 			sensor::Sensor *sensor; // Pointer to the sensor associated with the register
 			SofarSolar_RegisterValue default_value; // Value of the register
 			SofarSolar_RegisterValue write_value; // Value to write to the register
