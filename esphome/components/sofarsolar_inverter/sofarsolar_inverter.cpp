@@ -126,7 +126,7 @@ namespace esphome
 					task.register_key = dynamic_register.first; // Set the register key for the task
 					dynamic_register.second.is_queued = true; // Mark the register as queued
 					register_read_queue.push(task); // Add the task to the read queue
-					ESP_LOGV(TAG, "Current reading queue size: %d", register_read_queue.size());
+					ESP_LOGD(TAG, "Current reading queue size: %d", register_read_queue.size());
 					ESP_LOGD(TAG, "Queued register %d for reading", dynamic_register.first);
 				}
 			}
