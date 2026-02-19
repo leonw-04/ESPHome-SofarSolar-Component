@@ -117,6 +117,9 @@ namespace esphome
 
 			for (auto &dynamic_register : this->G3_dynamic) {
 				ESP_LOGD(TAG, "Checking register %d for update. Last update %d, Update Intervall %d", dynamic_register.first, millis() - dynamic_register.second.last_update, dynamic_register.second.update_interval);
+				if (dynamic_register.second.is_queued) {
+					ESP_LOGD(TAG, "Register %d is currently queued for reading/writing, skipping update check", dynamic_register.first);
+				}
 				if (millis() - dynamic_register.second.last_update >= dynamic_register.second.update_interval  && !dynamic_register.second.is_queued) {
 					dynamic_register.second.last_update = millis(); // Update the last update time
 					register_read_task task;
