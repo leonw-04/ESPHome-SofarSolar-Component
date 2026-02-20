@@ -540,8 +540,8 @@ namespace esphome
 				new_battery_conf_eps_buffer = G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).sensor->state;
 			}
 			ESP_LOGV(TAG, "Writing battery configuration EPS buffer: %d", new_battery_conf_eps_buffer);
-			//data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
-			//data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
+			data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
+			data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
 
 			//data.push_back(static_cast<uint8_t>(0x01 >> 8));
 			//data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
