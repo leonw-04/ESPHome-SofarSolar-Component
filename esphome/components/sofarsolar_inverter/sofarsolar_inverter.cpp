@@ -1046,6 +1046,8 @@ namespace esphome
 		void SofarSolar_Inverter::set_desired_grid_power_sensor_default_value(int64_t default_value) { G3_dynamic.at(DESIRED_GRID_POWER).default_value.int64_value = default_value; G3_dynamic.at(DESIRED_GRID_POWER).default_value_set = true; }
 		void SofarSolar_Inverter::set_minimum_battery_power_sensor_default_value(int64_t default_value) { G3_dynamic.at(MINIMUM_BATTERY_POWER).default_value.int64_value = default_value; G3_dynamic.at(MINIMUM_BATTERY_POWER).default_value_set = true; }
 		void SofarSolar_Inverter::set_maximum_battery_power_sensor_default_value(int64_t default_value) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value.int64_value = default_value; G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value_set = true; }
+		void SofarSolar_Inverter::set_passive_timeout_sensor_default_value(int64_t default_value) { G3_dynamic.at(PASSIVE_TIMEOUT).default_value.int64_value = default_value; G3_dynamic.at(PASSIVE_TIMEOUT).default_value_set = true; }
+		void SofarSolar_Inverter::set_passive_timeout_action_sensor_default_value(int64_t default_value) { G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).default_value.int64_value = default_value; G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).default_value_set = true; }
 		void SofarSolar_Inverter::set_energy_storage_mode_sensor_default_value(int64_t default_value) { G3_dynamic.at(ENERGY_STORAGE_MODE).default_value.int64_value = default_value; G3_dynamic.at(ENERGY_STORAGE_MODE).default_value_set = true; }
 		void SofarSolar_Inverter::set_battery_conf_id_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_ID).default_value.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_ID).default_value_set = true; }
 		void SofarSolar_Inverter::set_battery_conf_address_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_ADDRESS).default_value.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_ADDRESS).default_value_set = true; }
@@ -1066,6 +1068,8 @@ namespace esphome
 		void SofarSolar_Inverter::set_desired_grid_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(DESIRED_GRID_POWER).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_minimum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(MINIMUM_BATTERY_POWER).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_maximum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).enforce_default_value = enforce_default_value; }
+		void SofarSolar_Inverter::set_passive_timeout_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(PASSIVE_TIMEOUT).enforce_default_value = enforce_default_value; }
+        void SofarSolar_Inverter::set_passive_timeout_action_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_energy_storage_mode_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(ENERGY_STORAGE_MODE).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_battery_conf_id_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_ID).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_battery_conf_address_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_ADDRESS).enforce_default_value = enforce_default_value; }
