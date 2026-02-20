@@ -630,7 +630,7 @@ namespace esphome {
             void set_minimum_battery_power_sensor_update_interval(uint16_t minimum_battery_power_sensor_update_interval);
             void set_maximum_battery_power_sensor_update_interval(uint16_t maximum_battery_power_sensor_update_interval);
 			void set_passive_timeout_sensor_update_interval(uint16_t passive_timeout_sensor_update_interval);
-			void set_passive_timeout_action_sensor_update_interval(uint16_t passive_timeout_action_sensor_update_interval
+			void set_passive_timeout_action_sensor_update_interval(uint16_t passive_timeout_action_sensor_update_interval);
             void set_energy_storage_mode_sensor_update_interval(uint16_t energy_storage_mode_sensor_update_interval);
             void set_battery_conf_id_sensor_update_interval(uint16_t battery_conf_id_sensor_update_interval);
             void set_battery_conf_address_sensor_update_interval(uint16_t battery_conf_address_sensor_update_interval);
