@@ -1478,7 +1478,3 @@ async def to_code(config):
                 cg.add(getattr(var, f"set_{type}_sensor_default_value")(conf[DEFAULT_VALUE]))
             if ENFORCE_DEFAULT_VALUE in conf:
                 cg.add(getattr(var, f"set_{type}_sensor_enforce_default_value")(conf[ENFORCE_DEFAULT_VALUE]))
-            if MAX_FLAT_CHANGE in conf:
-                cg.add(getattr(var, f"set_{type}_sensor_max_flat_change")(conf[MAX_FLAT_CHANGE]))
-            if MAX_PERCENTAGE_CHANGE in conf:
-                cg.add(getattr(var, f"set_{type}_sensor_max_percentage_change")(conf[MAX_PERCENTAGE_CHANGE]))
