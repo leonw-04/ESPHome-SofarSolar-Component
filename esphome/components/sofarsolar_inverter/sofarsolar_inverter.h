@@ -95,6 +95,8 @@
 #define DESIRED_GRID_POWER 119
 #define MINIMUM_BATTERY_POWER 120
 #define MAXIMUM_BATTERY_POWER 121
+#define PASSIVE_TIMEOUT 201
+#define PASSIVE_TIMEOUT_ACTION 202
 #define ENERGY_STORAGE_MODE 122
 #define BATTERY_CONF_ID 123
 #define BATTERY_CONF_ADDRESS 124
@@ -150,6 +152,7 @@
 #define BATTERY_CONF_WRITE 3
 #define BATTERY_ACTIVE_WRITE 4
 #define POWER_WRITE 4
+#define PASSIVE_TIMOUT_WRITE 5
 
 #define U_WORD 0x01
 #define U_DWORD 0x02
@@ -284,10 +287,13 @@ namespace esphome {
 
 			{BATTERY_POWER_TOTAL, SofarSolar_Register{0x0667, 1, S_WORD, 3, 2, NONE}}, // Battery Power Total
             {BATTERY_STATE_OF_CHARGE_TOTAL, SofarSolar_Register{0x0668, 1, U_WORD, 1, 0, NONE}}, // Battery State of Charge Total
+
             {DESIRED_GRID_POWER, SofarSolar_Register{0x1187, 2, S_DWORD, 3, 0, DESIRED_GRID_POWER_WRITE}}, // Desired Grid Power
 			{MINIMUM_BATTERY_POWER, SofarSolar_Register{0x1189, 2, S_DWORD, 3, 0, DESIRED_GRID_POWER_WRITE}}, // Minimum Battery Power
 			{MAXIMUM_BATTERY_POWER, SofarSolar_Register{0x118B, 2, S_DWORD, 3, 0, DESIRED_GRID_POWER_WRITE}}, // Maximum Battery Power
 			{ENERGY_STORAGE_MODE, SofarSolar_Register{0x1110, 1, U_WORD, 0, 0, SINGLE_REGISTER_WRITE}}, // Energy Storage Mode
+			{PASSIVE_TIMEOUT, SofarSolar_Register{0x1184, 1, U_WORD, 0, 0, PASSIVE_TIMOUT_WRITE}}, // Passive Timeout
+			{PASSIVE_TIMEOUT_ACTION, SofarSolar_Register{0x1185, 1, U_WORD, 0, 0, PASSIVE_TIMOUT_WRITE}}, // Passive Timeout Action
 			{BATTERY_CONF_ID, SofarSolar_Register{0x1044, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf ID
 			{BATTERY_CONF_ADDRESS, SofarSolar_Register{0x1045, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Address
 			{BATTERY_CONF_PROTOCOL, SofarSolar_Register{0x1046, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Protocol
@@ -484,6 +490,8 @@ namespace esphome {
             void set_desired_grid_power_sensor(sensor::Sensor *desired_grid_power_sensor);
             void set_minimum_battery_power_sensor(sensor::Sensor *minimum_battery_power_sensor);
             void set_maximum_battery_power_sensor(sensor::Sensor *maximum_battery_power_sensor);
+			void set_passive_timeout_sensor(sensor::Sensor *passive_timeout_sensor);
+			void set_passive_timeout_action_sensor(sensor::Sensor *passive_timeout_action_sensor);
             void set_energy_storage_mode_sensor(sensor::Sensor *energy_storage_mode_sensor);
             void set_battery_conf_id_sensor(sensor::Sensor *battery_conf_id_sensor);
             void set_battery_conf_address_sensor(sensor::Sensor *battery_conf_address_sensor);
@@ -621,6 +629,8 @@ namespace esphome {
             void set_desired_grid_power_sensor_update_interval(uint16_t desired_grid_power_sensor_update_interval);
             void set_minimum_battery_power_sensor_update_interval(uint16_t minimum_battery_power_sensor_update_interval);
             void set_maximum_battery_power_sensor_update_interval(uint16_t maximum_battery_power_sensor_update_interval);
+			void set_passive_timeout_sensor_update_interval(uint16_t passive_timeout_sensor_update_interval);
+			void set_passive_timeout_action_sensor_update_interval(uint16_t passive_timeout_action_sensor_update_interval
             void set_energy_storage_mode_sensor_update_interval(uint16_t energy_storage_mode_sensor_update_interval);
             void set_battery_conf_id_sensor_update_interval(uint16_t battery_conf_id_sensor_update_interval);
             void set_battery_conf_address_sensor_update_interval(uint16_t battery_conf_address_sensor_update_interval);
@@ -674,6 +684,8 @@ namespace esphome {
 			void set_desired_grid_power_sensor_default_value(int64_t default_value);
 			void set_minimum_battery_power_sensor_default_value(int64_t default_value);
 			void set_maximum_battery_power_sensor_default_value(int64_t default_value);
+			void set_passive_timeout_sensor_default_value(int64_t default_value);
+			void set_passive_timeout_action_sensor_default_value(int64_t default_value);
 			void set_energy_storage_mode_sensor_default_value(int64_t default_value);
 			void set_battery_conf_id_sensor_default_value(int64_t default_value);
 			void set_battery_conf_address_sensor_default_value(int64_t default_value);
@@ -696,6 +708,8 @@ namespace esphome {
 			void set_desired_grid_power_sensor_enforce_default_value(bool enforce_default_value);
 			void set_minimum_battery_power_sensor_enforce_default_value(bool enforce_default_value);
 			void set_maximum_battery_power_sensor_enforce_default_value(bool enforce_default_value);
+			void set_passive_timeout_sensor_enforce_default_value(bool enforce_default_value);
+			void set_passive_timeout_action_sensor_enforce_default_value(bool enforce_default_value);
 			void set_energy_storage_mode_sensor_enforce_default_value(bool enforce_default_value);
 			void set_battery_conf_id_sensor_enforce_default_value(bool enforce_default_value);
 			void set_battery_conf_address_sensor_enforce_default_value(bool enforce_default_value);
