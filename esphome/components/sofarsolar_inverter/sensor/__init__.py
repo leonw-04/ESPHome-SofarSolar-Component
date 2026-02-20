@@ -1114,7 +1114,7 @@ TYPES = {
         }
     ),
     CONF_BATTERY_CONF_CAPACITY: sensor.sensor_schema(
-        unit_of_measurement=UNIT_EMPTY,
+        unit_of_measurement="Ah",
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
