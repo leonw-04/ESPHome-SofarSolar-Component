@@ -396,6 +396,7 @@ namespace esphome {
 			void write_battery_active();
 			void write_single_register();
 			void write_power();
+			void write_passive_timeout();
 
             void set_model(std::string model) { this->model_ = model; this->set_model_id(model); }
             void set_model_id(std::string model);
