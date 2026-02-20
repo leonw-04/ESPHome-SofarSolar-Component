@@ -543,8 +543,8 @@ namespace esphome
 			data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
 			data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
 
-			//data.push_back(static_cast<uint8_t>(0x01 >> 8));
-			//data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
+			data.push_back(static_cast<uint8_t>(0x01 >> 8));
+			data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
 
 			register_write_task task;
 			task.first_register_key = BATTERY_CONF_ID; // Set the register key for the write task
