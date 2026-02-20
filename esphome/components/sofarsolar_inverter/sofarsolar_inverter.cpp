@@ -126,7 +126,7 @@ namespace esphome
 				if (dynamic_register.second.is_queued) {
 					ESP_LOGVV(TAG, "Register %d is currently queued for reading/writing, skipping update check", dynamic_register.first);
 				}
-				if (millis() - dynamic_register.second.last_update >= dynamic_register.second.update_interval  && !dynamic_register.second.is_queued) {
+				if ((millis() - dynamic_register.second.last_update >= dynamic_register.second.update_interval || dynamic_register.second.last_update == 0) && !dynamic_register.second.is_queued) {
 					dynamic_register.second.last_update = millis(); // Update the last update time
 					register_read_task task;
 					task.register_key = dynamic_register.first; // Set the register key for the task
