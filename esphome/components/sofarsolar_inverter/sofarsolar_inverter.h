@@ -302,7 +302,7 @@ namespace esphome {
 			{BATTERY_CONF_END_OF_DISCHARGE, SofarSolar_Register{0x104E, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf End of Discharge
 			{BATTERY_CONF_CAPACITY, SofarSolar_Register{0x104F, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Capacity
 			{BATTERY_CONF_CELL_TYPE, SofarSolar_Register{0x1051, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Cell Type
-			{BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052, 1, U_WORD, 0, 1, BATTERY_CONF_WRITE}}, // Battery Conf EPS Buffer
+			{BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf EPS Buffer
 			{BATTERY_CONF_CONTROL, SofarSolar_Register{0x1053, 1 , U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Control
 			{GRID_FREQUENCY, SofarSolar_Register{0x0484, 1, U_WORD, 2, -2, NONE}}, // Grid Frequency
 			{GRID_VOLTAGE_PHASE_R, SofarSolar_Register{0x0580, 1, U_WORD, 2, -1, NONE}}, // Grid Voltage Phase R
