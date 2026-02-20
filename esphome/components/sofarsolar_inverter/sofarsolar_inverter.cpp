@@ -113,6 +113,12 @@ namespace esphome
 					ESP_LOGV(TAG, "New desired grid power: %d W", G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value);
 					this->write_desired_grid_power(); // Write the new desired grid power, minimum battery power, and maximum battery power
 				}
+
+				if (!((G3_dynamic.at(PASSIVE_TIMEOUT).sensor->state == G3_dynamic.at(PASSIVE_TIMEOUT).default_value.uint16_value) && (G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).sensor->state == G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).default_value.uint16_value))) {
+                    ESP_LOGV(TAG, "Updating passive timeout settings. Current passive timeout: %d s, action: %d", G3_dynamic.at(PASSIVE_TIMEOUT).sensor->state, G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).sensor->state);
+					ESP_LOGV(TAG, "New passive timeout: %d s, action: %d", G3_dynamic.at(PASSIVE_TIMEOUT).write_value.uint16_value, G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).write_value.uint16_value);
+					this->write_single_register(); // Write the passive timeout register
+                }
 			}
 
 			for (auto &dynamic_register : this->G3_dynamic) {
@@ -543,8 +549,8 @@ namespace esphome
 			data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer >> 8));
 			data.push_back(static_cast<uint8_t>(new_battery_conf_eps_buffer & 0xFF));
 
-			//data.push_back(static_cast<uint8_t>(0x01 >> 8));
-			//data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
+			data.push_back(static_cast<uint8_t>(0x01 >> 8));
+			data.push_back(static_cast<uint8_t>(0x01 & 0xFF)); // Write the battery configuration
 
 			register_write_task task;
 			task.first_register_key = BATTERY_CONF_ID; // Set the register key for the write task
@@ -672,6 +678,42 @@ namespace esphome
 			}
 			data.push_back(static_cast<uint8_t>(new_reactive_power_response_time >> 8));
 			data.push_back(static_cast<uint8_t>(new_reactive_power_response_time & 0xFF));
+
+			register_write_task task;
+			task.first_register_key = POWER_CONTROL; // Set the register key for the write task
+			task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
+			ESP_LOGVV(TAG, "Number of registers to write: %d", task.number_of_registers);
+			task.data = data; // Set the data to write
+			ESP_LOGVV(TAG, "Data of registers to write: %d", task.data);
+			register_write_queue.push(task); // Add the write task to the queue
+		}
+
+		void SofarSolar_Inverter::write_passive_timeout() {
+			ESP_LOGD(TAG, "Writing Passive Timeout");
+			ESP_LOGV(TAG, "Passive Timout");
+			std::vector<uint8_t> data;
+			uint16_t new_passive_timeout;
+			if (G3_dynamic.at(PASSIVE_TIMEOUT).enforce_default_value && G3_dynamic.at(PASSIVE_TIMEOUT).default_value_set) {
+				new_passive_timeout = G3_dynamic.at(PASSIVE_TIMEOUT).default_value.uint16_value;
+			} else if (G3_dynamic.at(PASSIVE_TIMEOUT).write_set_value) {
+				new_passive_timeout = G3_dynamic.at(PASSIVE_TIMEOUT).write_value.uint16_value;
+			} else {
+				new_passive_timeout = G3_dynamic.at(PASSIVE_TIMEOUT).sensor->state;
+			}
+			data.push_back(static_cast<uint8_t>(new_passive_timeout >> 8));
+			data.push_back(static_cast<uint8_t>(new_passive_timeout & 0xFF));
+
+			ESP_LOGV(TAG, "Passive Timeout Action");
+			uint16_t new_passive_timeout_action;
+			if (G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).enforce_default_value && G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).default_value_set) {
+				new_passive_timeout_action = G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).default_value.uint16_value;
+			} else if (G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).write_set_value) {
+				new_passive_timeout_action = G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).write_value.uint16_value;
+			} else {
+				new_passive_timeout_action = G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).sensor->state;
+			}
+			data.push_back(static_cast<uint8_t>(new_passive_timeout_action >> 8));
+			data.push_back(static_cast<uint8_t>(new_passive_timeout_action & 0xFF));
 
 			register_write_task task;
 			task.first_register_key = POWER_CONTROL; // Set the register key for the write task
@@ -810,6 +852,8 @@ namespace esphome
 		void SofarSolar_Inverter::set_desired_grid_power_sensor(sensor::Sensor *desired_grid_power_sensor) { G3_dynamic.insert({DESIRED_GRID_POWER, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(DESIRED_GRID_POWER).sensor = desired_grid_power_sensor; }
 		void SofarSolar_Inverter::set_minimum_battery_power_sensor(sensor::Sensor *minimum_battery_power_sensor) { G3_dynamic.insert({MINIMUM_BATTERY_POWER, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor = minimum_battery_power_sensor; }
 		void SofarSolar_Inverter::set_maximum_battery_power_sensor(sensor::Sensor *maximum_battery_power_sensor) { G3_dynamic.insert({MAXIMUM_BATTERY_POWER, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor = maximum_battery_power_sensor; }
+		void SofarSolar_Inverter::set_passive_timeout_sensor(sensor::Sensor *passive_timeout_sensor) { G3_dynamic.insert({PASSIVE_TIMEOUT, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(PASSIVE_TIMEOUT).sensor = passive_timeout_sensor; }
+		void SofarSolar_Inverter::set_passive_timeout_action_sensor(sensor::Sensor *passive_timeout_action_sensor) { G3_dynamic.insert({PASSIVE_TIMEOUT_ACTION, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).sensor = passive_timeout_action_sensor; }
 		void SofarSolar_Inverter::set_energy_storage_mode_sensor(sensor::Sensor *energy_storage_mode_sensor) { G3_dynamic.insert({ENERGY_STORAGE_MODE, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(ENERGY_STORAGE_MODE).sensor = energy_storage_mode_sensor; }
 		void SofarSolar_Inverter::set_battery_conf_id_sensor(sensor::Sensor *battery_conf_id_sensor) { G3_dynamic.insert({BATTERY_CONF_ID, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(BATTERY_CONF_ID).sensor = battery_conf_id_sensor; }
 		void SofarSolar_Inverter::set_battery_conf_address_sensor(sensor::Sensor *battery_conf_address_sensor) { G3_dynamic.insert({BATTERY_CONF_ADDRESS, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(BATTERY_CONF_ADDRESS).sensor = battery_conf_address_sensor; }
@@ -947,6 +991,8 @@ namespace esphome
 		void SofarSolar_Inverter::set_desired_grid_power_sensor_update_interval(uint16_t desired_grid_power_sensor_update_interval) { G3_dynamic.at(DESIRED_GRID_POWER).update_interval = desired_grid_power_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_minimum_battery_power_sensor_update_interval(uint16_t minimum_battery_power_sensor_update_interval) { G3_dynamic.at(MINIMUM_BATTERY_POWER).update_interval = minimum_battery_power_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_maximum_battery_power_sensor_update_interval(uint16_t maximum_battery_power_sensor_update_interval) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).update_interval = maximum_battery_power_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_passive_timeout_sensor_update_interval(uint16_t passive_timeout_sensor_update_interval) { G3_dynamic.at(PASSIVE_TIMEOUT).update_interval = passive_timeout_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_passive_timeout_active_sensor_update_interval(uint16_t passive_timeout_active_sensor_update_interval) { G3_dynamic.at(PASSIVE_TIMEOUT_ACTIVE).update_interval = passive_timeout_active_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_energy_storage_mode_sensor_update_interval(uint16_t energy_storage_mode_sensor_update_interval) { G3_dynamic.at(ENERGY_STORAGE_MODE).update_interval = energy_storage_mode_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_battery_conf_id_sensor_update_interval(uint16_t battery_conf_id_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_ID).update_interval = battery_conf_id_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_battery_conf_address_sensor_update_interval(uint16_t battery_conf_address_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_ADDRESS).update_interval = battery_conf_address_sensor_update_interval * 1000; }
