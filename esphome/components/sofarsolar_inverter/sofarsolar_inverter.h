@@ -300,7 +300,7 @@ namespace esphome {
 			{BATTERY_CONF_CURRENT_DISCHARGE_LIMIT, SofarSolar_Register{0x104C, 1, U_WORD, 0, -2, BATTERY_CONF_WRITE}}, // Battery Conf Current Discharge Limit
 			{BATTERY_CONF_DEPTH_OF_DISCHARGE, SofarSolar_Register{0x104D, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Depth of Discharge
 			{BATTERY_CONF_END_OF_DISCHARGE, SofarSolar_Register{0x104E, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf End of Discharge
-			{BATTERY_CONF_CAPACITY, SofarSolar_Register{0x104F, 1, U_WORD, 0, 1, BATTERY_CONF_WRITE}}, // Battery Conf Capacity
+			{BATTERY_CONF_CAPACITY, SofarSolar_Register{0x104F, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Capacity
 			{BATTERY_CONF_CELL_TYPE, SofarSolar_Register{0x1051, 1, U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Cell Type
 			{BATTERY_CONF_EPS_BUFFER, SofarSolar_Register{0x1052, 1, U_WORD, 0, 1, BATTERY_CONF_WRITE}}, // Battery Conf EPS Buffer
 			{BATTERY_CONF_CONTROL, SofarSolar_Register{0x1053, 1 , U_WORD, 0, 0, BATTERY_CONF_WRITE}}, // Battery Conf Control
