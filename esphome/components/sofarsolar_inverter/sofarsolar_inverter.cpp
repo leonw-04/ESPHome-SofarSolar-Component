@@ -78,7 +78,7 @@ namespace esphome
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value = true;
 				ESP_LOGV(TAG, "Setting active power export limit to %d (percentage: %f%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, (float) percentage / 10);
 
-				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value = 1000;
+				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value = 0;
 				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_set_value = true;
 
 				G3_dynamic.at(REACTIVE_POWER_SETTING).write_value.int16_value = 0;
@@ -87,7 +87,7 @@ namespace esphome
 				G3_dynamic.at(POWER_FACTOR_SETTING).write_value.int16_value = 0;
 				G3_dynamic.at(POWER_FACTOR_SETTING).write_set_value = true;
 
-				G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_value.uint16_value = 1;
+				G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_value.uint16_value = 100;
 				G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).write_set_value = true;
 
 				G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).write_value.uint16_value = 0;
