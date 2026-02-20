@@ -118,6 +118,8 @@ CONF_BATTERY_STATE_OF_CHARGE_TOTAL = "battery_state_of_charge_total"
 CONF_DESIRED_GRID_POWER = "desired_grid_power"
 CONF_MINIMUM_BATTERY_POWER = "minimum_battery_power"
 CONF_MAXIMUM_BATTERY_POWER = "maximum_battery_power"
+CONF_PASSIVE_TIMEOUT = "passive_timeout"
+CONF_PASSIVE_TIMEOUT_ACTION = "passive_timeout_action"
 CONF_ENERGY_STORAGE_MODE = "energy_storage_mode"
 CONF_BATTERY_CONF_ID = "battery_conf_id"
 CONF_BATTERY_CONF_ADDRESS = "battery_conf_address"
@@ -953,6 +955,30 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
+        }
+    ),
+    CONF_PASSIVE_TIMEOUT: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_EMPTY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_,
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
+        }
+    ),
+    CONF_PASSIVE_TIMEOUT_ACTION: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_EMPTY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
             cv.Optional(DEFAULT_VALUE): cv.int_,
             cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
