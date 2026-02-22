@@ -396,6 +396,7 @@ namespace esphome {
 			void write_battery_active();
 			void write_single_register();
 			void write_power();
+			void write_passive_timeout();
 
             void set_model(std::string model) { this->model_ = model; this->set_model_id(model); }
             void set_model_id(std::string model);
@@ -630,7 +631,7 @@ namespace esphome {
             void set_minimum_battery_power_sensor_update_interval(uint16_t minimum_battery_power_sensor_update_interval);
             void set_maximum_battery_power_sensor_update_interval(uint16_t maximum_battery_power_sensor_update_interval);
 			void set_passive_timeout_sensor_update_interval(uint16_t passive_timeout_sensor_update_interval);
-			void set_passive_timeout_action_sensor_update_interval(uint16_t passive_timeout_action_sensor_update_interval
+			void set_passive_timeout_action_sensor_update_interval(uint16_t passive_timeout_action_sensor_update_interval);
             void set_energy_storage_mode_sensor_update_interval(uint16_t energy_storage_mode_sensor_update_interval);
             void set_battery_conf_id_sensor_update_interval(uint16_t battery_conf_id_sensor_update_interval);
             void set_battery_conf_address_sensor_update_interval(uint16_t battery_conf_address_sensor_update_interval);
@@ -702,6 +703,8 @@ namespace esphome {
 			void set_battery_conf_capacity_sensor_default_value(int64_t default_value);
 			void set_battery_conf_cell_type_sensor_default_value(int64_t default_value);
 			void set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value);
+			void set_active_power_export_limit_sensor_default_value(float default_value);
+			void set_active_power_import_limit_sensor_default_value(float default_value);
 
 
 
@@ -726,6 +729,8 @@ namespace esphome {
 			void set_battery_conf_capacity_sensor_enforce_default_value(bool enforce_default_value);
 			void set_battery_conf_cell_type_sensor_enforce_default_value(bool enforce_default_value);
 			void set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value);
+			void set_active_power_export_limit_sensor_enforce_default_value(bool enforce_default_value);
+			void set_active_power_import_limit_sensor_enforce_default_value(bool enforce_default_value);
 
 
 

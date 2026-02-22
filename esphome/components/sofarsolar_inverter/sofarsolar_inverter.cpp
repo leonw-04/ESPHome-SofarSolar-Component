@@ -95,8 +95,8 @@ namespace esphome
 
 				this->write_power(); // Write the power control registers=
 
-				if (!(((battery_charge_only_switch_state_ == true && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == 0) || (battery_charge_only_switch_state_ == false && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == -5000)) && ((battery_discharge_only_switch_state_ == true && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 0) || (battery_discharge_only_switch_state_ == false && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 5000)) && (-model_parameters.at(this->model_id_).max_output_power_w == G3_dynamic.at(DESIRED_GRID_POWER).sensor->state))) {
-					G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value = model_parameters.at(this->model_id_).max_output_power_w;
+				if (!(((battery_charge_only_switch_state_ == true && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == 0) || (battery_charge_only_switch_state_ == false && G3_dynamic.at(MINIMUM_BATTERY_POWER).sensor->state == -5000)) && ((battery_discharge_only_switch_state_ == true && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 0) || (battery_discharge_only_switch_state_ == false && G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state == 5000)) && (model_parameters.at(this->model_id_).max_output_power_w == G3_dynamic.at(DESIRED_GRID_POWER).sensor->state))) {
+					G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value = -model_parameters.at(this->model_id_).max_output_power_w;
 					G3_dynamic.at(DESIRED_GRID_POWER).write_set_value = true;
 					if (battery_charge_only_switch_state_) {
 						G3_dynamic.at(MINIMUM_BATTERY_POWER).write_value.int32_value = 0;
@@ -126,7 +126,7 @@ namespace esphome
 				if (dynamic_register.second.is_queued) {
 					ESP_LOGVV(TAG, "Register %d is currently queued for reading/writing, skipping update check", dynamic_register.first);
 				}
-				if (millis() - dynamic_register.second.last_update >= dynamic_register.second.update_interval  && !dynamic_register.second.is_queued) {
+				if ((millis() - dynamic_register.second.last_update >= dynamic_register.second.update_interval || dynamic_register.second.last_update == 0) && !dynamic_register.second.is_queued) {
 					dynamic_register.second.last_update = millis(); // Update the last update time
 					register_read_task task;
 					task.register_key = dynamic_register.first; // Set the register key for the task
@@ -153,6 +153,7 @@ namespace esphome
 
 			if (millis() - time_begin_modbus_operation > 500) { // Timeout for read operation
 				if (current_reading) {
+					G3_dynamic.at(register_read_queue.top().register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 					G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
 					current_reading = false; // Reset the flag for read operation
 					register_read_queue.pop(); // Remove the top task from the read queue
@@ -992,7 +993,7 @@ namespace esphome
 		void SofarSolar_Inverter::set_minimum_battery_power_sensor_update_interval(uint16_t minimum_battery_power_sensor_update_interval) { G3_dynamic.at(MINIMUM_BATTERY_POWER).update_interval = minimum_battery_power_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_maximum_battery_power_sensor_update_interval(uint16_t maximum_battery_power_sensor_update_interval) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).update_interval = maximum_battery_power_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_passive_timeout_sensor_update_interval(uint16_t passive_timeout_sensor_update_interval) { G3_dynamic.at(PASSIVE_TIMEOUT).update_interval = passive_timeout_sensor_update_interval * 1000; }
-		void SofarSolar_Inverter::set_passive_timeout_active_sensor_update_interval(uint16_t passive_timeout_active_sensor_update_interval) { G3_dynamic.at(PASSIVE_TIMEOUT_ACTIVE).update_interval = passive_timeout_active_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_passive_timeout_action_sensor_update_interval(uint16_t passive_timeout_action_sensor_update_interval) { G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).update_interval = passive_timeout_action_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_energy_storage_mode_sensor_update_interval(uint16_t energy_storage_mode_sensor_update_interval) { G3_dynamic.at(ENERGY_STORAGE_MODE).update_interval = energy_storage_mode_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_battery_conf_id_sensor_update_interval(uint16_t battery_conf_id_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_ID).update_interval = battery_conf_id_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_battery_conf_address_sensor_update_interval(uint16_t battery_conf_address_sensor_update_interval) { G3_dynamic.at(BATTERY_CONF_ADDRESS).update_interval = battery_conf_address_sensor_update_interval * 1000; }
@@ -1046,6 +1047,8 @@ namespace esphome
 		void SofarSolar_Inverter::set_desired_grid_power_sensor_default_value(int64_t default_value) { G3_dynamic.at(DESIRED_GRID_POWER).default_value.int64_value = default_value; G3_dynamic.at(DESIRED_GRID_POWER).default_value_set = true; }
 		void SofarSolar_Inverter::set_minimum_battery_power_sensor_default_value(int64_t default_value) { G3_dynamic.at(MINIMUM_BATTERY_POWER).default_value.int64_value = default_value; G3_dynamic.at(MINIMUM_BATTERY_POWER).default_value_set = true; }
 		void SofarSolar_Inverter::set_maximum_battery_power_sensor_default_value(int64_t default_value) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value.int64_value = default_value; G3_dynamic.at(MAXIMUM_BATTERY_POWER).default_value_set = true; }
+		void SofarSolar_Inverter::set_passive_timeout_sensor_default_value(int64_t default_value) { G3_dynamic.at(PASSIVE_TIMEOUT).default_value.int64_value = default_value; G3_dynamic.at(PASSIVE_TIMEOUT).default_value_set = true; }
+		void SofarSolar_Inverter::set_passive_timeout_action_sensor_default_value(int64_t default_value) { G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).default_value.int64_value = default_value; G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).default_value_set = true; }
 		void SofarSolar_Inverter::set_energy_storage_mode_sensor_default_value(int64_t default_value) { G3_dynamic.at(ENERGY_STORAGE_MODE).default_value.int64_value = default_value; G3_dynamic.at(ENERGY_STORAGE_MODE).default_value_set = true; }
 		void SofarSolar_Inverter::set_battery_conf_id_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_ID).default_value.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_ID).default_value_set = true; }
 		void SofarSolar_Inverter::set_battery_conf_address_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_ADDRESS).default_value.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_ADDRESS).default_value_set = true; }
@@ -1062,10 +1065,14 @@ namespace esphome
 		void SofarSolar_Inverter::set_battery_conf_capacity_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_CAPACITY).default_value.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_CAPACITY).default_value_set = true; }
 		void SofarSolar_Inverter::set_battery_conf_cell_type_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_CELL_TYPE).default_value_set = true; }
 		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_set = true; }
+		void SofarSolar_Inverter::set_active_power_export_limit_sensor_default_value(float default_value) { G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value.int64_value = static_cast<int64_t>(default_value * get_power_of_ten(-G3_registers.at(ACTIVE_POWER_EXPORT_LIMIT).scale)); G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value_set = true; }
+		void SofarSolar_Inverter::set_active_power_import_limit_sensor_default_value(float default_value) { G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value.int64_value = static_cast<int64_t>(default_value * get_power_of_ten(-G3_registers.at(ACTIVE_POWER_IMPORT_LIMIT).scale)); G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value_set = true; }
 
 		void SofarSolar_Inverter::set_desired_grid_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(DESIRED_GRID_POWER).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_minimum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(MINIMUM_BATTERY_POWER).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_maximum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(MAXIMUM_BATTERY_POWER).enforce_default_value = enforce_default_value; }
+		void SofarSolar_Inverter::set_passive_timeout_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(PASSIVE_TIMEOUT).enforce_default_value = enforce_default_value; }
+        void SofarSolar_Inverter::set_passive_timeout_action_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_energy_storage_mode_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(ENERGY_STORAGE_MODE).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_battery_conf_id_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_ID).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_battery_conf_address_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_ADDRESS).enforce_default_value = enforce_default_value; }
@@ -1082,5 +1089,7 @@ namespace esphome
 		void SofarSolar_Inverter::set_battery_conf_capacity_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_CAPACITY).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_battery_conf_cell_type_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_CELL_TYPE).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value = enforce_default_value; }
+		void SofarSolar_Inverter::set_active_power_export_limit_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).enforce_default_value = enforce_default_value; }
+		void SofarSolar_Inverter::set_active_power_import_limit_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).enforce_default_value = enforce_default_value; }
 	}
 }
