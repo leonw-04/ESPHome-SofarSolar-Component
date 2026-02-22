@@ -930,7 +930,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="15s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
             cv.Optional(DEFAULT_VALUE): cv.int_,
             cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
@@ -942,7 +942,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="15s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
             cv.Optional(DEFAULT_VALUE): cv.int_,
             cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
@@ -954,7 +954,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="15s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
             cv.Optional(DEFAULT_VALUE): cv.int_,
             cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
