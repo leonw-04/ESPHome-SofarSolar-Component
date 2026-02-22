@@ -223,7 +223,7 @@ namespace esphome {
 
 			{BATTERY_VOLTAGE_1, SofarSolar_Register{0x0604, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 1
 			{BATTERY_CURRENT_1, SofarSolar_Register{0x0605, 1, S_WORD, 2, -2, NONE}}, // Battery Current 1
-			{BATTERY_POWER_1, SofarSolar_Register{0x0606, 1, S_WORD, 2, 3, NONE}}, // Battery Power 1
+			{BATTERY_POWER_1, SofarSolar_Register{0x0606, 1, S_WORD, 2, 1, NONE}}, // Battery Power 1
 			{BATTERY_TEMPERATUR_ENV_1, SofarSolar_Register{0x0607, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 1
 			{BATTERY_STATE_OF_CHARGE_1, SofarSolar_Register{0x0608, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 1
 			{BATTERY_STATE_OF_HEALTH_1, SofarSolar_Register{0x0609, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 1
@@ -231,7 +231,7 @@ namespace esphome {
 
 			{BATTERY_VOLTAGE_2, SofarSolar_Register{0x060B, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 2
 			{BATTERY_CURRENT_2, SofarSolar_Register{0x060C, 1, S_WORD, 2, -2, NONE}}, // Battery Current 2
-			{BATTERY_POWER_2, SofarSolar_Register{0x060D, 1, S_WORD, 2, 3, NONE}}, // Battery Power 2
+			{BATTERY_POWER_2, SofarSolar_Register{0x060D, 1, S_WORD, 2, 1, NONE}}, // Battery Power 2
 			{BATTERY_TEMPERATUR_ENV_2, SofarSolar_Register{0x060E, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 2
 			{BATTERY_STATE_OF_CHARGE_2, SofarSolar_Register{0x060F, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 2
 			{BATTERY_STATE_OF_HEALTH_2, SofarSolar_Register{0x0610, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 2
@@ -239,7 +239,7 @@ namespace esphome {
 
 			{BATTERY_VOLTAGE_3 ,SofarSolar_Register{0x0612, 1 ,U_WORD ,2 ,-1 ,NONE}}, // Battery Voltage 3
 			{BATTERY_CURRENT_3 ,SofarSolar_Register{0x0613 ,1 ,S_WORD ,2 ,-2 ,NONE}}, // Battery Current 3
-			{BATTERY_POWER_3 ,SofarSolar_Register{0x0614 ,1 ,S_WORD ,2 ,3 ,NONE}}, // Battery Power 3
+			{BATTERY_POWER_3 ,SofarSolar_Register{0x0614 ,1 ,S_WORD ,2 ,1 ,NONE}}, // Battery Power 3
 			{BATTERY_TEMPERATUR_ENV_3 ,SofarSolar_Register{0x0615 ,1 ,S_WORD ,2 ,0 ,NONE}}, // Battery Temperature Environment 3
 			{BATTERY_STATE_OF_CHARGE_3 ,SofarSolar_Register{0x0616 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Charge 3
 			{BATTERY_STATE_OF_HEALTH_3 ,SofarSolar_Register{0x0617 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Health 3
@@ -247,7 +247,7 @@ namespace esphome {
 
 			{BATTERY_VOLTAGE_4, SofarSolar_Register{0x0619, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 4
 			{BATTERY_CURRENT_4, SofarSolar_Register{0x061A, 1, S_WORD, 2, -2, NONE}}, // Battery Current 4
-			{BATTERY_POWER_4, SofarSolar_Register{0x061B, 1, S_WORD, 2, 3, NONE}}, // Battery Power 4
+			{BATTERY_POWER_4, SofarSolar_Register{0x061B, 1, S_WORD, 2, 1, NONE}}, // Battery Power 4
 			{BATTERY_TEMPERATUR_ENV_4, SofarSolar_Register{0x061C, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 4
 			{BATTERY_STATE_OF_CHARGE_4, SofarSolar_Register{0x061D, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 4
 			{BATTERY_STATE_OF_HEALTH_4, SofarSolar_Register{0x061E, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 4
@@ -255,7 +255,7 @@ namespace esphome {
 
 			{BATTERY_VOLTAGE_5 ,SofarSolar_Register{0x0620 ,1 ,U_WORD ,2 ,-1 ,NONE}}, // Battery Voltage 5
 			{BATTERY_CURRENT_5 ,SofarSolar_Register{0x0621 ,1 ,S_WORD ,2 ,-2 ,NONE}}, // Battery Current 5
-			{BATTERY_POWER_5 ,SofarSolar_Register{0x0622 ,1 ,S_WORD ,2 ,3 ,NONE}}, // Battery Power 5
+			{BATTERY_POWER_5 ,SofarSolar_Register{0x0622 ,1 ,S_WORD ,2 ,1 ,NONE}}, // Battery Power 5
 			{BATTERY_TEMPERATUR_ENV_5,SofarSolar_Register{0x0623 ,1 ,S_WORD ,2 ,0 ,NONE}}, // Battery Temperature Environment 5
 			{BATTERY_STATE_OF_CHARGE_5,SofarSolar_Register{0x0624 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Charge 5
 			{BATTERY_STATE_OF_HEALTH_5 ,SofarSolar_Register{0x0625 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Health 5
@@ -263,7 +263,7 @@ namespace esphome {
 
 			{BATTERY_VOLTAGE_6, SofarSolar_Register{0x0627, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 6
 			{BATTERY_CURRENT_6, SofarSolar_Register{0x0628, 1, S_WORD, 2, -2, NONE}}, // Battery Current 6
-			{BATTERY_POWER_6, SofarSolar_Register{0x0629, 1, S_WORD, 2, 3, NONE}}, // Battery Power 6
+			{BATTERY_POWER_6, SofarSolar_Register{0x0629, 1, S_WORD, 2, 1, NONE}}, // Battery Power 6
 			{BATTERY_TEMPERATUR_ENV_6, SofarSolar_Register{0x062A, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 6
 			{BATTERY_STATE_OF_CHARGE_6, SofarSolar_Register{0x062B, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 6
 			{BATTERY_STATE_OF_HEALTH_6, SofarSolar_Register{0x062C, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 6
@@ -271,7 +271,7 @@ namespace esphome {
 
 			{BATTERY_VOLTAGE_7,SofarSolar_Register{0x062E ,1 ,U_WORD ,2 ,-1 ,NONE}}, // Battery Voltage 7
 			{BATTERY_CURRENT_7,SofarSolar_Register{0x062F ,1 ,S_WORD ,2 ,-2 ,NONE}}, // Battery Current 7
-			{BATTERY_POWER_7,SofarSolar_Register{0x0630 ,1 ,S_WORD ,2 ,3 ,NONE}}, // Battery Power 7
+			{BATTERY_POWER_7,SofarSolar_Register{0x0630 ,1 ,S_WORD ,2 ,1 ,NONE}}, // Battery Power 7
 			{BATTERY_TEMPERATUR_ENV_7,SofarSolar_Register{0x0631 ,1 ,S_WORD ,2 ,0 ,NONE}}, // Battery Temperature Environment 7
 			{BATTERY_STATE_OF_CHARGE_7,SofarSolar_Register{0x0632 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Charge 7
 			{BATTERY_STATE_OF_HEALTH_7,SofarSolar_Register{0x0633 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Health 7
@@ -279,7 +279,7 @@ namespace esphome {
 
 			{BATTERY_VOLTAGE_8, SofarSolar_Register{0x0635, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 8
 			{BATTERY_CURRENT_8, SofarSolar_Register{0x0636, 1, S_WORD, 2, -2, NONE}}, // Battery Current 8
-			{BATTERY_POWER_8, SofarSolar_Register{0x0637, 1, S_WORD, 2, 3, NONE}}, // Battery Power 8
+			{BATTERY_POWER_8, SofarSolar_Register{0x0637, 1, S_WORD, 2, 1, NONE}}, // Battery Power 8
 			{BATTERY_TEMPERATUR_ENV_8, SofarSolar_Register{0x0638, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 8
 			{BATTERY_STATE_OF_CHARGE_8, SofarSolar_Register{0x0639, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 8
 			{BATTERY_STATE_OF_HEALTH_8, SofarSolar_Register{0x063A, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 8
