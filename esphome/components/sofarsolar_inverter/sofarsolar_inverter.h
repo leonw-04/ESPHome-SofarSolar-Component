@@ -215,10 +215,10 @@ namespace esphome {
             {TOTAL_ACTIVE_POWER_INVERTER, SofarSolar_Register{0x0485, 1, S_WORD, 3, 1, NONE}}, // Total Active Power Inverter
             {PV_VOLTAGE_1 ,SofarSolar_Register{0x0584, 1, U_WORD, 2, -1, NONE}}, // PV Voltage 1
             {PV_CURRENT_1 ,SofarSolar_Register{0x0585, 1, U_WORD, 2, -2, NONE}}, // PV Current 1
-            {PV_POWER_1 ,SofarSolar_Register{0x0586, 1, U_WORD, 2, 1, NONE}}, // PV Power 1
+            {PV_POWER_1 ,SofarSolar_Register{0x0586, 1, U_WORD, 3, 1, NONE}}, // PV Power 1
             {PV_VOLTAGE_2 ,SofarSolar_Register{0x0587, 1, U_WORD, 2, -1, NONE}}, // PV Voltage 2
             {PV_CURRENT_2 ,SofarSolar_Register{0x0588, 1, U_WORD, 2, -2, NONE}}, // PV Current 2
-            {PV_POWER_2, SofarSolar_Register{0x0589, 1, U_WORD, 2, 1, NONE}}, // PV Power 2
+            {PV_POWER_2, SofarSolar_Register{0x0589, 1, U_WORD, 3, 1, NONE}}, // PV Power 2
             {PV_POWER_TOTAL, SofarSolar_Register{0x05C4, 1, U_WORD, 3, 2, NONE}}, // PV Power Total
 
 			{BATTERY_VOLTAGE_1, SofarSolar_Register{0x0604, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 1
