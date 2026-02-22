@@ -68,18 +68,27 @@ namespace esphome
 
 				ESP_LOGV(TAG, "Current total active power inverter: %f W + %f W / %d W", G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state, this->power_sensor_->state, model_parameters.at(this->model_id_).max_output_power_w);
 				ESP_LOGVV(TAG, "Model id %d, %d W", this->model_id_, model_parameters.at(this->model_id_).max_output_power_w);
-				int percentage = (G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state + 10) * 1000 / model_parameters.at(this->model_id_).max_output_power_w;
-				if (percentage < 0) {
-					percentage = 0;
-				} else if (percentage > 1000) {
-					percentage = 1000;
+				int needed_power = G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state + 10; // Add a small buffer to ensure that we don't draw power from the grid
+				int export_percentage = needed_power * 1000 / model_parameters.at(this->model_id_).max_output_power_w;
+				if (export_percentage < 0) {
+					export_percentage = 0;
+				} else if (export_percentage > 1000) {
+					export_percentage = 1000;
 				}
-				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value = percentage;
+				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value = export_percentage;
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value = true;
-				ESP_LOGV(TAG, "Setting active power export limit to %d (percentage: %f%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, (float) percentage / 10);
+				ESP_LOGV(TAG, "Setting active power export limit to %d (percentage: %f%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, (float) export_percentage / 10);
 
-				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value = 0;
+				int charge_power = G3_dynamic.at(PV_POWER_1).sensor->state + G3_dynamic.at(PV_POWER_2).sensor->state - needed_power; // Get the current charge power (negative value means charging)
+				int import_percentage = charge_power * 1000 / model_parameters.at(this->model_id_).max_output_power_w;
+				if (import_percentage < 0) {
+					import_percentage = 0;
+				} else if (import_percentage > 1000) {
+					import_percentage = 1000;
+				}
+				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_value.uint16_value = import_percentage;
 				G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).write_set_value = true;
+				ESP_LOGV(TAG, "Setting active power import limit to %d (percentage: %f%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, (float) import_percentage / 10);
 
 				G3_dynamic.at(REACTIVE_POWER_SETTING).write_value.int16_value = 0;
 				G3_dynamic.at(REACTIVE_POWER_SETTING).write_set_value = true;
