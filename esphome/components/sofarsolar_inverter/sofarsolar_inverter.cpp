@@ -74,7 +74,7 @@ namespace esphome
 				} else if (percentage > 1000) {
 					percentage = 1000;
 				}
-				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value = percentage;
+				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value = 1;
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value = true;
 				ESP_LOGV(TAG, "Setting active power export limit to %d (percentage: %f%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, (float) percentage / 10);
 
