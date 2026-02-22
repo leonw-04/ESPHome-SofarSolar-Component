@@ -68,8 +68,7 @@ namespace esphome
 
 				ESP_LOGV(TAG, "Current total active power inverter: %f W + %f W / %d W", G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state, this->power_sensor_->state, model_parameters.at(this->model_id_).max_output_power_w);
 				ESP_LOGVV(TAG, "Model id %d, %d W", this->model_id_, model_parameters.at(this->model_id_).max_output_power_w);
-				//int percentage = (G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state + 10) * 1000 / model_parameters.at(this->model_id_).max_output_power_w;
-				int percentage = 1;
+				int percentage = (G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state + 10) * 1000 / model_parameters.at(this->model_id_).max_output_power_w;
 				if (percentage < 0) {
 					percentage = 0;
 				} else if (percentage > 1000) {
