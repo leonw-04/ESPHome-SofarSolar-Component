@@ -1427,7 +1427,7 @@ TYPES = {
     ),
     CONF_ACTIVE_POWER_EXPORT_LIMIT: sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
-        accuracy_decimals=0,
+        accuracy_decimals=1,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
@@ -1439,7 +1439,7 @@ TYPES = {
     ),
     CONF_ACTIVE_POWER_IMPORT_LIMIT: sensor.sensor_schema(
         unit_of_measurement=UNIT_PERCENT,
-        accuracy_decimals=0,
+        accuracy_decimals=1,
         device_class=DEVICE_CLASS_POWER,
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
