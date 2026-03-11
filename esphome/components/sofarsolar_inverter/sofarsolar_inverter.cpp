@@ -221,9 +221,9 @@ namespace esphome
 		void SofarSolar_Inverter::parse_read_response(const std::vector<uint8_t> &data) {
 			ESP_LOGVV(TAG, "Parsing read response: %s", vector_to_string(data).c_str());
 			switch (G3_registers.at(register_read_queue.top().register_key).type) {
-			case U_WORD: {
+			case SofarSolar_U_WORD: {
 					if (data.size() != 2) {
-						ESP_LOGE(TAG, "Invalid read response size for U_WORD: %d", data.size());
+						ESP_LOGE(TAG, "Invalid read response size for SofarSolar_U_WORD: %d", data.size());
 						return;
 					}
 					uint16_t value = (data[0] << 8) | data[1];
@@ -231,9 +231,9 @@ namespace esphome
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
-			case S_WORD: {
+			case SofarSolar_S_WORD: {
 					if (data.size() != 2) {
-						ESP_LOGE(TAG, "Invalid read response size for S_WORD: %d", data.size());
+						ESP_LOGE(TAG, "Invalid read response size for SofarSolar_S_WORD: %d", data.size());
 						return;
 					}
 					int16_t value = (data[0] << 8) | data[1];
@@ -241,9 +241,9 @@ namespace esphome
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
-			case U_DWORD: {
+			case SofarSolar_U_DWORD: {
 					if (data.size() != 4) {
-						ESP_LOGE(TAG, "Invalid read response size for U_DWORD: %d", data.size());
+						ESP_LOGE(TAG, "Invalid read response size for SofarSolar_U_DWORD: %d", data.size());
 						return;
 					}
 					uint32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
@@ -251,9 +251,9 @@ namespace esphome
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
 					break;
 			}
-			case S_DWORD: {
+			case SofarSolar_S_DWORD: {
 					if (data.size() != 4) {
-						ESP_LOGE(TAG, "Invalid read response size for S_DWORD: %d", data.size());
+						ESP_LOGE(TAG, "Invalid read response size for SofarSolar_S_DWORD: %d", data.size());
 						return;
 					}
 					int32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
