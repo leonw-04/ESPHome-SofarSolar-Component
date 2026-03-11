@@ -167,6 +167,7 @@ CONF_REACTIVE_POWER_SETTING = "reactive_power_setting"
 CONF_POWER_FACTOR_SETTING = "power_factor_setting"
 CONF_ACTIVE_POWER_LIMIT_SPEED = "active_power_limit_speed"
 CONF_REACTIVE_POWER_RESPONSE_TIME = "reactive_power_response_time"
+CONF_PCC_SAMPLE_MODE = "pcc_sample_mode"
 
 UPDATE_INTERVAL = "update_interval"
 DEFAULT_VALUE = "default_value"
@@ -1487,6 +1488,18 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_PCC_SAMPLE_MODE: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_EMPTY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE): cv.int_range(0, 4),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
 }
