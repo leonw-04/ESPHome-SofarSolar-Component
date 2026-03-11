@@ -911,7 +911,7 @@ namespace esphome
 		void SofarSolar_Inverter::set_power_factor_setting_sensor(sensor::Sensor *power_factor_setting_sensor) { G3_dynamic.insert({POWER_FACTOR_SETTING, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(POWER_FACTOR_SETTING).sensor = power_factor_setting_sensor; }
 		void SofarSolar_Inverter::set_active_power_limit_speed_sensor(sensor::Sensor *active_power_limit_speed_sensor) { G3_dynamic.insert({ACTIVE_POWER_LIMIT_SPEED, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).sensor = active_power_limit_speed_sensor; }
 		void SofarSolar_Inverter::set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor) { G3_dynamic.insert({REACTIVE_POWER_RESPONSE_TIME, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).sensor = reactive_power_response_time_sensor; }
-
+		void SofarSolar_Inverter::set_pcc_voltage_sensor(sensor::Sensor *pcc_voltage_sensor) { G3_dynamic.insert({PCC_VOLTAGE, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(PCC_VOLTAGE).sensor = pcc_voltage_sensor; }
 
 		// Set update intervals for sensors
 
@@ -1050,6 +1050,7 @@ namespace esphome
 		void SofarSolar_Inverter::set_power_factor_setting_sensor_update_interval(uint16_t power_factor_setting_sensor_update_interval) { G3_dynamic.at(POWER_FACTOR_SETTING).update_interval = power_factor_setting_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_active_power_limit_speed_sensor_update_interval(uint16_t active_power_limit_speed_sensor_update_interval) { G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).update_interval = active_power_limit_speed_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_reactive_power_response_time_sensor_update_interval(uint16_t reactive_power_response_time_sensor_update_interval) { G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).update_interval = reactive_power_response_time_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pcc_voltage_sensor_update_interval(uint16_t pcc_voltage_sensor_update_interval) { G3_dynamic.at(PCC_VOLTAGE).update_interval = pcc_voltage_sensor_update_interval * 1000; }
 
 		// Set default values for sensors
 
@@ -1076,6 +1077,7 @@ namespace esphome
 		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value) { G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value.int64_value = default_value; G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).default_value_set = true; }
 		void SofarSolar_Inverter::set_active_power_export_limit_sensor_default_value(float default_value) { G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value.int64_value = static_cast<int64_t>(default_value * get_power_of_ten(-G3_registers.at(ACTIVE_POWER_EXPORT_LIMIT).scale)); G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).default_value_set = true; }
 		void SofarSolar_Inverter::set_active_power_import_limit_sensor_default_value(float default_value) { G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value.int64_value = static_cast<int64_t>(default_value * get_power_of_ten(-G3_registers.at(ACTIVE_POWER_IMPORT_LIMIT).scale)); G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).default_value_set = true; }
+		void SofarSolar_Inverter::set_pcc_sample_mode_sensor_default_value(int64_t default_value) { G3_dynamic.at(PCC_SAMPLE_MODE).default_value.int64_value = default_value; G3_dynamic.at(PCC_SAMPLE_MODE).default_value_set = true; }
 
 		void SofarSolar_Inverter::set_desired_grid_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(DESIRED_GRID_POWER).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_minimum_battery_power_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(MINIMUM_BATTERY_POWER).enforce_default_value = enforce_default_value; }
@@ -1100,5 +1102,6 @@ namespace esphome
 		void SofarSolar_Inverter::set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(BATTERY_CONF_EPS_BUFFER).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_active_power_export_limit_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).enforce_default_value = enforce_default_value; }
 		void SofarSolar_Inverter::set_active_power_import_limit_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(ACTIVE_POWER_IMPORT_LIMIT).enforce_default_value = enforce_default_value; }
+		void SofarSolar_Inverter::set_pcc_sample_mode_sensor_enforce_default_value(bool enforce_default_value) { G3_dynamic.at(PCC_SAMPLE_MODE).enforce_default_value = enforce_default_value; }
 	}
 }
