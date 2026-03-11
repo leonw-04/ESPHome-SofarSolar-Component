@@ -911,7 +911,7 @@ namespace esphome
 		void SofarSolar_Inverter::set_power_factor_setting_sensor(sensor::Sensor *power_factor_setting_sensor) { G3_dynamic.insert({POWER_FACTOR_SETTING, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(POWER_FACTOR_SETTING).sensor = power_factor_setting_sensor; }
 		void SofarSolar_Inverter::set_active_power_limit_speed_sensor(sensor::Sensor *active_power_limit_speed_sensor) { G3_dynamic.insert({ACTIVE_POWER_LIMIT_SPEED, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).sensor = active_power_limit_speed_sensor; }
 		void SofarSolar_Inverter::set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor) { G3_dynamic.insert({REACTIVE_POWER_RESPONSE_TIME, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).sensor = reactive_power_response_time_sensor; }
-		void SofarSolar_Inverter::set_pcc_voltage_sensor(sensor::Sensor *pcc_voltage_sensor) { G3_dynamic.insert({PCC_VOLTAGE, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(PCC_VOLTAGE).sensor = pcc_voltage_sensor; }
+		void SofarSolar_Inverter::set_pcc_sample_mode_sensor(sensor::Sensor *pcc_voltage_sensor) { G3_dynamic.insert({PCC_VOLTAGE, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(PCC_VOLTAGE).sensor = pcc_voltage_sensor; }
 
 		// Set update intervals for sensors
 
