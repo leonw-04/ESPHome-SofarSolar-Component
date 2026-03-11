@@ -145,6 +145,7 @@
 #define ACTIVE_POWER_LIMIT_SPEED 167
 #define REACTIVE_POWER_RESPONSE_TIME 168
 #define SVG_FIXED_REACTIVE_POWER_SETTING 169
+#define PCC_SAMPLE_MODE 169
 
 #define NONE 0
 #define SINGLE_REGISTER_WRITE 1
@@ -341,6 +342,7 @@ namespace esphome {
             {ACTIVE_POWER_LIMIT_SPEED, SofarSolar_Register{0x110A, 1, U_WORD, 0, 0, POWER_WRITE}}, // Active Power Limit Speed
             {REACTIVE_POWER_RESPONSE_TIME, SofarSolar_Register{0x110B, 1, U_WORD, 0, -1, POWER_WRITE}}, // Reactive Power Response Time
             {SVG_FIXED_REACTIVE_POWER_SETTING, SofarSolar_Register{0x110C, 1, S_WORD, 0, 0, NONE}} // SVG Fixed Reactive Power Setting
+            {PCC_SAMPLE_MODE, SofarSolar_Register{0x1060, 1, U_WORD, 0, 0, SINGLE_REGISTER_WRITE}} // SVG Fixed Reactive Power Setting
         };
 
 		static const std::map<uint8_t, Model_Parameters> model_parameters = {
@@ -540,6 +542,7 @@ namespace esphome {
 			void set_power_factor_setting_sensor(sensor::Sensor *power_factor_setting_sensor);
 			void set_active_power_limit_speed_sensor(sensor::Sensor *active_power_limit_speed_sensor);
 			void set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor);
+			void set_pcc_sample_mode_sensor(sensor::Sensor *pcc_sample_mode_sensor);
 
 
 
@@ -679,6 +682,7 @@ namespace esphome {
             void set_power_factor_setting_sensor_update_interval(uint16_t power_factor_setting_sensor_update_interval);
 			void set_active_power_limit_speed_sensor_update_interval(uint16_t active_power_limit_speed_sensor_update_interval);
             void set_reactive_power_response_time_sensor_update_interval(uint16_t reactive_power_response_time_sensor_update_interval);
+			void set_pcc_sample_mode_sensor_update_interval(uint16_t pcc_sample_mode_sensor_update_interval);
 
 
 
@@ -705,6 +709,7 @@ namespace esphome {
 			void set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value);
 			void set_active_power_export_limit_sensor_default_value(float default_value);
 			void set_active_power_import_limit_sensor_default_value(float default_value);
+			void set_pcc_sample_mode_sensor_default_value(int64_t default_value);
 
 
 
@@ -731,6 +736,7 @@ namespace esphome {
 			void set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value);
 			void set_active_power_export_limit_sensor_enforce_default_value(bool enforce_default_value);
 			void set_active_power_import_limit_sensor_enforce_default_value(bool enforce_default_value);
+			void set_pcc_sample_mode_sensor_enforce_default_value(bool enforce_default_value);
 
 
 
