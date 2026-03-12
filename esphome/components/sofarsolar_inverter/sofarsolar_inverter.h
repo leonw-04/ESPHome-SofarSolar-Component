@@ -398,7 +398,7 @@ namespace esphome {
 			void write_desired_grid_power();
 			void write_battery_conf();
 			void write_battery_active();
-			void write_single_register();
+			void write_single_register(uint8_t register_key);
 			void write_power();
 			void write_passive_timeout();
 

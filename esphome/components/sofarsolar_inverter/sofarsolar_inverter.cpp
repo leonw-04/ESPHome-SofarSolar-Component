@@ -738,7 +738,7 @@ namespace esphome
 			register_write_queue.push(task); // Add the write task to the queue
 		}
 
-		void SofarSolar_Inverter::write_single_register(uint16_t register_key) {
+		void SofarSolar_Inverter::write_single_register(uint8_t register_key) {
             ESP_LOGD(TAG, "Writing single register: %d", register_key);
             std::vector<uint8_t> data;
             switch(G3_registers.at(register_key).type) {
