@@ -221,44 +221,48 @@ namespace esphome
 		void SofarSolar_Inverter::parse_read_response(const std::vector<uint8_t> &data) {
 			ESP_LOGVV(TAG, "Parsing read response: %s", vector_to_string(data).c_str());
 			switch (G3_registers.at(register_read_queue.top().register_key).type) {
-			case U_WORD: {
+			case SofarSolar_U_WORD: {
 					if (data.size() != 2) {
-						ESP_LOGE(TAG, "Invalid read response size for U_WORD: %d", data.size());
+						ESP_LOGE(TAG, "Invalid read response size for SofarSolar_U_WORD: %d", data.size());
 						return;
 					}
 					uint16_t value = (data[0] << 8) | data[1];
 					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
+					this->test_new_state(new_state, register_read_queue.top().register_key);
 					break;
 			}
-			case S_WORD: {
+			case SofarSolar_S_WORD: {
 					if (data.size() != 2) {
-						ESP_LOGE(TAG, "Invalid read response size for S_WORD: %d", data.size());
+						ESP_LOGE(TAG, "Invalid read response size for SofarSolar_S_WORD: %d", data.size());
 						return;
 					}
 					int16_t value = (data[0] << 8) | data[1];
 					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
+					this->test_new_state(new_state, register_read_queue.top().register_key);
 					break;
 			}
-			case U_DWORD: {
+			case SofarSolar_U_DWORD: {
 					if (data.size() != 4) {
-						ESP_LOGE(TAG, "Invalid read response size for U_DWORD: %d", data.size());
+						ESP_LOGE(TAG, "Invalid read response size for SofarSolar_U_DWORD: %d", data.size());
 						return;
 					}
 					uint32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
 					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
+					this->test_new_state(new_state, register_read_queue.top().register_key);
 					break;
 			}
-			case S_DWORD: {
+			case SofarSolar_S_DWORD: {
 					if (data.size() != 4) {
-						ESP_LOGE(TAG, "Invalid read response size for S_DWORD: %d", data.size());
+						ESP_LOGE(TAG, "Invalid read response size for SofarSolar_S_DWORD: %d", data.size());
 						return;
 					}
 					int32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
 					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
+					this->test_new_state(new_state, register_read_queue.top().register_key);
 					break;
 			}
 			default:
@@ -734,9 +738,177 @@ namespace esphome
 			register_write_queue.push(task); // Add the write task to the queue
 		}
 
-		void SofarSolar_Inverter::write_single_register() {
+		void SofarSolar_Inverter::write_single_register(uint16_t register_key) {
+            ESP_LOGD(TAG, "Writing single register: %d", register_key);
+            std::vector<uint8_t> data;
+            switch(G3_registers.at(register_key).type) {
+                case SofarSolar_U_WORD:
+                    {
+                        uint16_t value_to_write;
+                        if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
+                            value_to_write = G3_dynamic.at(register_key).default_value.uint16_value;
+                        } else if (G3_dynamic.at(register_key).write_set_value) {
+                            value_to_write = G3_dynamic.at(register_key).write_value.uint16_value;
+                        } else {
+                            value_to_write = G3_dynamic.at(register_key).sensor->state;
+                        }
+                        data.push_back(static_cast<uint8_t>(value_to_write >> 8));
+                        data.push_back(static_cast<uint8_t>(value_to_write & 0xFF));
+                        ESP_LOGV(TAG, "Value to write: %d", value_to_write);
+                    }
+                    break;
+                case SofarSolar_S_WORD:
+                    {
+                        int16_t value_to_write;
+                        if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
+                            value_to_write = G3_dynamic.at(register_key).default_value.int16_value;
+                        } else if (G3_dynamic.at(register_key).write_set_value) {
+                            value_to_write = G3_dynamic.at(register_key).write_value.int16_value;
+                        } else {
+                            value_to_write = G3_dynamic.at(register_key).sensor->state;
+                        }
+                        data.push_back(static_cast<uint8_t>(value_to_write >> 8));
+                        data.push_back(static_cast<uint8_t>(value_to_write & 0xFF));
+                        ESP_LOGV(TAG, "Value to write: %d", value_to_write);
+                    }
+                    break;
+				case SofarSolar_U_DWORD:
+					{
+						uint32_t value_to_write;
+                        if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
+                            value_to_write = G3_dynamic.at(register_key).default_value.uint32_value;
+                        } else if (G3_dynamic.at(register_key).write_set_value) {
+                            value_to_write = G3_dynamic.at(register_key).write_value.uint32_value;
+                        } else {
+                            value_to_write = G3_dynamic.at(register_key).sensor->state;
+                        }
+                        data.push_back(static_cast<uint8_t>(value_to_write >> 24));
+						data.push_back(static_cast<uint8_t>((value_to_write >> 16) & 0xFF));
+						data.push_back(static_cast<uint8_t>((value_to_write >> 8) & 0xFF));
+                        data.push_back(static_cast<uint8_t>(value_to_write & 0xFF));
+                        ESP_LOGV(TAG, "Value to write: %d", value_to_write);
+                    }
+					break;
+				case SofarSolar_S_DWORD:
+					{
+						int32_t value_to_write;
+                        if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
+                            value_to_write = G3_dynamic.at(register_key).default_value.int32_value;
+                        } else if (G3_dynamic.at(register_key).write_set_value) {
+                            value_to_write = G3_dynamic.at(register_key).write_value.int32_value;
+                        } else {
+                            value_to_write = G3_dynamic.at(register_key).sensor->state;
+                        }
+                        data.push_back(static_cast<uint8_t>(value_to_write >> 24));
+                        data.push_back(static_cast<uint8_t>((value_to_write >> 16) & 0xFF));
+                        data.push_back(static_cast<uint8_t>((value_to_write >> 8) & 0xFF));
+                        data.push_back(static_cast<uint8_t>(value_to_write & 0xFF));
+                        ESP_LOGV(TAG, "Value to write: %d", value_to_write);
+                    }
+                    break;
+                default:
+                    ESP_LOGE(TAG, "Unsupported register type for writing: %d", G3_registers.at(register_key).type);
+                    return; // Exit the function if the register type is unsupported
+            }
 
+			register_write_task task;
+			task.first_register_key = register_key; // Set the register key for the write task
+			task.number_of_registers = (data.size() >> 1); // Set the number of registers to write
+			ESP_LOGVV(TAG, "Number of registers to write: %d", task.number_of_registers);
+			task.data = data; // Set the data to write
+			ESP_LOGVV(TAG, "Data of registers to write: %d", task.data);
+			register_write_queue.push(task); // Add the write task to the queue
 		}
+
+		void SofarSolar_Inverter::write_register(uint8_t register_key) {
+			switch(G3_registers.at(register_key).write_function) {
+				case SINGLE_REGISTER_WRITE:
+					{
+						this->write_single_register(register_key);
+					}
+					break;
+				case DESIRED_GRID_POWER_WRITE:
+					{
+						this->write_desired_grid_power();
+					}
+					break;
+				case BATTERY_CONF_WRITE:
+					{
+						this->write_battery_conf();
+					}
+					break;
+				case BATTERY_ACTIVE_WRITE:
+					{
+						this->write_battery_active();
+					}
+					break;
+				case POWER_WRITE:
+					{
+						this->write_power();
+					}
+					break;
+				case PASSIVE_TIMOUT_WRITE:
+					{
+						this->write_passive_timeout();
+					}
+					break;
+                default:
+                    ESP_LOGE(TAG, "No write function");
+                    return; // Exit the function if the register type is unsupported
+			}
+		}
+
+		void SofarSolar_Inverter::test_new_state(uint16_t value, uint8_t register_key) {
+            ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
+            if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
+                ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
+				if(G3_dynamic.at(register_key).default_value.uint16_t != value) {
+					this->write_register(register_key);
+				}
+                return; // Do not update the state if enforce default value is set
+            } else {
+                return;
+            }
+        }
+
+		void SofarSolar_Inverter::test_new_state(int16_t value, uint8_t register_key) {
+            ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
+            if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
+                ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
+				if(G3_dynamic.at(register_key).default_value.int16_t != value) {
+					this->write_register(register_key);
+				}
+                return; // Do not update the state if enforce default value is set
+            } else {
+                return;
+            }
+        }
+
+		void SofarSolar_Inverter::test_new_state(uint32_t value, uint8_t register_key) {
+            ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
+            if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
+                ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
+				if(G3_dynamic.at(register_key).default_value.uint32_t != value) {
+					this->write_register(register_key);
+				}
+                return; // Do not update the state if enforce default value is set
+            } else {
+                return;
+            }
+        }
+
+		void SofarSolar_Inverter::test_new_state(int32_t value, uint8_t register_key) {
+            ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
+            if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
+                ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
+				if(G3_dynamic.at(register_key).default_value.int32_t != value) {
+					this->write_register(register_key);
+				}
+                return; // Do not update the state if enforce default value is set
+            } else {
+                return;
+            }
+        }
 
 		void SofarSolar_Inverter::switch_command(const std::string &command) {
 			if (command == "battery_charge_only_on") {
@@ -911,7 +1083,9 @@ namespace esphome
 		void SofarSolar_Inverter::set_power_factor_setting_sensor(sensor::Sensor *power_factor_setting_sensor) { G3_dynamic.insert({POWER_FACTOR_SETTING, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(POWER_FACTOR_SETTING).sensor = power_factor_setting_sensor; }
 		void SofarSolar_Inverter::set_active_power_limit_speed_sensor(sensor::Sensor *active_power_limit_speed_sensor) { G3_dynamic.insert({ACTIVE_POWER_LIMIT_SPEED, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).sensor = active_power_limit_speed_sensor; }
 		void SofarSolar_Inverter::set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor) { G3_dynamic.insert({REACTIVE_POWER_RESPONSE_TIME, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).sensor = reactive_power_response_time_sensor; }
-		void SofarSolar_Inverter::set_pcc_voltage_sensor(sensor::Sensor *pcc_voltage_sensor) { G3_dynamic.insert({PCC_VOLTAGE, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(PCC_VOLTAGE).sensor = pcc_voltage_sensor; }
+		void SofarSolar_Inverter::set_svg_fixed_reactive_power_setting_sensor(sensor::Sensor *svg_fixed_reactive_power_setting_sensor) { G3_dynamic.insert({SVG_FIXED_REACTIVE_POWER_SETTING, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(SVG_FIXED_REACTIVE_POWER_SETTING).sensor = svg_fixed_reactive_power_setting_sensor; }
+		void SofarSolar_Inverter::set_pcc_sample_mode_sensor(sensor::Sensor *pcc_sample_mode_sensor) { G3_dynamic.insert({PCC_SAMPLE_MODE, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(PCC_SAMPLE_MODE).sensor = pcc_sample_mode_sensor; }
+		void SofarSolar_Inverter::set_pcc_active_power_sensor(sensor::Sensor *pcc_active_power_sensor) { G3_dynamic.insert({PCC_ACTIVE_POWER, SofarSolar_RegisterDynamic{}}); G3_dynamic.at(PCC_ACTIVE_POWER).sensor = pcc_active_power_sensor; }
 
 		// Set update intervals for sensors
 
@@ -1050,7 +1224,9 @@ namespace esphome
 		void SofarSolar_Inverter::set_power_factor_setting_sensor_update_interval(uint16_t power_factor_setting_sensor_update_interval) { G3_dynamic.at(POWER_FACTOR_SETTING).update_interval = power_factor_setting_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_active_power_limit_speed_sensor_update_interval(uint16_t active_power_limit_speed_sensor_update_interval) { G3_dynamic.at(ACTIVE_POWER_LIMIT_SPEED).update_interval = active_power_limit_speed_sensor_update_interval * 1000; }
 		void SofarSolar_Inverter::set_reactive_power_response_time_sensor_update_interval(uint16_t reactive_power_response_time_sensor_update_interval) { G3_dynamic.at(REACTIVE_POWER_RESPONSE_TIME).update_interval = reactive_power_response_time_sensor_update_interval * 1000; }
-		void SofarSolar_Inverter::set_pcc_voltage_sensor_update_interval(uint16_t pcc_voltage_sensor_update_interval) { G3_dynamic.at(PCC_VOLTAGE).update_interval = pcc_voltage_sensor_update_interval * 1000; }
+		void SofarSolar_inverter::set_svg_fixed_reactive_power_setting_sensor_update_interval(uint16_t svg_fixed_reactive_power_setting_sensor_update_interval) { G3_dynamic.at(SVG_FIXED_REACTIVE_POWER_SETTING).update_interval = svg_fixed_reactive_power_setting_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pcc_sample_mode_sensor_update_interval(uint16_t pcc_sample_mode_sensor_update_interval) { G3_dynamic.at(PCC_SAMPLE_MODE).update_interval = pcc_sample_mode_sensor_update_interval * 1000; }
+		void SofarSolar_Inverter::set_pcc_active_power_sensor_update_interval(uint16_t pcc_active_power_sensor_update_interval) { G3_dynamic.at(PCC_ACTIVE_POWER).update_interval = pcc_active_power_sensor_update_interval * 1000; }
 
 		// Set default values for sensors
 
