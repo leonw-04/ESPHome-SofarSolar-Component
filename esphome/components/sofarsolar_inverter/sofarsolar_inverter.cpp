@@ -126,7 +126,7 @@ namespace esphome
 				if (!((G3_dynamic.at(PASSIVE_TIMEOUT).sensor->state == G3_dynamic.at(PASSIVE_TIMEOUT).default_value.uint16_value) && (G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).sensor->state == G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).default_value.uint16_value))) {
                     ESP_LOGV(TAG, "Updating passive timeout settings. Current passive timeout: %d s, action: %d", G3_dynamic.at(PASSIVE_TIMEOUT).sensor->state, G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).sensor->state);
 					ESP_LOGV(TAG, "New passive timeout: %d s, action: %d", G3_dynamic.at(PASSIVE_TIMEOUT).write_value.uint16_value, G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).write_value.uint16_value);
-					this->write_single_register(); // Write the passive timeout register
+					this->write_passive_timeout(); // Write the passive timeout register
                 }
 			}
 
