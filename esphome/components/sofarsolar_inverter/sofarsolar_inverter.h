@@ -153,8 +153,8 @@
 #define DESIRED_GRID_POWER_WRITE 2
 #define BATTERY_CONF_WRITE 3
 #define BATTERY_ACTIVE_WRITE 4
-#define POWER_WRITE 4
-#define PASSIVE_TIMOUT_WRITE 5
+#define POWER_WRITE 5
+#define PASSIVE_TIMOUT_WRITE 6
 
 #define SofarSolar_U_WORD 0x01
 #define SofarSolar_U_DWORD 0x02
