@@ -229,7 +229,7 @@ namespace esphome
 					uint16_t value = (data[0] << 8) | data[1];
 					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
-					this->test_new_state(new_state, register_read_queue.top().register_key);
+					this->test_new_state(value, register_read_queue.top().register_key);
 					break;
 			}
 			case SofarSolar_S_WORD: {
@@ -240,7 +240,7 @@ namespace esphome
 					int16_t value = (data[0] << 8) | data[1];
 					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
-					this->test_new_state(new_state, register_read_queue.top().register_key);
+					this->test_new_state(value, register_read_queue.top().register_key);
 					break;
 			}
 			case SofarSolar_U_DWORD: {
@@ -251,7 +251,7 @@ namespace esphome
 					uint32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
 					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
-					this->test_new_state(new_state, register_read_queue.top().register_key);
+					this->test_new_state(value, register_read_queue.top().register_key);
 					break;
 			}
 			case SofarSolar_S_DWORD: {
@@ -262,7 +262,7 @@ namespace esphome
 					int32_t value = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
 					float new_state = static_cast<float>(value) * get_power_of_ten(G3_registers.at(register_read_queue.top().register_key).scale);
 					G3_dynamic.at(register_read_queue.top().register_key).sensor->publish_state(new_state);
-					this->test_new_state(new_state, register_read_queue.top().register_key);
+					this->test_new_state(value, register_read_queue.top().register_key);
 					break;
 			}
 			default:
