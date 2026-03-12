@@ -343,7 +343,7 @@ namespace esphome {
             {ACTIVE_POWER_LIMIT_SPEED, SofarSolar_Register{0x110A, 1, SofarSolar_U_WORD, 0, 0, POWER_WRITE}}, // Active Power Limit Speed
             {REACTIVE_POWER_RESPONSE_TIME, SofarSolar_Register{0x110B, 1, SofarSolar_U_WORD, 0, -1, POWER_WRITE}}, // Reactive Power Response Time
             {SVG_FIXED_REACTIVE_POWER_SETTING, SofarSolar_Register{0x110C, 1, SofarSolar_S_WORD, 0, 0, NONE}}, // SVG Fixed Reactive Power Setting
-            {PCC_SAMPLE_MODE, SofarSolar_Register{0x1060, 1, SofarSolar_U_WORD, 0, 0, SINGLE_REGISTER_WRITE}} // SVG Fixed Reactive Power Setting
+            {PCC_SAMPLE_MODE, SofarSolar_Register{0x1060, 1, SofarSolar_U_WORD, 0, 0, SINGLE_REGISTER_WRITE}}, // SVG Fixed Reactive Power Setting
 			{PCC_ACTIVE_POWER, SofarSolar_Register{0x0488, 1, SofarSolar_S_WORD, 2, 1, NONE}} // PCC Active Power
         };
 
