@@ -145,7 +145,8 @@
 #define ACTIVE_POWER_LIMIT_SPEED 167
 #define REACTIVE_POWER_RESPONSE_TIME 168
 #define SVG_FIXED_REACTIVE_POWER_SETTING 169
-#define PCC_SAMPLE_MODE 169
+#define PCC_SAMPLE_MODE 170
+#define PCC_ACTIVE_POWER 171
 
 #define NONE 0
 #define SINGLE_REGISTER_WRITE 1
@@ -343,6 +344,7 @@ namespace esphome {
             {REACTIVE_POWER_RESPONSE_TIME, SofarSolar_Register{0x110B, 1, SofarSolar_U_WORD, 0, -1, POWER_WRITE}}, // Reactive Power Response Time
             {SVG_FIXED_REACTIVE_POWER_SETTING, SofarSolar_Register{0x110C, 1, SofarSolar_S_WORD, 0, 0, NONE}}, // SVG Fixed Reactive Power Setting
             {PCC_SAMPLE_MODE, SofarSolar_Register{0x1060, 1, SofarSolar_U_WORD, 0, 0, SINGLE_REGISTER_WRITE}} // SVG Fixed Reactive Power Setting
+			{PCC_ACTIVE_POWER, SofarSolar_Register{0x0488, 1, SofarSolar_S_WORD, 2, 1, NONE}} // PCC Active Power
         };
 
 		static const std::map<uint8_t, Model_Parameters> model_parameters = {
@@ -399,6 +401,13 @@ namespace esphome {
 			void write_single_register();
 			void write_power();
 			void write_passive_timeout();
+
+			void write_register(uint8_t register_key);
+
+			void test_new_state(uint16_t value, uint8_t register_key);
+			void test_new_state(int16_t value, uint8_t register_key);
+			void test_new_state(uint32_t value, uint8_t register_key);
+			void test_new_state(int32_t value, uint8_t register_key);
 
             void set_model(std::string model) { this->model_ = model; this->set_model_id(model); }
             void set_model_id(std::string model);
@@ -542,7 +551,9 @@ namespace esphome {
 			void set_power_factor_setting_sensor(sensor::Sensor *power_factor_setting_sensor);
 			void set_active_power_limit_speed_sensor(sensor::Sensor *active_power_limit_speed_sensor);
 			void set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor);
+			void set_svg_fixed_reactive_power_setting_sensor(sensor::Sensor *svg_fixed_reactive_power_setting_sensor);
 			void set_pcc_sample_mode_sensor(sensor::Sensor *pcc_sample_mode_sensor);
+			void set_pcc_active_power_sensor(sensor::Sensor *pcc_active_power_sensor);
 
 
 
@@ -682,7 +693,9 @@ namespace esphome {
             void set_power_factor_setting_sensor_update_interval(uint16_t power_factor_setting_sensor_update_interval);
 			void set_active_power_limit_speed_sensor_update_interval(uint16_t active_power_limit_speed_sensor_update_interval);
             void set_reactive_power_response_time_sensor_update_interval(uint16_t reactive_power_response_time_sensor_update_interval);
+			void set_svg_fixed_reactive_power_setting_sensor_update_interval(uint16_t svg_fixed_reactive_power_setting_sensor_update_interval);
 			void set_pcc_sample_mode_sensor_update_interval(uint16_t pcc_sample_mode_sensor_update_interval);
+			void set_pcc_active_power_sensor_update_interval(uint16_t pcc_active_power_sensor_update_interval);
 
 
 
