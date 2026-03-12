@@ -59,7 +59,7 @@ namespace esphome
 		}
 
 		void SofarSolar_Inverter::loop() {
-			if (millis() - zero_export_last_update > 1000 && this->zero_export_) {
+			if (millis() - zero_export_last_update > 1000 && this->zero_export_ ) {
 				zero_export_last_update = millis();
 				ESP_LOGV(TAG, "Updating zero export status");
 				// Read the current zero export status
@@ -179,14 +179,14 @@ namespace esphome
 			ESP_LOGV(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
 			if(current_reading) {
 				parse_read_response(data);
-				time_begin_modbus_operation = 0; // Reset the start time of the Modbus operation
 				G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
 				current_reading = false; // Reset the flag for read operation
+				time_begin_modbus_operation = 0; // Reset the start time of the Modbus operation
 				register_read_queue.pop(); // Remove the top task from the read queue
 			} else if (current_writing) {
 				parse_write_response(data);
-				time_begin_modbus_operation = 0; // Reset the start time of the Modbus operation
 				current_writing = false; // Reset the flag for read operation
+				time_begin_modbus_operation = 0; // Reset the start time of the Modbus operation
 				register_write_queue.pop(); // Remove the top task from the read queue
 			} else {
 				ESP_LOGE(TAG, "Received Modbus data while not in a read or write operation");
@@ -867,6 +867,7 @@ namespace esphome
                 ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.uint16_value != value) {
 					this->write_register(register_key);
+					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
                 return; // Do not update the state if enforce default value is set
             } else {
@@ -880,6 +881,7 @@ namespace esphome
                 ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.int16_value != value) {
 					this->write_register(register_key);
+					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
                 return; // Do not update the state if enforce default value is set
             } else {
@@ -893,6 +895,7 @@ namespace esphome
                 ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.uint32_value != value) {
 					this->write_register(register_key);
+					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
                 return; // Do not update the state if enforce default value is set
             } else {
@@ -906,6 +909,7 @@ namespace esphome
                 ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.int32_value != value) {
 					this->write_register(register_key);
+					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
                 return; // Do not update the state if enforce default value is set
             } else {
