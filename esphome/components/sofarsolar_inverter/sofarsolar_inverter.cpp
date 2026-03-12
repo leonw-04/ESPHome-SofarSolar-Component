@@ -179,13 +179,13 @@ namespace esphome
 			ESP_LOGV(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
 			if(current_reading) {
 				parse_read_response(data);
-				time_begin_modbus_operation = millis(); // Reset the start time of the Modbus operation
+				time_begin_modbus_operation = 0; // Reset the start time of the Modbus operation
 				G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
 				current_reading = false; // Reset the flag for read operation
 				register_read_queue.pop(); // Remove the top task from the read queue
 			} else if (current_writing) {
 				parse_write_response(data);
-				time_begin_modbus_operation = millis(); // Reset the start time of the Modbus operation
+				time_begin_modbus_operation = 0; // Reset the start time of the Modbus operation
 				current_writing = false; // Reset the flag for read operation
 				register_write_queue.pop(); // Remove the top task from the read queue
 			} else {
@@ -332,6 +332,7 @@ namespace esphome
 			std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x03, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(register_count >> 8), static_cast<uint8_t>(register_count & 0xFF)};
 			ESP_LOGV(TAG, "Reading Modbus registers: %s", vector_to_string(frame).c_str());
 			this->send_raw(frame);
+			time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
 		}
 
 		void SofarSolar_Inverter::write_modbus_register(uint16_t start_address, uint16_t register_count, const std::vector<uint8_t> &data) {
@@ -340,6 +341,8 @@ namespace esphome
 			frame.insert(frame.end(), data.begin(), data.end());
 			ESP_LOGV(TAG, "Writing Modbus registers: %s", vector_to_string(frame).c_str());
 			this->send_raw(frame);
+			time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
+
 		}
 
 		void SofarSolar_Inverter::write_desired_grid_power() {
