@@ -866,6 +866,7 @@ namespace esphome
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
                 ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.uint16_value != value) {
+					current_writing = true;
 					this->write_register(register_key);
 					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
@@ -880,6 +881,7 @@ namespace esphome
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
                 ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.int16_value != value) {
+					current_writing = true;
 					this->write_register(register_key);
 					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
@@ -894,6 +896,7 @@ namespace esphome
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
                 ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.uint32_value != value) {
+					current_writing = true;
 					this->write_register(register_key);
 					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
@@ -908,6 +911,7 @@ namespace esphome
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
                 ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.int32_value != value) {
+					current_writing = true;
 					this->write_register(register_key);
 					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
