@@ -864,8 +864,8 @@ namespace esphome
 		void SofarSolar_Inverter::test_new_state(uint16_t value, uint8_t register_key) {
             ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
-                ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.uint16_value != value) {
+                	ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 					this->write_register(register_key);
 					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
@@ -878,8 +878,8 @@ namespace esphome
 		void SofarSolar_Inverter::test_new_state(int16_t value, uint8_t register_key) {
             ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
-                ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.int16_value != value) {
+                	ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 					this->write_register(register_key);
 					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
@@ -892,8 +892,8 @@ namespace esphome
 		void SofarSolar_Inverter::test_new_state(uint32_t value, uint8_t register_key) {
             ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
-                ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.uint32_value != value) {
+                	ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 					this->write_register(register_key);
 					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
@@ -906,8 +906,8 @@ namespace esphome
 		void SofarSolar_Inverter::test_new_state(int32_t value, uint8_t register_key) {
             ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
-                ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 				if(G3_dynamic.at(register_key).default_value.int32_value != value) {
+                	ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
 					this->write_register(register_key);
 					G3_dynamic.at(register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 				}
