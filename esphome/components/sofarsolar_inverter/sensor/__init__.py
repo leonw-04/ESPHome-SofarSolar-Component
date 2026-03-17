@@ -1510,7 +1510,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
 }
