@@ -722,6 +722,7 @@ namespace esphome {
 			void set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value);
 			void set_active_power_export_limit_sensor_default_value(float default_value);
 			void set_active_power_import_limit_sensor_default_value(float default_value);
+        	void set_active_power_limit_speed_sensor_default_value(int64_t default_value);
 			void set_pcc_sample_mode_sensor_default_value(int64_t default_value);
 
 
@@ -749,6 +750,7 @@ namespace esphome {
 			void set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value);
 			void set_active_power_export_limit_sensor_enforce_default_value(bool enforce_default_value);
 			void set_active_power_import_limit_sensor_enforce_default_value(bool enforce_default_value);
+        	void set_active_power_limit_speed_sensor_enforce_default_value(bool enforce_default_value);
 			void set_pcc_sample_mode_sensor_enforce_default_value(bool enforce_default_value);
 
 
