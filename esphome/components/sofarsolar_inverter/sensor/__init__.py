@@ -292,7 +292,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="5s"): cv.positive_time_period_seconds,
         }
     ),
     CONF_PV_VOLTAGE_2: sensor.sensor_schema(
@@ -322,7 +322,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="5s"): cv.positive_time_period_seconds,
         }
     ),
     CONF_PV_POWER_TOTAL: sensor.sensor_schema(
@@ -332,7 +332,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
     CONF_BATTERY_VOLTAGE_1: sensor.sensor_schema(
@@ -1434,7 +1434,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="5s"): cv.positive_time_period_seconds,
             cv.Optional(DEFAULT_VALUE, default=100): cv.float_range(0, 100),
             cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
@@ -1446,7 +1446,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="5s"): cv.positive_time_period_seconds,
             cv.Optional(DEFAULT_VALUE, default=100): cv.float_range(0, 100),
             cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
