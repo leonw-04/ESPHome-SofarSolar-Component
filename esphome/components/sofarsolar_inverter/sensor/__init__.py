@@ -1479,6 +1479,8 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
+            cv.Optional(DEFAULT_VALUE, default=100): cv.float_range(0, 100),
+            cv.Optional(ENFORCE_DEFAULT_VALUE, default=False): cv.boolean,
         }
     ),
     CONF_REACTIVE_POWER_RESPONSE_TIME: sensor.sensor_schema(
@@ -1510,7 +1512,7 @@ TYPES = {
         state_class=STATE_CLASS_MEASUREMENT,
     ).extend(
         {
-            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
         }
     ),
 }
