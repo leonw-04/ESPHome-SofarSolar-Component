@@ -153,8 +153,8 @@
 #define DESIRED_GRID_POWER_WRITE 2
 #define BATTERY_CONF_WRITE 3
 #define BATTERY_ACTIVE_WRITE 4
-#define POWER_WRITE 4
-#define PASSIVE_TIMOUT_WRITE 5
+#define POWER_WRITE 5
+#define PASSIVE_TIMOUT_WRITE 6
 
 #define SofarSolar_U_WORD 0x01
 #define SofarSolar_U_DWORD 0x02
@@ -343,7 +343,7 @@ namespace esphome {
             {ACTIVE_POWER_LIMIT_SPEED, SofarSolar_Register{0x110A, 1, SofarSolar_U_WORD, 0, 0, POWER_WRITE}}, // Active Power Limit Speed
             {REACTIVE_POWER_RESPONSE_TIME, SofarSolar_Register{0x110B, 1, SofarSolar_U_WORD, 0, -1, POWER_WRITE}}, // Reactive Power Response Time
             {SVG_FIXED_REACTIVE_POWER_SETTING, SofarSolar_Register{0x110C, 1, SofarSolar_S_WORD, 0, 0, NONE}}, // SVG Fixed Reactive Power Setting
-            {PCC_SAMPLE_MODE, SofarSolar_Register{0x1060, 1, SofarSolar_U_WORD, 0, 0, SINGLE_REGISTER_WRITE}} // SVG Fixed Reactive Power Setting
+            {PCC_SAMPLE_MODE, SofarSolar_Register{0x1060, 1, SofarSolar_U_WORD, 0, 0, SINGLE_REGISTER_WRITE}}, // SVG Fixed Reactive Power Setting
 			{PCC_ACTIVE_POWER, SofarSolar_Register{0x0488, 1, SofarSolar_S_WORD, 2, 1, NONE}} // PCC Active Power
         };
 
@@ -398,7 +398,7 @@ namespace esphome {
 			void write_desired_grid_power();
 			void write_battery_conf();
 			void write_battery_active();
-			void write_single_register();
+			void write_single_register(uint8_t register_key);
 			void write_power();
 			void write_passive_timeout();
 
@@ -722,6 +722,7 @@ namespace esphome {
 			void set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value);
 			void set_active_power_export_limit_sensor_default_value(float default_value);
 			void set_active_power_import_limit_sensor_default_value(float default_value);
+        	void set_active_power_limit_speed_sensor_default_value(float default_value);
 			void set_pcc_sample_mode_sensor_default_value(int64_t default_value);
 
 
@@ -749,6 +750,7 @@ namespace esphome {
 			void set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value);
 			void set_active_power_export_limit_sensor_enforce_default_value(bool enforce_default_value);
 			void set_active_power_import_limit_sensor_enforce_default_value(bool enforce_default_value);
+        	void set_active_power_limit_speed_sensor_enforce_default_value(bool enforce_default_value);
 			void set_pcc_sample_mode_sensor_enforce_default_value(bool enforce_default_value);
 
 
