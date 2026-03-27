@@ -24,7 +24,7 @@ namespace esphome
 		struct register_read_task {
 			uint8_t register_key; // Pointer to the register to read
 			bool operator<(const register_read_task &other) const {
-				return G3_registers.at(this->register_key).priority > G3_registers.at(other.register_key).priority;
+				return G3_registers.at(this->register_key).priority < G3_registers.at(other.register_key).priority;
 			}
 		};
 
@@ -33,7 +33,7 @@ namespace esphome
 			uint8_t number_of_registers; // Number of registers to write
 			std::vector<uint8_t> data; // Data to write to the register
 			bool operator<(const register_write_task &other) const {
-				return G3_registers.at(this->first_register_key).priority > G3_registers.at(other.first_register_key).priority;
+				return G3_registers.at(this->first_register_key).priority < G3_registers.at(other.first_register_key).priority;
 			}
 		};
 
