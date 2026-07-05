@@ -66,9 +66,13 @@ namespace esphome
 				G3_dynamic.at(POWER_CONTROL).write_value.uint16_value = 0b00001;
 				G3_dynamic.at(POWER_CONTROL).write_set_value = true;
 
-				ESP_LOGV(TAG, "Current total active power inverter: %f W + %f W / %d W", G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state, this->power_sensor_->state, model_parameters.at(this->model_id_).max_output_power_w);
+				{
+					float total_active = this->get_sensor_state_or_default(TOTAL_ACTIVE_POWER_INVERTER, 0.0f);
+					float power_sensor_val = this->power_sensor_ ? this->power_sensor_->state : 0.0f;
+					ESP_LOGV(TAG, "Current total active power inverter: %f W + %f W / %d W", total_active, power_sensor_val, model_parameters.at(this->model_id_).max_output_power_w);
+				}
 				ESP_LOGVV(TAG, "Model id %d, %d W", this->model_id_, model_parameters.at(this->model_id_).max_output_power_w);
-				int needed_power = G3_dynamic.at(TOTAL_ACTIVE_POWER_INVERTER).sensor->state + this->power_sensor_->state + 10; // Add a small buffer to ensure that we don't draw power from the grid
+				int needed_power = static_cast<int>(this->get_sensor_state_or_default(TOTAL_ACTIVE_POWER_INVERTER, 0.0f) + (this->power_sensor_ ? this->power_sensor_->state : 0.0f) + 10); // Add a small buffer to ensure that we don't draw power from the grid
 				int export_percentage = needed_power * 1000 / model_parameters.at(this->model_id_).max_output_power_w;
 				if (export_percentage < 0) {
 					export_percentage = 0;
@@ -79,7 +83,7 @@ namespace esphome
 				G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_set_value = true;
 				ESP_LOGV(TAG, "Setting active power export limit to %d (percentage: %f%%)", G3_dynamic.at(ACTIVE_POWER_EXPORT_LIMIT).write_value.uint16_value, (float) export_percentage / 10);
 
-				int charge_power = G3_dynamic.at(PV_POWER_1).sensor->state + G3_dynamic.at(PV_POWER_2).sensor->state - needed_power; // Get the current charge power (negative value means charging)
+				int charge_power = static_cast<int>(this->get_sensor_state_or_default(PV_POWER_1, 0.0f) + this->get_sensor_state_or_default(PV_POWER_2, 0.0f) - needed_power); // Get the current charge power (negative value means charging)
 				int import_percentage = charge_power * 1000 / model_parameters.at(this->model_id_).max_output_power_w;
 				if (import_percentage < 0) {
 					import_percentage = 0;
@@ -124,7 +128,7 @@ namespace esphome
 				}
 
 				if (!((G3_dynamic.at(PASSIVE_TIMEOUT).sensor->state == G3_dynamic.at(PASSIVE_TIMEOUT).default_value.uint16_value) && (G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).sensor->state == G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).default_value.uint16_value))) {
-                    ESP_LOGV(TAG, "Updating passive timeout settings. Current passive timeout: %d s, action: %d", G3_dynamic.at(PASSIVE_TIMEOUT).sensor->state, G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).sensor->state);
+                    ESP_LOGV(TAG, "Updating passive timeout settings. Current passive timeout: %d s, action: %d", (int)this->get_sensor_state_or_default(PASSIVE_TIMEOUT, 0.0f), (int)this->get_sensor_state_or_default(PASSIVE_TIMEOUT_ACTION, 0.0f));
 					ESP_LOGV(TAG, "New passive timeout: %d s, action: %d", G3_dynamic.at(PASSIVE_TIMEOUT).write_value.uint16_value, G3_dynamic.at(PASSIVE_TIMEOUT_ACTION).write_value.uint16_value);
 					this->write_passive_timeout(); // Write the passive timeout register
                 }
@@ -275,13 +279,17 @@ namespace esphome
 			ESP_LOGVV(TAG, "Parsing write response: %s", vector_to_string(data).c_str());
 			if (data.size() != 4) {
 				ESP_LOGE(TAG, "Invalid write response size: %d", data.size());
+				return; // Cannot parse an invalid response
 			}
-			if (G3_registers.at(register_write_queue.top().first_register_key).start_address != ((data[0] << 8) | data[1])) {
-				ESP_LOGE(TAG, "Invalid response address: expected %04X, got %02X%02X", G3_registers.at(register_write_queue.top().first_register_key).start_address, data[2], data[3]);
+			uint16_t resp_address = (data[0] << 8) | data[1];
+			uint16_t resp_quantity = (data[2] << 8) | data[3];
+			uint16_t expected_address = G3_registers.at(register_write_queue.top().first_register_key).start_address;
+			if (expected_address != resp_address) {
+				ESP_LOGE(TAG, "Invalid response address: expected %04X, got %02X%02X", expected_address, data[0], data[1]);
 				return; // Invalid response address
 			}
-			if (register_write_queue.top().number_of_registers != ((data[2] << 8) | data[3])) {
-				ESP_LOGE(TAG, "Invalid response quantity: expected %d, got %02X", register_write_queue.top().number_of_registers, ((data[2] << 8) | data[3]));
+			if (register_write_queue.top().number_of_registers != resp_quantity) {
+				ESP_LOGE(TAG, "Invalid response quantity: expected %d, got %d", register_write_queue.top().number_of_registers, resp_quantity);
 				return; // Invalid response quantity
 			}
 		};
@@ -325,6 +333,14 @@ namespace esphome
 			//		", enforce_default_value = " + TRUEFALSE(G3_dynamic.at(reg.first).enforce_default_value) + "\n";
 			//}
 			//ESP_LOGCONFIG(TAG, "%s", log_str.c_str());
+		}
+
+		float SofarSolar_Inverter::get_sensor_state_or_default(uint8_t register_key, float def) {
+			auto it = this->G3_dynamic.find(register_key);
+			if (it != this->G3_dynamic.end() && it->second.sensor) {
+				return it->second.sensor->state;
+			}
+			return def;
 		}
 
 		void SofarSolar_Inverter::read_modbus_register(uint16_t start_address, uint16_t register_count) {

@@ -384,16 +384,22 @@ namespace esphome {
 
 			static float get_power_of_ten(int exponent) {
                 switch (exponent) {
-					case -3: return 0.001f;  // 10^-4
+                    case -3: return 0.001f;  // 10^-3
                     case -2: return 0.01f;     // 10^-2
                     case -1: return 0.1f;      // 10^-1
                     case 0: return 1.0f;       // 10^0
                     case 1: return 10.0f;      // 10^1
                     case 2: return 100.0f;     // 10^2
-					case 3: return 1000.0f;    // 10^3
+                    case 3: return 1000.0f;    // 10^3
                     default: return 1.0f;       // Default to no scaling for other cases
                 }
             }
+
+			/**
+			 * Safely read a sensor state from the dynamic register map. Returns `def` if the sensor
+			 * pointer is not set or the register is not present.
+			 */
+			float get_sensor_state_or_default(uint8_t register_key, float def = 0.0f);
 
 			void write_desired_grid_power();
 			void write_battery_conf();
