@@ -4,9 +4,6 @@ import esphome.config_validation as cv
 
 from .. import CONF_SOFARSOLAR_INVERTER_ID, SOFARSOLAR_INVERTER_COMPONENT_SCHEMA
 
-from esphome.const import CONF_ID, DEVICE_CLASS_POWER, DEVICE_CLASS_ENERGY, DEVICE_CLASS_ENERGY_STORAGE, \
-    DEVICE_CLASS_VOLTAGE, DEVICE_CLASS_CURRENT
-
 from esphome.const import (
     DEVICE_CLASS_POWER,
     DEVICE_CLASS_ENERGY,
@@ -16,6 +13,7 @@ from esphome.const import (
     DEVICE_CLASS_BATTERY,
     DEVICE_CLASS_BATTERY_CHARGING,
     DEVICE_CLASS_FREQUENCY,
+    DEVICE_CLASS_TEMPERATURE,
     DEVICE_CLASS_EMPTY,
     STATE_CLASS_MEASUREMENT,
     STATE_CLASS_TOTAL_INCREASING,
@@ -26,6 +24,9 @@ from esphome.const import (
     UNIT_WATT_HOURS,
     UNIT_KILOWATT_HOURS,
     UNIT_PERCENT,
+    UNIT_SECOND,
+    UNIT_CELSIUS,
+
     UNIT_EMPTY
 )
 
@@ -47,6 +48,71 @@ CONF_PV_VOLTAGE_2 = "pv_voltage_2"
 CONF_PV_CURRENT_2 = "pv_current_2"
 CONF_PV_POWER_2 = "pv_power_2"
 CONF_PV_POWER_TOTAL = "pv_power_total"
+
+CONF_BATTERY_VOLTAGE_1 = "battery_voltage_1"
+CONF_BATTERY_CURRENT_1 = "battery_current_1"
+CONF_BATTERY_POWER_1 = "battery_power_1"
+CONF_BATTERY_TEMPERATURE_ENV_1 = "battery_temperature_environment_1"
+CONF_BATTERY_STATE_OF_CHARGE_1 = "battery_state_of_charge_1"
+CONF_BATTERY_STATE_OF_HEALTH_1 = "battery_state_of_health_1"
+CONF_BATTERY_CHARGE_CYCLE_1 = "battery_charge_cycle_1"
+
+CONF_BATTERY_VOLTAGE_2 = "battery_voltage_2"
+CONF_BATTERY_CURRENT_2 = "battery_current_2"
+CONF_BATTERY_POWER_2 = "battery_power_2"
+CONF_BATTERY_TEMPERATURE_ENV_2 = "battery_temperature_environment_2"
+CONF_BATTERY_STATE_OF_CHARGE_2 = "battery_state_of_charge_2"
+CONF_BATTERY_STATE_OF_HEALTH_2 = "battery_state_of_health_2"
+CONF_BATTERY_CHARGE_CYCLE_2 = "battery_charge_cycle_2"
+
+CONF_BATTERY_VOLTAGE_3 = "battery_voltage_3"
+CONF_BATTERY_CURRENT_3 = "battery_current_3"
+CONF_BATTERY_POWER_3 = "battery_power_3"
+CONF_BATTERY_TEMPERATURE_ENV_3 = "battery_temperature_environment_3"
+CONF_BATTERY_STATE_OF_CHARGE_3 = "battery_state_of_charge_3"
+CONF_BATTERY_STATE_OF_HEALTH_3 = "battery_state_of_health_3"
+CONF_BATTERY_CHARGE_CYCLE_3 = "battery_charge_cycle_3"
+
+CONF_BATTERY_VOLTAGE_4 = "battery_voltage_4"
+CONF_BATTERY_CURRENT_4 = "battery_current_4"
+CONF_BATTERY_POWER_4 = "battery_power_4"
+CONF_BATTERY_TEMPERATURE_ENV_4 = "battery_temperature_environment_4"
+CONF_BATTERY_STATE_OF_CHARGE_4 = "battery_state_of_charge_4"
+CONF_BATTERY_STATE_OF_HEALTH_4 = "battery_state_of_health_4"
+CONF_BATTERY_CHARGE_CYCLE_4 = "battery_charge_cycle_4"
+
+CONF_BATTERY_VOLTAGE_5 = "battery_voltage_5"
+CONF_BATTERY_CURRENT_5 = "battery_current_5"
+CONF_BATTERY_POWER_5 = "battery_power_5"
+CONF_BATTERY_TEMPERATURE_ENV_5 = "battery_temperature_environment_5"
+CONF_BATTERY_STATE_OF_CHARGE_5 = "battery_state_of_charge_5"
+CONF_BATTERY_STATE_OF_HEALTH_5 = "battery_state_of_health_5"
+CONF_BATTERY_CHARGE_CYCLE_5 = "battery_charge_cycle_5"
+
+CONF_BATTERY_VOLTAGE_6 = "battery_voltage_6"
+CONF_BATTERY_CURRENT_6 = "battery_current_6"
+CONF_BATTERY_POWER_6 = "battery_power_6"
+CONF_BATTERY_TEMPERATURE_ENV_6 = "battery_temperature_environment_6"
+CONF_BATTERY_STATE_OF_CHARGE_6 = "battery_state_of_charge_6"
+CONF_BATTERY_STATE_OF_HEALTH_6 = "battery_state_of_health_6"
+CONF_BATTERY_CHARGE_CYCLE_6 = "battery_charge_cycle_6"
+
+CONF_BATTERY_VOLTAGE_7 = "battery_voltage_7"
+CONF_BATTERY_CURRENT_7 = "battery_current_7"
+CONF_BATTERY_POWER_7 = "battery_power_7"
+CONF_BATTERY_TEMPERATURE_ENV_7 = "battery_temperature_environment_7"
+CONF_BATTERY_STATE_OF_CHARGE_7 = "battery_state_of_charge_7"
+CONF_BATTERY_STATE_OF_HEALTH_7 = "battery_state_of_health_7"
+CONF_BATTERY_CHARGE_CYCLE_7 = "battery_charge_cycle_7"
+
+CONF_BATTERY_VOLTAGE_8 = "battery_voltage_8"
+CONF_BATTERY_CURRENT_8 = "battery_current_8"
+CONF_BATTERY_POWER_8 = "battery_power_8"
+CONF_BATTERY_TEMPERATURE_ENV_8 = "battery_temperature_environment_8"
+CONF_BATTERY_STATE_OF_CHARGE_8 = "battery_state_of_charge_8"
+CONF_BATTERY_STATE_OF_HEALTH_8 = "battery_state_of_health_8"
+CONF_BATTERY_CHARGE_CYCLE_8 = "battery_charge_cycle_8"
+
 CONF_BATTERY_POWER_TOTAL = "battery_power_total"
 CONF_BATTERY_STATE_OF_CHARGE_TOTAL = "battery_state_of_charge_total"
 CONF_DESIRED_GRID_POWER = "desired_grid_power"
@@ -92,6 +158,14 @@ CONF_OFF_GRID_CURRENT_PHASE_T = "off_grid_current_phase_t"
 CONF_OFF_GRID_POWER_PHASE_T = "off_grid_power_phase_t"
 CONF_BATTERY_ACTIVE_CONTROL = "battery_active_control"
 CONF_BATTERY_ACTIVE_ONESHOT = "battery_active_oneshot"
+CONF_POWER_CONTROL = "power_control"
+CONF_ACTIVE_POWER_EXPORT_LIMIT = "active_power_export_limit"
+CONF_ACTIVE_POWER_IMPORT_LIMIT = "active_power_import_limit"
+CONF_REACTIVE_POWER_SETTING = "reactive_power_setting"
+CONF_POWER_FACTOR_SETTING = "power_factor_setting"
+CONF_ACTIVE_POWER_LIMIT_SPEED = "active_power_limit_speed"
+CONF_REACTIVE_POWER_RESPONSE_TIME = "reactive_power_response_time"
+
 UPDATE_INTERVAL = "update_interval"
 DEFAULT_VALUE = "default_value"
 ENFORCE_DEFAULT_VALUE = "enforce_default_value"
@@ -257,6 +331,576 @@ TYPES = {
             cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
         }
     ),
+    CONF_BATTERY_VOLTAGE_1: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CURRENT_1: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_POWER_1: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_TEMPERATURE_ENV_1: sensor.sensor_schema(
+        unit_of_measurement=UNIT_CELSIUS,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_TEMPERATURE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_CHARGE_1: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_HEALTH_1: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CHARGE_CYCLE_1: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+
+    CONF_BATTERY_VOLTAGE_2: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CURRENT_2: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_POWER_2: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_TEMPERATURE_ENV_2: sensor.sensor_schema(
+        unit_of_measurement=UNIT_CELSIUS,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_TEMPERATURE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_CHARGE_2: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_HEALTH_2: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CHARGE_CYCLE_2: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+
+    CONF_BATTERY_VOLTAGE_3: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CURRENT_3: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_POWER_3: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_TEMPERATURE_ENV_3: sensor.sensor_schema(
+        unit_of_measurement=UNIT_CELSIUS,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_TEMPERATURE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_CHARGE_3: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_HEALTH_3: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CHARGE_CYCLE_3: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+
+    CONF_BATTERY_VOLTAGE_4: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CURRENT_4: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_POWER_4: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_TEMPERATURE_ENV_4: sensor.sensor_schema(
+        unit_of_measurement=UNIT_CELSIUS,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_TEMPERATURE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_CHARGE_4: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_HEALTH_4: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CHARGE_CYCLE_4: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+
+
+    CONF_BATTERY_VOLTAGE_5: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CURRENT_5: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_POWER_5: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_TEMPERATURE_ENV_5: sensor.sensor_schema(
+        unit_of_measurement=UNIT_CELSIUS,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_TEMPERATURE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_CHARGE_5: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_HEALTH_5: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CHARGE_CYCLE_5: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+
+    CONF_BATTERY_VOLTAGE_6: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CURRENT_6: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_POWER_6: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_TEMPERATURE_ENV_6: sensor.sensor_schema(
+        unit_of_measurement=UNIT_CELSIUS,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_TEMPERATURE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_CHARGE_6: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_HEALTH_6: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CHARGE_CYCLE_6: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+
+    CONF_BATTERY_VOLTAGE_7: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CURRENT_7: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_POWER_7: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_TEMPERATURE_ENV_7: sensor.sensor_schema(
+        unit_of_measurement=UNIT_CELSIUS,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_TEMPERATURE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_CHARGE_7: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_HEALTH_7: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CHARGE_CYCLE_7: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+
+    CONF_BATTERY_VOLTAGE_8: sensor.sensor_schema(
+        unit_of_measurement=UNIT_VOLT,
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_VOLTAGE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CURRENT_8: sensor.sensor_schema(
+        unit_of_measurement=UNIT_AMPERE,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_CURRENT,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_POWER_8: sensor.sensor_schema(
+        unit_of_measurement=UNIT_WATT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_TEMPERATURE_ENV_8: sensor.sensor_schema(
+        unit_of_measurement=UNIT_CELSIUS,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_TEMPERATURE,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_CHARGE_8: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="10s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_STATE_OF_HEALTH_8: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="60s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_BATTERY_CHARGE_CYCLE_8: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_BATTERY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+
+
     CONF_BATTERY_POWER_TOTAL: sensor.sensor_schema(
         unit_of_measurement=UNIT_WATT,
         accuracy_decimals=0,
@@ -470,7 +1114,7 @@ TYPES = {
         }
     ),
     CONF_BATTERY_CONF_CAPACITY: sensor.sensor_schema(
-        unit_of_measurement=UNIT_EMPTY,
+        unit_of_measurement="Ah",
         accuracy_decimals=0,
         device_class=DEVICE_CLASS_EMPTY,
         state_class=STATE_CLASS_MEASUREMENT,
@@ -743,6 +1387,76 @@ TYPES = {
     ).extend(
         {
             cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_POWER_CONTROL: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_EMPTY,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="300s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_ACTIVE_POWER_EXPORT_LIMIT: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_ACTIVE_POWER_IMPORT_LIMIT: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="1s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_REACTIVE_POWER_SETTING: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_POWER_FACTOR_SETTING: sensor.sensor_schema(
+        unit_of_measurement=UNIT_EMPTY,
+        accuracy_decimals=2,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_ACTIVE_POWER_LIMIT_SPEED: sensor.sensor_schema(
+        unit_of_measurement=UNIT_PERCENT,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
+        }
+    ),
+    CONF_REACTIVE_POWER_RESPONSE_TIME: sensor.sensor_schema(
+        unit_of_measurement=UNIT_SECOND,
+        accuracy_decimals=0,
+        device_class=DEVICE_CLASS_POWER,
+        state_class=STATE_CLASS_MEASUREMENT,
+    ).extend(
+        {
+            cv.Optional(UPDATE_INTERVAL, default="30s"): cv.positive_time_period_seconds,
         }
     ),
 }

@@ -3,6 +3,9 @@
 #include "vector"
 #include "map"
 #include "esphome/components/sensor/sensor.h"
+#include "esphome/components/switch/switch.h"
+#include "esphome/components/button/button.h"
+#include "esphome/components/text_sensor/text_sensor.h"
 #include "esphome/components/modbus/modbus.h"
 #include "esphome/core/component.h"
 
@@ -22,62 +25,138 @@
 #define PV_CURRENT_2 14
 #define PV_POWER_2 15
 #define PV_POWER_TOTAL 16
-#define BATTERY_POWER_TOTAL 17
-#define BATTERY_STATE_OF_CHARGE_TOTAL 18
-#define DESIRED_GRID_POWER 19
-#define MINIMUM_BATTERY_POWER 20
-#define MAXIMUM_BATTERY_POWER 21
-#define ENERGY_STORAGE_MODE 22
-#define BATTERY_CONF_ID 23
-#define BATTERY_CONF_ADDRESS 24
-#define BATTERY_CONF_PROTOCOL 25
-#define BATTERY_CONF_VOLTAGE_NOMINAL 26
-#define BATTERY_CONF_VOLTAGE_OVER 27
-#define BATTERY_CONF_VOLTAGE_CHARGE 28
-#define BATTERY_CONF_VOLTAGE_LACK 29
-#define BATTERY_CONF_VOLTAGE_DISCHARGE_STOP 30
-#define BATTERY_CONF_CURRENT_CHARGE_LIMIT 31
-#define BATTERY_CONF_CURRENT_DISCHARGE_LIMIT 32
-#define BATTERY_CONF_DEPTH_OF_DISCHARGE 33
-#define BATTERY_CONF_END_OF_DISCHARGE 34
-#define BATTERY_CONF_CAPACITY 35
-#define BATTERY_CONF_CELL_TYPE 36
-#define BATTERY_CONF_EPS_BUFFER 37
-#define BATTERY_CONF_CONTROL 38
-#define GRID_FREQUENCY 39
-#define GRID_VOLTAGE_PHASE_R 40
-#define GRID_CURRENT_PHASE_R 41
-#define GRID_POWER_PHASE_R 42
-#define GRID_VOLTAGE_PHASE_S 43
-#define GRID_CURRENT_PHASE_S 44
-#define GRID_POWER_PHASE_S 45
-#define GRID_VOLTAGE_PHASE_T 46
-#define GRID_CURRENT_PHASE_T 47
-#define GRID_POWER_PHASE_T 48
-#define OFF_GRID_POWER_TOTAL 49
-#define OFF_GRID_FREQUENCY 50
-#define OFF_GRID_VOLTAGE_PHASE_R 51
-#define OFF_GRID_CURRENT_PHASE_R 52
-#define OFF_GRID_POWER_PHASE_R 53
-#define OFF_GRID_VOLTAGE_PHASE_S 54
-#define OFF_GRID_CURRENT_PHASE_S 55
-#define OFF_GRID_POWER_PHASE_S 56
-#define OFF_GRID_VOLTAGE_PHASE_T 57
-#define OFF_GRID_CURRENT_PHASE_T 58
-#define OFF_GRID_POWER_PHASE_T 59
-#define BATTERY_ACTIVE_CONTROL 60
-#define BATTERY_ACTIVE_ONESHOT 61
+
+#define BATTERY_VOLTAGE_1 17
+#define BATTERY_CURRENT_1 18
+#define BATTERY_POWER_1 19
+#define BATTERY_TEMPERATUR_ENV_1 20
+#define BATTERY_STATE_OF_CHARGE_1 21
+#define BATTERY_STATE_OF_HEALTH_1 22
+#define BATTERY_CHARGE_CYCLE_1 23
+
+#define BATTERY_VOLTAGE_2 24
+#define BATTERY_CURRENT_2 25
+#define BATTERY_POWER_2 26
+#define BATTERY_TEMPERATUR_ENV_2 27
+#define BATTERY_STATE_OF_CHARGE_2 28
+#define BATTERY_STATE_OF_HEALTH_2 29
+#define BATTERY_CHARGE_CYCLE_2 30
+
+#define BATTERY_VOLTAGE_3 31
+#define BATTERY_CURRENT_3 32
+#define BATTERY_POWER_3 33
+#define BATTERY_TEMPERATUR_ENV_3 34
+#define BATTERY_STATE_OF_CHARGE_3 35
+#define BATTERY_STATE_OF_HEALTH_3 36
+#define BATTERY_CHARGE_CYCLE_3 37
+
+#define BATTERY_VOLTAGE_4 38
+#define BATTERY_CURRENT_4 39
+#define BATTERY_POWER_4 40
+#define BATTERY_TEMPERATUR_ENV_4 41
+#define BATTERY_STATE_OF_CHARGE_4 42
+#define BATTERY_STATE_OF_HEALTH_4 43
+#define BATTERY_CHARGE_CYCLE_4 44
+
+#define BATTERY_VOLTAGE_5 45
+#define BATTERY_CURRENT_5 46
+#define BATTERY_POWER_5 47
+#define BATTERY_TEMPERATUR_ENV_5 48
+#define BATTERY_STATE_OF_CHARGE_5 49
+#define BATTERY_STATE_OF_HEALTH_5 50
+#define BATTERY_CHARGE_CYCLE_5 51
+
+#define BATTERY_VOLTAGE_6 52
+#define BATTERY_CURRENT_6 53
+#define BATTERY_POWER_6 54
+#define BATTERY_TEMPERATUR_ENV_6 55
+#define BATTERY_STATE_OF_CHARGE_6 56
+#define BATTERY_STATE_OF_HEALTH_6 57
+#define BATTERY_CHARGE_CYCLE_6 58
+
+#define BATTERY_VOLTAGE_7 59
+#define BATTERY_CURRENT_7 60
+#define BATTERY_POWER_7 61
+#define BATTERY_TEMPERATUR_ENV_7 62
+#define BATTERY_STATE_OF_CHARGE_7 63
+#define BATTERY_STATE_OF_HEALTH_7 64
+#define BATTERY_CHARGE_CYCLE_7 65
+
+#define BATTERY_VOLTAGE_8 66
+#define BATTERY_CURRENT_8 67
+#define BATTERY_POWER_8 68
+#define BATTERY_TEMPERATUR_ENV_8 69
+#define BATTERY_STATE_OF_CHARGE_8 70
+#define BATTERY_STATE_OF_HEALTH_8 71
+#define BATTERY_CHARGE_CYCLE_8 72
+
+#define BATTERY_POWER_TOTAL 117
+#define BATTERY_STATE_OF_CHARGE_TOTAL 118
+#define DESIRED_GRID_POWER 119
+#define MINIMUM_BATTERY_POWER 120
+#define MAXIMUM_BATTERY_POWER 121
+#define ENERGY_STORAGE_MODE 122
+#define BATTERY_CONF_ID 123
+#define BATTERY_CONF_ADDRESS 124
+#define BATTERY_CONF_PROTOCOL 125
+#define BATTERY_CONF_VOLTAGE_NOMINAL 126
+#define BATTERY_CONF_VOLTAGE_OVER 127
+#define BATTERY_CONF_VOLTAGE_CHARGE 128
+#define BATTERY_CONF_VOLTAGE_LACK 129
+#define BATTERY_CONF_VOLTAGE_DISCHARGE_STOP 130
+#define BATTERY_CONF_CURRENT_CHARGE_LIMIT 131
+#define BATTERY_CONF_CURRENT_DISCHARGE_LIMIT 132
+#define BATTERY_CONF_DEPTH_OF_DISCHARGE 133
+#define BATTERY_CONF_END_OF_DISCHARGE 134
+#define BATTERY_CONF_CAPACITY 135
+#define BATTERY_CONF_CELL_TYPE 136
+#define BATTERY_CONF_EPS_BUFFER 137
+#define BATTERY_CONF_CONTROL 138
+#define GRID_FREQUENCY 139
+#define GRID_VOLTAGE_PHASE_R 140
+#define GRID_CURRENT_PHASE_R 141
+#define GRID_POWER_PHASE_R 142
+#define GRID_VOLTAGE_PHASE_S 143
+#define GRID_CURRENT_PHASE_S 144
+#define GRID_POWER_PHASE_S 145
+#define GRID_VOLTAGE_PHASE_T 146
+#define GRID_CURRENT_PHASE_T 147
+#define GRID_POWER_PHASE_T 148
+#define OFF_GRID_POWER_TOTAL 149
+#define OFF_GRID_FREQUENCY 150
+#define OFF_GRID_VOLTAGE_PHASE_R 151
+#define OFF_GRID_CURRENT_PHASE_R 152
+#define OFF_GRID_POWER_PHASE_R 153
+#define OFF_GRID_VOLTAGE_PHASE_S 154
+#define OFF_GRID_CURRENT_PHASE_S 155
+#define OFF_GRID_POWER_PHASE_S 156
+#define OFF_GRID_VOLTAGE_PHASE_T 157
+#define OFF_GRID_CURRENT_PHASE_T 158
+#define OFF_GRID_POWER_PHASE_T 159
+#define BATTERY_ACTIVE_CONTROL 160
+#define BATTERY_ACTIVE_ONESHOT 161
+#define POWER_CONTROL 162
+#define ACTIVE_POWER_EXPORT_LIMIT 163
+#define ACTIVE_POWER_IMPORT_LIMIT 164
+#define REACTIVE_POWER_SETTING 165
+#define POWER_FACTOR_SETTING 166
+#define ACTIVE_POWER_LIMIT_SPEED 167
+#define REACTIVE_POWER_RESPONSE_TIME 168
+#define SVG_FIXED_REACTIVE_POWER_SETTING 169
 
 #define NONE 0
 #define SINGLE_REGISTER_WRITE 1
 #define DESIRED_GRID_POWER_WRITE 2
 #define BATTERY_CONF_WRITE 3
 #define BATTERY_ACTIVE_WRITE 4
+#define POWER_WRITE 4
 
 #define U_WORD 0x01
 #define U_DWORD 0x02
 #define S_WORD 0x03
 #define S_DWORD 0x04
+
+#define HYD6000EP 1
 
 namespace esphome {
     namespace sofarsolar_inverter {
@@ -105,6 +184,14 @@ namespace esphome {
 				start_address(start_address), register_count(register_count), type(type), priority(priority), scale(scale), write_function(write_function) {}
     	};
 
+		struct Model_Parameters {
+			uint8_t phase_count; // Number of phases (1 or 3)
+			uint16_t max_output_power_w; // Maximum output power in watts
+			Model_Parameters() : phase_count(1), max_output_power_w(0) {}
+			Model_Parameters(uint8_t phase_count, uint16_t max_output_power_w) :
+                phase_count(phase_count), max_output_power_w(max_output_power_w) {}
+		};
+
     	struct SofarSolar_RegisterDynamic;
 
 		struct register_read_task;
@@ -112,6 +199,8 @@ namespace esphome {
         struct register_write_task;
 
 		static const std::map<uint8_t, SofarSolar_Register> G3_registers = {
+			// Define the SofarSolar registers with their properties
+			// Address, number of registers, type, priority, scale, write function
 			{PV_GENERATION_TODAY, SofarSolar_Register{0x0684, 2, U_DWORD, 1, -2, NONE}}, // PV Generation Today
             {PV_GENERATION_TOTAL, SofarSolar_Register{0x0686, 2, U_DWORD, 0, -1, NONE}}, // PV Generation Total
             {LOAD_CONSUMPTION_TODAY, SofarSolar_Register{0x0688, 2, U_DWORD, 1, -2, NONE}}, // Load Consumption Today
@@ -128,7 +217,72 @@ namespace esphome {
             {PV_CURRENT_2 ,SofarSolar_Register{0x0588, 1, U_WORD, 2, -2, NONE}}, // PV Current 2
             {PV_POWER_2, SofarSolar_Register{0x0589, 1, U_WORD, 2, 1, NONE}}, // PV Power 2
             {PV_POWER_TOTAL, SofarSolar_Register{0x05C4, 1, U_WORD, 3, 2, NONE}}, // PV Power Total
-            {BATTERY_POWER_TOTAL, SofarSolar_Register{0x0667, 1, S_WORD, 3, 2, NONE}}, // Battery Power Total
+
+			{BATTERY_VOLTAGE_1, SofarSolar_Register{0x0604, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 1
+			{BATTERY_CURRENT_1, SofarSolar_Register{0x0605, 1, S_WORD, 2, -2, NONE}}, // Battery Current 1
+			{BATTERY_POWER_1, SofarSolar_Register{0x0606, 1, S_WORD, 2, 3, NONE}}, // Battery Power 1
+			{BATTERY_TEMPERATUR_ENV_1, SofarSolar_Register{0x0607, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 1
+			{BATTERY_STATE_OF_CHARGE_1, SofarSolar_Register{0x0608, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 1
+			{BATTERY_STATE_OF_HEALTH_1, SofarSolar_Register{0x0609, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 1
+			{BATTERY_CHARGE_CYCLE_1, SofarSolar_Register{0x060A, 1, U_WORD, 2, 0, NONE}}, // Battery Charge Cycle 1
+
+			{BATTERY_VOLTAGE_2, SofarSolar_Register{0x060B, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 2
+			{BATTERY_CURRENT_2, SofarSolar_Register{0x060C, 1, S_WORD, 2, -2, NONE}}, // Battery Current 2
+			{BATTERY_POWER_2, SofarSolar_Register{0x060D, 1, S_WORD, 2, 3, NONE}}, // Battery Power 2
+			{BATTERY_TEMPERATUR_ENV_2, SofarSolar_Register{0x060E, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 2
+			{BATTERY_STATE_OF_CHARGE_2, SofarSolar_Register{0x060F, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 2
+			{BATTERY_STATE_OF_HEALTH_2, SofarSolar_Register{0x0610, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 2
+			{BATTERY_CHARGE_CYCLE_2, SofarSolar_Register{0x0611, 1, U_WORD, 2, 0, NONE}}, // Battery Charge Cycle 2
+
+			{BATTERY_VOLTAGE_3 ,SofarSolar_Register{0x0612, 1 ,U_WORD ,2 ,-1 ,NONE}}, // Battery Voltage 3
+			{BATTERY_CURRENT_3 ,SofarSolar_Register{0x0613 ,1 ,S_WORD ,2 ,-2 ,NONE}}, // Battery Current 3
+			{BATTERY_POWER_3 ,SofarSolar_Register{0x0614 ,1 ,S_WORD ,2 ,3 ,NONE}}, // Battery Power 3
+			{BATTERY_TEMPERATUR_ENV_3 ,SofarSolar_Register{0x0615 ,1 ,S_WORD ,2 ,0 ,NONE}}, // Battery Temperature Environment 3
+			{BATTERY_STATE_OF_CHARGE_3 ,SofarSolar_Register{0x0616 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Charge 3
+			{BATTERY_STATE_OF_HEALTH_3 ,SofarSolar_Register{0x0617 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Health 3
+			{BATTERY_CHARGE_CYCLE_3,SofarSolar_Register{0x0618 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery Charge Cycle 3
+
+			{BATTERY_VOLTAGE_4, SofarSolar_Register{0x0619, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 4
+			{BATTERY_CURRENT_4, SofarSolar_Register{0x061A, 1, S_WORD, 2, -2, NONE}}, // Battery Current 4
+			{BATTERY_POWER_4, SofarSolar_Register{0x061B, 1, S_WORD, 2, 3, NONE}}, // Battery Power 4
+			{BATTERY_TEMPERATUR_ENV_4, SofarSolar_Register{0x061C, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 4
+			{BATTERY_STATE_OF_CHARGE_4, SofarSolar_Register{0x061D, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 4
+			{BATTERY_STATE_OF_HEALTH_4, SofarSolar_Register{0x061E, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 4
+			{BATTERY_CHARGE_CYCLE_4,SofarSolar_Register{0x061F ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery Charge Cycle 4
+
+			{BATTERY_VOLTAGE_5 ,SofarSolar_Register{0x0620 ,1 ,U_WORD ,2 ,-1 ,NONE}}, // Battery Voltage 5
+			{BATTERY_CURRENT_5 ,SofarSolar_Register{0x0621 ,1 ,S_WORD ,2 ,-2 ,NONE}}, // Battery Current 5
+			{BATTERY_POWER_5 ,SofarSolar_Register{0x0622 ,1 ,S_WORD ,2 ,3 ,NONE}}, // Battery Power 5
+			{BATTERY_TEMPERATUR_ENV_5,SofarSolar_Register{0x0623 ,1 ,S_WORD ,2 ,0 ,NONE}}, // Battery Temperature Environment 5
+			{BATTERY_STATE_OF_CHARGE_5,SofarSolar_Register{0x0624 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Charge 5
+			{BATTERY_STATE_OF_HEALTH_5 ,SofarSolar_Register{0x0625 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Health 5
+			{BATTERY_CHARGE_CYCLE_5,SofarSolar_Register{0x0626 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery Charge Cycle 5
+
+			{BATTERY_VOLTAGE_6, SofarSolar_Register{0x0627, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 6
+			{BATTERY_CURRENT_6, SofarSolar_Register{0x0628, 1, S_WORD, 2, -2, NONE}}, // Battery Current 6
+			{BATTERY_POWER_6, SofarSolar_Register{0x0629, 1, S_WORD, 2, 3, NONE}}, // Battery Power 6
+			{BATTERY_TEMPERATUR_ENV_6, SofarSolar_Register{0x062A, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 6
+			{BATTERY_STATE_OF_CHARGE_6, SofarSolar_Register{0x062B, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 6
+			{BATTERY_STATE_OF_HEALTH_6, SofarSolar_Register{0x062C, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 6
+			{BATTERY_CHARGE_CYCLE_6,SofarSolar_Register{0x062D ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery Charge Cycle 6
+
+			{BATTERY_VOLTAGE_7,SofarSolar_Register{0x062E ,1 ,U_WORD ,2 ,-1 ,NONE}}, // Battery Voltage 7
+			{BATTERY_CURRENT_7,SofarSolar_Register{0x062F ,1 ,S_WORD ,2 ,-2 ,NONE}}, // Battery Current 7
+			{BATTERY_POWER_7,SofarSolar_Register{0x0630 ,1 ,S_WORD ,2 ,3 ,NONE}}, // Battery Power 7
+			{BATTERY_TEMPERATUR_ENV_7,SofarSolar_Register{0x0631 ,1 ,S_WORD ,2 ,0 ,NONE}}, // Battery Temperature Environment 7
+			{BATTERY_STATE_OF_CHARGE_7,SofarSolar_Register{0x0632 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Charge 7
+			{BATTERY_STATE_OF_HEALTH_7,SofarSolar_Register{0x0633 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery State of Health 7
+			{BATTERY_CHARGE_CYCLE_7,SofarSolar_Register{0x0634 ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery Charge Cycle 7
+
+			{BATTERY_VOLTAGE_8, SofarSolar_Register{0x0635, 1, U_WORD, 2, -1, NONE}}, // Battery Voltage 8
+			{BATTERY_CURRENT_8, SofarSolar_Register{0x0636, 1, S_WORD, 2, -2, NONE}}, // Battery Current 8
+			{BATTERY_POWER_8, SofarSolar_Register{0x0637, 1, S_WORD, 2, 3, NONE}}, // Battery Power 8
+			{BATTERY_TEMPERATUR_ENV_8, SofarSolar_Register{0x0638, 1, S_WORD, 2, 0, NONE}}, // Battery Temperature Environment 8
+			{BATTERY_STATE_OF_CHARGE_8, SofarSolar_Register{0x0639, 1, U_WORD, 2, 0, NONE}}, // Battery State of Charge 8
+			{BATTERY_STATE_OF_HEALTH_8, SofarSolar_Register{0x063A, 1, U_WORD, 2, 0, NONE}}, // Battery State of Health 8
+			{BATTERY_CHARGE_CYCLE_8,SofarSolar_Register{0x063B ,1 ,U_WORD ,2 ,0 ,NONE}}, // Battery Charge Cycle 8
+
+			{BATTERY_POWER_TOTAL, SofarSolar_Register{0x0667, 1, S_WORD, 3, 2, NONE}}, // Battery Power Total
             {BATTERY_STATE_OF_CHARGE_TOTAL, SofarSolar_Register{0x0668, 1, U_WORD, 1, 0, NONE}}, // Battery State of Charge Total
             {DESIRED_GRID_POWER, SofarSolar_Register{0x1187, 2, S_DWORD, 3, 0, DESIRED_GRID_POWER_WRITE}}, // Desired Grid Power
 			{MINIMUM_BATTERY_POWER, SofarSolar_Register{0x1189, 2, S_DWORD, 3, 0, DESIRED_GRID_POWER_WRITE}}, // Minimum Battery Power
@@ -172,7 +326,20 @@ namespace esphome {
 			{OFF_GRID_CURRENT_PHASE_T, SofarSolar_Register{0x05B9, 1, U_WORD, 2, -2, NONE}}, // Off Grid Current Phase T
 			{OFF_GRID_POWER_PHASE_T, SofarSolar_Register{0x05BA, 1, U_WORD, 2, 1, NONE}}, // Off Grid Power Phase T
 			{BATTERY_ACTIVE_CONTROL, SofarSolar_Register{0x102B, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}}, // Battery Active Control
-			{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}} // Battery Active Oneshot
+			{BATTERY_ACTIVE_ONESHOT, SofarSolar_Register{0x102C, 1, U_WORD, 0, 0, BATTERY_ACTIVE_WRITE}}, // Battery Active Oneshot
+			{POWER_CONTROL, SofarSolar_Register{0x1105, 1, U_WORD, 0, 0, POWER_WRITE}}, // Battery Active Oneshot
+			{ACTIVE_POWER_EXPORT_LIMIT, SofarSolar_Register{0x1106, 1, U_WORD, 3, -1, POWER_WRITE}}, // Active Power Export Limit
+			{ACTIVE_POWER_IMPORT_LIMIT, SofarSolar_Register{0x1107, 1, U_WORD, 3, -1, POWER_WRITE}}, // Active Power Import Limit
+            {REACTIVE_POWER_SETTING, SofarSolar_Register{0x1108, 1, S_WORD, 0, -1, POWER_WRITE}}, // Reactive Power Setting
+            {POWER_FACTOR_SETTING, SofarSolar_Register{0x1109, 1, S_WORD, 0, 0, POWER_WRITE}}, // Power Factor Setting
+            {ACTIVE_POWER_LIMIT_SPEED, SofarSolar_Register{0x110A, 1, U_WORD, 0, 0, POWER_WRITE}}, // Active Power Limit Speed
+            {REACTIVE_POWER_RESPONSE_TIME, SofarSolar_Register{0x110B, 1, U_WORD, 0, -1, POWER_WRITE}}, // Reactive Power Response Time
+            {SVG_FIXED_REACTIVE_POWER_SETTING, SofarSolar_Register{0x110C, 1, S_WORD, 0, 0, NONE}} // SVG Fixed Reactive Power Setting
+        };
+
+		static const std::map<uint8_t, Model_Parameters> model_parameters = {
+			//Model, Phase Count, Max Output Power (W)
+            {HYD6000EP, Model_Parameters{1, 6000}} // HYD6000EP, 1 phase, 5000W
         };
 
         class SofarSolar_Inverter : public modbus::ModbusDevice, public Component {
@@ -222,11 +389,14 @@ namespace esphome {
 			void write_battery_conf();
 			void write_battery_active();
 			void write_single_register();
+			void write_power();
 
-            void set_model(std::string model) { this->model_ = model;}
+            void set_model(std::string model) { this->model_ = model; this->set_model_id(model); }
+            void set_model_id(std::string model);
             void set_modbus_address(int modbus_address) { this->modbus_address_ = modbus_address;}
             void set_zero_export(bool zero_export) { this->zero_export_ = zero_export;}
             void set_power_id(sensor::Sensor *power_id) { this->power_sensor_ = power_id;}
+
 
             void set_pv_generation_today_sensor(sensor::Sensor *pv_generation_today_sensor);
             void set_pv_generation_total_sensor(sensor::Sensor *pv_generation_total_sensor);
@@ -243,6 +413,71 @@ namespace esphome {
             void set_pv_voltage_2_sensor(sensor::Sensor *pv_voltage_2_sensor);
             void set_pv_current_2_sensor(sensor::Sensor *pv_current_2_sensor);
             void set_pv_power_2_sensor(sensor::Sensor *pv_power_2_sensor);
+
+			void set_battery_voltage_1_sensor(sensor::Sensor *battery_voltage_1_sensor);
+            void set_battery_current_1_sensor(sensor::Sensor *battery_current_1_sensor);
+            void set_battery_power_1_sensor(sensor::Sensor *battery_power_1_sensor);
+            void set_battery_temperature_environment_1_sensor(sensor::Sensor *battery_temperature_environment_1_sensor);
+            void set_battery_state_of_charge_1_sensor(sensor::Sensor *battery_state_of_charge_1_sensor);
+            void set_battery_state_of_health_1_sensor(sensor::Sensor *battery_state_of_health_1_sensor);
+            void set_battery_charge_cycle_1_sensor(sensor::Sensor *battery_charge_cycle_1_sensor);
+
+			void set_battery_voltage_2_sensor(sensor::Sensor *battery_voltage_2_sensor);
+            void set_battery_current_2_sensor(sensor::Sensor *battery_current_2_sensor);
+            void set_battery_power_2_sensor(sensor::Sensor *battery_power_2_sensor);
+            void set_battery_temperature_environment_2_sensor(sensor::Sensor *battery_temperature_environment_2_sensor);
+            void set_battery_state_of_charge_2_sensor(sensor::Sensor *battery_state_of_charge_2_sensor);
+            void set_battery_state_of_health_2_sensor(sensor::Sensor *battery_state_of_health_2_sensor);
+            void set_battery_charge_cycle_2_sensor(sensor::Sensor *battery_charge_cycle_2_sensor);
+
+			void set_battery_voltage_3_sensor(sensor::Sensor *battery_voltage_3_sensor);
+            void set_battery_current_3_sensor(sensor::Sensor *battery_current_3_sensor);
+            void set_battery_power_3_sensor(sensor::Sensor *battery_power_3_sensor);
+            void set_battery_temperature_environment_3_sensor(sensor::Sensor *battery_temperature_environment_3_sensor);
+            void set_battery_state_of_charge_3_sensor(sensor::Sensor *battery_state_of_charge_3_sensor);
+            void set_battery_state_of_health_3_sensor(sensor::Sensor *battery_state_of_health_3_sensor);
+            void set_battery_charge_cycle_3_sensor(sensor::Sensor *battery_charge_cycle_3_sensor);
+
+			void set_battery_voltage_4_sensor(sensor::Sensor *battery_voltage_4_sensor);
+            void set_battery_current_4_sensor(sensor::Sensor *battery_current_4_sensor);
+            void set_battery_power_4_sensor(sensor::Sensor *battery_power_4_sensor);
+            void set_battery_temperature_environment_4_sensor(sensor::Sensor *battery_temperature_environment_4_sensor);
+            void set_battery_state_of_charge_4_sensor(sensor::Sensor *battery_state_of_charge_4_sensor);
+            void set_battery_state_of_health_4_sensor(sensor::Sensor *battery_state_of_health_4_sensor);
+            void set_battery_charge_cycle_4_sensor(sensor::Sensor *battery_charge_cycle_4_sensor);
+
+			void set_battery_voltage_5_sensor(sensor::Sensor *battery_voltage_5_sensor);
+            void set_battery_current_5_sensor(sensor::Sensor *battery_current_5_sensor);
+            void set_battery_power_5_sensor(sensor::Sensor *battery_power_5_sensor);
+            void set_battery_temperature_environment_5_sensor(sensor::Sensor *battery_temperature_environment_5_sensor);
+            void set_battery_state_of_charge_5_sensor(sensor::Sensor *battery_state_of_charge_5_sensor);
+            void set_battery_state_of_health_5_sensor(sensor::Sensor *battery_state_of_health_5_sensor);
+            void set_battery_charge_cycle_5_sensor(sensor::Sensor *battery_charge_cycle_5_sensor);
+
+			void set_battery_voltage_6_sensor(sensor::Sensor *battery_voltage_6_sensor);
+            void set_battery_current_6_sensor(sensor::Sensor *battery_current_6_sensor);
+            void set_battery_power_6_sensor(sensor::Sensor *battery_power_6_sensor);
+            void set_battery_temperature_environment_6_sensor(sensor::Sensor *battery_temperature_environment_6_sensor);
+            void set_battery_state_of_charge_6_sensor(sensor::Sensor *battery_state_of_charge_6_sensor);
+            void set_battery_state_of_health_6_sensor(sensor::Sensor *battery_state_of_health_6_sensor);
+            void set_battery_charge_cycle_6_sensor(sensor::Sensor *battery_charge_cycle_6_sensor);
+
+			void set_battery_voltage_7_sensor(sensor::Sensor *battery_voltage_7_sensor);
+            void set_battery_current_7_sensor(sensor::Sensor *battery_current_7_sensor);
+            void set_battery_power_7_sensor(sensor::Sensor *battery_power_7_sensor);
+            void set_battery_temperature_environment_7_sensor(sensor::Sensor *battery_temperature_environment_7_sensor);
+            void set_battery_state_of_charge_7_sensor(sensor::Sensor *battery_state_of_charge_7_sensor);
+            void set_battery_state_of_health_7_sensor(sensor::Sensor *battery_state_of_health_7_sensor);
+            void set_battery_charge_cycle_7_sensor(sensor::Sensor *battery_charge_cycle_7_sensor);
+
+			void set_battery_voltage_8_sensor(sensor::Sensor *battery_voltage_8_sensor);
+            void set_battery_current_8_sensor(sensor::Sensor *battery_current_8_sensor);
+            void set_battery_power_8_sensor(sensor::Sensor *battery_power_8_sensor);
+            void set_battery_temperature_environment_8_sensor(sensor::Sensor *battery_temperature_environment_8_sensor);
+            void set_battery_state_of_charge_8_sensor(sensor::Sensor *battery_state_of_charge_8_sensor);
+            void set_battery_state_of_health_8_sensor(sensor::Sensor *battery_state_of_health_8_sensor);
+            void set_battery_charge_cycle_8_sensor(sensor::Sensor *battery_charge_cycle_8_sensor);
+
             void set_pv_power_total_sensor(sensor::Sensor *pv_power_total_sensor);
             void set_battery_power_total_sensor(sensor::Sensor *battery_power_total_sensor);
             void set_battery_state_of_charge_total_sensor(sensor::Sensor *battery_state_of_charge_total_sensor);
@@ -289,6 +524,15 @@ namespace esphome {
 			void set_off_grid_power_phase_t_sensor(sensor::Sensor *off_grid_power_phase_t_sensor);
 			void set_battery_active_control_sensor(sensor::Sensor *battery_active_control_sensor);
 			void set_battery_active_oneshot_sensor(sensor::Sensor *battery_active_oneshot_sensor);
+			void set_power_control_sensor(sensor::Sensor *power_control_sensor);
+            void set_active_power_export_limit_sensor(sensor::Sensor *active_power_export_limit_sensor);
+			void set_active_power_import_limit_sensor(sensor::Sensor *active_power_import_limit_sensor);
+			void set_reactive_power_setting_sensor(sensor::Sensor *reactive_power_setting_sensor);
+			void set_power_factor_setting_sensor(sensor::Sensor *power_factor_setting_sensor);
+			void set_active_power_limit_speed_sensor(sensor::Sensor *active_power_limit_speed_sensor);
+			void set_reactive_power_response_time_sensor(sensor::Sensor *reactive_power_response_time_sensor);
+
+
 
             // Set update intervals for sensors
             void set_pv_generation_today_sensor_update_interval(uint16_t pv_generation_today_sensor_update_interval);
@@ -307,6 +551,71 @@ namespace esphome {
             void set_pv_current_2_sensor_update_interval(uint16_t pv_current_2_sensor_update_interval);
             void set_pv_power_2_sensor_update_interval(uint16_t pv_power_2_sensor_update_interval);
             void set_pv_power_total_sensor_update_interval(uint16_t pv_power_total_sensor_update_interval);
+
+			void set_battery_voltage_1_sensor_update_interval(uint16_t battery_voltage_1_sensor_update_interval);
+            void set_battery_current_1_sensor_update_interval(uint16_t battery_current_1_sensor_update_interval);
+            void set_battery_power_1_sensor_update_interval(uint16_t battery_power_1_sensor_update_interval);
+            void set_battery_temperature_environment_1_sensor_update_interval(uint16_t battery_temperature_environment_1_sensor_update_interval);
+            void set_battery_state_of_charge_1_sensor_update_interval(uint16_t battery_state_of_charge_1_sensor_update_interval);
+            void set_battery_state_of_health_1_sensor_update_interval(uint16_t battery_state_of_health_1_sensor_update_interval);
+            void set_battery_charge_cycle_1_sensor_update_interval(uint16_t battery_charge_cycle_1_sensor_update_interval);
+
+			void set_battery_voltage_2_sensor_update_interval(uint16_t battery_voltage_2_sensor_update_interval);
+            void set_battery_current_2_sensor_update_interval(uint16_t battery_current_2_sensor_update_interval);
+            void set_battery_power_2_sensor_update_interval(uint16_t battery_power_2_sensor_update_interval);
+            void set_battery_temperature_environment_2_sensor_update_interval(uint16_t battery_temperature_environment_2_sensor_update_interval);
+            void set_battery_state_of_charge_2_sensor_update_interval(uint16_t battery_state_of_charge_2_sensor_update_interval);
+            void set_battery_state_of_health_2_sensor_update_interval(uint16_t battery_state_of_health_2_sensor_update_interval);
+            void set_battery_charge_cycle_2_sensor_update_interval(uint16_t battery_charge_cycle_2_sensor_update_interval);
+
+			void set_battery_voltage_3_sensor_update_interval(uint16_t battery_voltage_3_sensor_update_interval);
+            void set_battery_current_3_sensor_update_interval(uint16_t battery_current_3_sensor_update_interval);
+            void set_battery_power_3_sensor_update_interval(uint16_t battery_power_3_sensor_update_interval);
+            void set_battery_temperature_environment_3_sensor_update_interval(uint16_t battery_temperature_environment_3_sensor_update_interval);
+            void set_battery_state_of_charge_3_sensor_update_interval(uint16_t battery_state_of_charge_3_sensor_update_interval);
+            void set_battery_state_of_health_3_sensor_update_interval(uint16_t battery_state_of_health_3_sensor_update_interval);
+            void set_battery_charge_cycle_3_sensor_update_interval(uint16_t battery_charge_cycle_3_sensor_update_interval);
+
+			void set_battery_voltage_4_sensor_update_interval(uint16_t battery_voltage_4_sensor_update_interval);
+			void set_battery_current_4_sensor_update_interval(uint16_t battery_current_4_sensor_update_interval);
+            void set_battery_power_4_sensor_update_interval(uint16_t battery_power_4_sensor_update_interval);
+            void set_battery_temperature_environment_4_sensor_update_interval(uint16_t battery_temperature_environment_4_sensor_update_interval);
+            void set_battery_state_of_charge_4_sensor_update_interval(uint16_t battery_state_of_charge_4_sensor_update_interval);
+            void set_battery_state_of_health_4_sensor_update_interval(uint16_t battery_state_of_health_4_sensor_update_interval);
+            void set_battery_charge_cycle_4_sensor_update_interval(uint16_t battery_charge_cycle_4_sensor_update_interval);
+
+			void set_battery_voltage_5_sensor_update_interval(uint16_t battery_voltage_5_sensor_update_interval);
+            void set_battery_current_5_sensor_update_interval(uint16_t battery_current_5_sensor_update_interval);
+            void set_battery_power_5_sensor_update_interval(uint16_t battery_power_5_sensor_update_interval);
+            void set_battery_temperature_environment_5_sensor_update_interval(uint16_t battery_temperature_environment_5_sensor_update_interval);
+            void set_battery_state_of_charge_5_sensor_update_interval(uint16_t battery_state_of_charge_5_sensor_update_interval);
+            void set_battery_state_of_health_5_sensor_update_interval(uint16_t battery_state_of_health_5_sensor_update_interval);
+            void set_battery_charge_cycle_5_sensor_update_interval(uint16_t battery_charge_cycle_5_sensor_update_interval);
+
+			void set_battery_voltage_6_sensor_update_interval(uint16_t battery_voltage_6_sensor_update_interval);
+            void set_battery_current_6_sensor_update_interval(uint16_t battery_current_6_sensor_update_interval);
+            void set_battery_power_6_sensor_update_interval(uint16_t battery_power_6_sensor_update_interval);
+            void set_battery_temperature_environment_6_sensor_update_interval(uint16_t battery_temperature_environment_6_sensor_update_interval);
+            void set_battery_state_of_charge_6_sensor_update_interval(uint16_t battery_state_of_charge_6_sensor_update_interval);
+            void set_battery_state_of_health_6_sensor_update_interval(uint16_t battery_state_of_health_6_sensor_update_interval);
+            void set_battery_charge_cycle_6_sensor_update_interval(uint16_t battery_charge_cycle_6_sensor_update_interval);
+
+			void set_battery_voltage_7_sensor_update_interval(uint16_t battery_voltage_7_sensor_update_interval);
+			void set_battery_current_7_sensor_update_interval(uint16_t battery_current_7_sensor_update_interval);
+            void set_battery_power_7_sensor_update_interval(uint16_t battery_power_7_sensor_update_interval);
+            void set_battery_temperature_environment_7_sensor_update_interval(uint16_t battery_temperature_environment_7_sensor_update_interval);
+            void set_battery_state_of_charge_7_sensor_update_interval(uint16_t battery_state_of_charge_7_sensor_update_interval);
+            void set_battery_state_of_health_7_sensor_update_interval(uint16_t battery_state_of_health_7_sensor_update_interval);
+            void set_battery_charge_cycle_7_sensor_update_interval(uint16_t battery_charge_cycle_7_sensor_update_interval);
+
+			void set_battery_voltage_8_sensor_update_interval(uint16_t battery_voltage_8_sensor_update_interval);
+            void set_battery_current_8_sensor_update_interval(uint16_t battery_current_8_sensor_update_interval);
+            void set_battery_power_8_sensor_update_interval(uint16_t battery_power_8_sensor_update_interval);
+            void set_battery_temperature_environment_8_sensor_update_interval(uint16_t battery_temperature_environment_8_sensor_update_interval);
+            void set_battery_state_of_charge_8_sensor_update_interval(uint16_t battery_state_of_charge_8_sensor_update_interval);
+            void set_battery_state_of_health_8_sensor_update_interval(uint16_t battery_state_of_health_8_sensor_update_interval);
+            void set_battery_charge_cycle_8_sensor_update_interval(uint16_t battery_charge_cycle_8_sensor_update_interval);
+
             void set_battery_power_total_sensor_update_interval(uint16_t battery_power_total_sensor_update_interval);
             void set_battery_state_of_charge_total_sensor_update_interval(uint16_t battery_state_of_charge_total_sensor_update_interval);
             void set_desired_grid_power_sensor_update_interval(uint16_t desired_grid_power_sensor_update_interval);
@@ -352,6 +661,15 @@ namespace esphome {
 			void set_off_grid_power_phase_t_sensor_update_interval(uint16_t off_grid_power_phase_t_sensor_update_interval);
 			void set_battery_active_control_sensor_update_interval(uint16_t battery_active_control_sensor_update_interval);
 			void set_battery_active_oneshot_sensor_update_interval(uint16_t battery_active_oneshot_sensor_update_interval);
+			void set_power_control_sensor_update_interval(uint16_t power_control_sensor_update_interval);
+            void set_active_power_export_limit_sensor_update_interval(uint16_t active_power_export_limit_sensor_update_interval);
+			void set_active_power_import_limit_sensor_update_interval(uint16_t active_power_import_limit_sensor_update_interval);
+            void set_reactive_power_setting_sensor_update_interval(uint16_t reactive_power_setting_sensor_update_interval);
+            void set_power_factor_setting_sensor_update_interval(uint16_t power_factor_setting_sensor_update_interval);
+			void set_active_power_limit_speed_sensor_update_interval(uint16_t active_power_limit_speed_sensor_update_interval);
+            void set_reactive_power_response_time_sensor_update_interval(uint16_t reactive_power_response_time_sensor_update_interval);
+
+
 
 			void set_desired_grid_power_sensor_default_value(int64_t default_value);
 			void set_minimum_battery_power_sensor_default_value(int64_t default_value);
@@ -373,6 +691,8 @@ namespace esphome {
 			void set_battery_conf_cell_type_sensor_default_value(int64_t default_value);
 			void set_battery_conf_eps_buffer_sensor_default_value(int64_t default_value);
 
+
+
 			void set_desired_grid_power_sensor_enforce_default_value(bool enforce_default_value);
 			void set_minimum_battery_power_sensor_enforce_default_value(bool enforce_default_value);
 			void set_maximum_battery_power_sensor_enforce_default_value(bool enforce_default_value);
@@ -393,7 +713,32 @@ namespace esphome {
 			void set_battery_conf_cell_type_sensor_enforce_default_value(bool enforce_default_value);
 			void set_battery_conf_eps_buffer_sensor_enforce_default_value(bool enforce_default_value);
 
+
+
+			void switch_command(const std::string &command);
+
+
+
+			void set_battery_charge_only_switch(switch_::Switch *battery_charge_only_switch) { this->battery_charge_only_switch_ = battery_charge_only_switch; }
+			void set_battery_discharge_only_switch(switch_::Switch *battery_discharge_only_switch) { this->battery_discharge_only_switch_ = battery_discharge_only_switch; }
+
+			switch_::Switch *battery_charge_only_switch_ = nullptr;
+			switch_::Switch *battery_discharge_only_switch_ = nullptr;
+
+			bool battery_charge_only_switch_state_ = false;
+			bool battery_discharge_only_switch_state_ = false;
+
+			void set_battery_activation_button(button::Button *battery_activation_button) { this->battery_activation_button_ = battery_activation_button; }
+			void set_battery_config_write_button(button::Button *battery_config_write_button) { this->battery_config_write_button_ = battery_config_write_button; }
+
+			button::Button *battery_activation_button_ = nullptr;
+			button::Button *battery_config_write_button_ = nullptr;
+
+			void battery_activation();
+			void battery_config_write();
+
             std::string model_;
+			int model_id_;
             int modbus_address_;
             bool zero_export_;
             sensor::Sensor *power_sensor_;
