@@ -1,4 +1,5 @@
 #include "queue"
+#include "cmath"
 #include "sofarsolar_inverter.h"
 #include "esphome/core/helpers.h"
 #include "esphome/core/log.h"
@@ -18,7 +19,7 @@ namespace esphome
 			bool enforce_default_value; // Flag to indicate if the default value should be enforced
 			bool write_set_value = false; // Flag to indicate if the write value is set
 			bool is_queued = false; // Flag to indicate if the register is queued for reading/writing
-			SofarSolar_RegisterDynamic() : sensor(nullptr), update_interval(0), last_update(0), default_value({}), default_value_set(false), enforce_default_value(false) {}
+			SofarSolar_RegisterDynamic() : last_update(0), update_interval(0), sensor(nullptr), default_value({}), default_value_set(false), enforce_default_value(false) {}
 		};
 
 		struct register_read_task {
@@ -68,11 +69,11 @@ namespace esphome
 
 				{
 					float total_active = this->get_sensor_state_or_default(TOTAL_ACTIVE_POWER_INVERTER, 0.0f);
-					float power_sensor_val = this->power_sensor_ ? this->power_sensor_->state : 0.0f;
+					float power_sensor_val = this->power_sensor_ && !std::isnan(this->power_sensor_->state) ? this->power_sensor_->state : 0.0f;
 					ESP_LOGV(TAG, "Current total active power inverter: %f W + %f W / %d W", total_active, power_sensor_val, model_parameters.at(this->model_id_).max_output_power_w);
 				}
 				ESP_LOGVV(TAG, "Model id %d, %d W", this->model_id_, model_parameters.at(this->model_id_).max_output_power_w);
-				int needed_power = static_cast<int>(this->get_sensor_state_or_default(TOTAL_ACTIVE_POWER_INVERTER, 0.0f) + (this->power_sensor_ ? this->power_sensor_->state : 0.0f) + 10); // Add a small buffer to ensure that we don't draw power from the grid
+				int needed_power = static_cast<int>(this->get_sensor_state_or_default(TOTAL_ACTIVE_POWER_INVERTER, 0.0f) + (this->power_sensor_ && !std::isnan(this->power_sensor_->state) ? this->power_sensor_->state : 0.0f) + 10); // Add a small buffer to ensure that we don't draw power from the grid
 				int export_percentage = needed_power * 1000 / model_parameters.at(this->model_id_).max_output_power_w;
 				if (export_percentage < 0) {
 					export_percentage = 0;
@@ -123,7 +124,7 @@ namespace esphome
 						G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_value.int32_value = 5000;
 					}
 					G3_dynamic.at(MAXIMUM_BATTERY_POWER).write_set_value = true;
-					ESP_LOGV(TAG, "New desired grid power: %d W", G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value);
+					ESP_LOGV(TAG, "New desired grid power: %ld W", static_cast<long>(G3_dynamic.at(DESIRED_GRID_POWER).write_value.int32_value));
 					this->write_desired_grid_power(); // Write the new desired grid power, minimum battery power, and maximum battery power
 				}
 
@@ -151,7 +152,9 @@ namespace esphome
 			}
 
 			ESP_LOGVV(TAG, "Current write queue size: %d", register_write_queue.size());
-			bool can_start_new_modbus_operation = millis() - time_begin_modbus_operation > 150;
+			constexpr uint32_t kModbusCooldownMs = 250;
+			constexpr uint32_t kModbusTimeoutMs = 2000;
+			bool can_start_new_modbus_operation = millis() - time_begin_modbus_operation > kModbusCooldownMs;
 			if (!current_reading && !current_writing && !register_read_queue.empty() && can_start_new_modbus_operation) {
 				read_modbus_register(G3_registers.at(register_read_queue.top().register_key).start_address, G3_registers.at(register_read_queue.top().register_key).register_count);
 				current_reading = true; // Set the flag to indicate that a read is in progress
@@ -163,7 +166,7 @@ namespace esphome
 				time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
 			}
 
-			if (millis() - time_begin_modbus_operation > 750) { // Timeout for read operation
+			if (millis() - time_begin_modbus_operation > kModbusTimeoutMs) { // Timeout for read operation
 				if (current_reading) {
 					G3_dynamic.at(register_read_queue.top().register_key).last_update = 0; // Reset the last update time to force an update in the next loop
 					G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
@@ -175,11 +178,12 @@ namespace esphome
 					register_write_queue.pop(); // Remove the top task from the write queue
 					ESP_LOGE(TAG, "Modbus write operation timed out");
 				}
+				time_begin_modbus_operation = 0;
 			}
 		}
 
 		void SofarSolar_Inverter::on_modbus_data(const std::vector<uint8_t> &data) {
-			ESP_LOGV(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
+			ESP_LOGD(TAG, "Received Modbus data: %s", vector_to_string(data).c_str());
 			if(current_reading) {
 				parse_read_response(data);
 				G3_dynamic.at(register_read_queue.top().register_key).is_queued = false; // Mark the register as not queued
@@ -198,6 +202,16 @@ namespace esphome
 
 		void SofarSolar_Inverter::on_modbus_error(uint8_t function_code, uint8_t exception_code) {
 			ESP_LOGE(TAG, "Modbus error: Function code %02X, Exception code %02X", function_code, exception_code);
+			if (current_reading) {
+				G3_dynamic.at(register_read_queue.top().register_key).last_update = 0;
+				G3_dynamic.at(register_read_queue.top().register_key).is_queued = false;
+				register_read_queue.pop();
+				current_reading = false;
+			} else if (current_writing) {
+				register_write_queue.pop();
+				current_writing = false;
+			}
+			time_begin_modbus_operation = 0;
 			if (function_code == 0x03 || function_code == 0x10 || function_code == 0x90) {
 				switch (exception_code) {
 				case 0x01:
@@ -345,7 +359,7 @@ namespace esphome
 		void SofarSolar_Inverter::read_modbus_register(uint16_t start_address, uint16_t register_count) {
 			// Create Modbus frame for reading registers
 			std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x03, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(register_count >> 8), static_cast<uint8_t>(register_count & 0xFF)};
-			ESP_LOGV(TAG, "Reading Modbus registers: %s", vector_to_string(frame).c_str());
+			ESP_LOGD(TAG, "Sending Modbus read frame: %s", vector_to_string(frame).c_str());
 			this->send_raw(frame);
 			time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
 		}
@@ -354,7 +368,7 @@ namespace esphome
 			// Create Modbus frame for writing registers
 			std::vector<uint8_t> frame = {static_cast<uint8_t>(this->modbus_address_), 0x10, static_cast<uint8_t>(start_address >> 8), static_cast<uint8_t>(start_address & 0xFF), static_cast<uint8_t>(register_count >> 8), static_cast<uint8_t>(register_count & 0xFF), static_cast<uint8_t>(data.size())};
 			frame.insert(frame.end(), data.begin(), data.end());
-			ESP_LOGV(TAG, "Writing Modbus registers: %s", vector_to_string(frame).c_str());
+			ESP_LOGD(TAG, "Writing Modbus registers: %s", vector_to_string(frame).c_str());
 			this->send_raw(frame);
 			time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
 
@@ -387,9 +401,9 @@ namespace esphome
 			} else {
 				new_maximum_battery_power = G3_dynamic.at(MAXIMUM_BATTERY_POWER).sensor->state;
 			}
-			ESP_LOGV(TAG, "Writing desired grid power: %d W", new_desired_grid_power);
-			ESP_LOGV(TAG, "Writing minimum battery power: %d W", new_minimum_battery_power);
-			ESP_LOGV(TAG, "Writing maximum battery power: %d W", new_maximum_battery_power);
+			ESP_LOGV(TAG, "Writing desired grid power: %ld W", static_cast<long>(new_desired_grid_power));
+			ESP_LOGV(TAG, "Writing minimum battery power: %ld W", static_cast<long>(new_minimum_battery_power));
+			ESP_LOGV(TAG, "Writing maximum battery power: %ld W", static_cast<long>(new_maximum_battery_power));
 			std::vector<uint8_t> data;
 			data.push_back(static_cast<uint8_t>(new_desired_grid_power >> 24));
 			data.push_back(static_cast<uint8_t>(new_desired_grid_power >> 16));
@@ -772,7 +786,7 @@ namespace esphome
                         }
                         data.push_back(static_cast<uint8_t>(value_to_write >> 8));
                         data.push_back(static_cast<uint8_t>(value_to_write & 0xFF));
-                        ESP_LOGV(TAG, "Value to write: %d", value_to_write);
+                        ESP_LOGV(TAG, "Value to write: %ld", static_cast<long>(value_to_write));
                     }
                     break;
                 case SofarSolar_S_WORD:
@@ -787,7 +801,7 @@ namespace esphome
                         }
                         data.push_back(static_cast<uint8_t>(value_to_write >> 8));
                         data.push_back(static_cast<uint8_t>(value_to_write & 0xFF));
-                        ESP_LOGV(TAG, "Value to write: %d", value_to_write);
+                        ESP_LOGV(TAG, "Value to write: %ld", static_cast<long>(value_to_write));
                     }
                     break;
 				case SofarSolar_U_DWORD:
@@ -804,7 +818,7 @@ namespace esphome
 						data.push_back(static_cast<uint8_t>((value_to_write >> 16) & 0xFF));
 						data.push_back(static_cast<uint8_t>((value_to_write >> 8) & 0xFF));
                         data.push_back(static_cast<uint8_t>(value_to_write & 0xFF));
-                        ESP_LOGV(TAG, "Value to write: %d", value_to_write);
+					    ESP_LOGV(TAG, "Value to write: %ld", static_cast<long>(value_to_write));
                     }
 					break;
 				case SofarSolar_S_DWORD:
@@ -877,7 +891,7 @@ namespace esphome
 		}
 
 		void SofarSolar_Inverter::test_new_state(uint16_t value, uint8_t register_key) {
-            ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
+            ESP_LOGD(TAG, "Testing new state for register key: %u with value: %lu", static_cast<unsigned>(register_key), static_cast<unsigned long>(value));
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
 				if(G3_dynamic.at(register_key).default_value.uint16_value != value) {
                 	ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
@@ -891,7 +905,7 @@ namespace esphome
         }
 
 		void SofarSolar_Inverter::test_new_state(int16_t value, uint8_t register_key) {
-            ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
+            ESP_LOGD(TAG, "Testing new state for register key: %u with value: %ld", static_cast<unsigned>(register_key), static_cast<long>(value));
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
 				if(G3_dynamic.at(register_key).default_value.int16_value != value) {
                 	ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
@@ -905,7 +919,7 @@ namespace esphome
         }
 
 		void SofarSolar_Inverter::test_new_state(uint32_t value, uint8_t register_key) {
-            ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
+            ESP_LOGD(TAG, "Testing new state for register key: %u with value: %lu", static_cast<unsigned>(register_key), static_cast<unsigned long>(value));
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
 				if(G3_dynamic.at(register_key).default_value.uint32_value != value) {
                 	ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
@@ -919,7 +933,7 @@ namespace esphome
         }
 
 		void SofarSolar_Inverter::test_new_state(int32_t value, uint8_t register_key) {
-            ESP_LOGD(TAG, "Testing new state for register key: %d with value: %d", register_key, value);
+            ESP_LOGD(TAG, "Testing new state for register key: %u with value: %ld", static_cast<unsigned>(register_key), static_cast<long>(value));
             if (G3_dynamic.at(register_key).enforce_default_value && G3_dynamic.at(register_key).default_value_set) {
 				if(G3_dynamic.at(register_key).default_value.int32_value != value) {
                 	ESP_LOGD(TAG, "Enforce default value is set for register key: %d", register_key);
