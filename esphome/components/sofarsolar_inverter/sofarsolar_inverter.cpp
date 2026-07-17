@@ -151,16 +151,15 @@ namespace esphome
 			}
 
 			ESP_LOGVV(TAG, "Current write queue size: %d", register_write_queue.size());
-			if(!current_reading && !current_writing && !register_write_queue.empty() && millis() - time_begin_modbus_operation > 150) {
+			bool can_start_new_modbus_operation = millis() - time_begin_modbus_operation > 150;
+			if (!current_reading && !current_writing && !register_read_queue.empty() && can_start_new_modbus_operation) {
+				read_modbus_register(G3_registers.at(register_read_queue.top().register_key).start_address, G3_registers.at(register_read_queue.top().register_key).register_count);
+				current_reading = true; // Set the flag to indicate that a read is in progress
+				time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
+			} else if(!current_reading && !current_writing && !register_write_queue.empty() && can_start_new_modbus_operation) {
 				// If there is a write task in the queue, process it
 				write_modbus_register(G3_registers.at(register_write_queue.top().first_register_key).start_address, register_write_queue.top().number_of_registers, register_write_queue.top().data); // Write the register
 				current_writing = true; // Set the flag to indicate that a write is in progress
-				time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
-			}
-
-			if (!current_reading && !current_writing && !register_read_queue.empty() && millis() - time_begin_modbus_operation > 150) {
-				read_modbus_register(G3_registers.at(register_read_queue.top().register_key).start_address, G3_registers.at(register_read_queue.top().register_key).register_count);
-				current_reading = true; // Set the flag to indicate that a read is in progress
 				time_begin_modbus_operation = millis(); // Record the start time of the Modbus operation
 			}
 
